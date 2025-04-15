@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.text.*?>
+
+<StackPane fx:id="rootPane" xmlns:fx="http://javafx.com/fxml" fx:controller="com.mdev.messanger.controller.AuthController">
+    <VBox spacing="20" alignment="CENTER" style="-fx-background-color: #f4f4f4; -fx-padding: 40;">
+        <Label fx:id="titleLabel" text="Welcome" style="-fx-font-size: 24; -fx-font-weight: bold;" />
+
+        <!-- Username -->
+        <TextField fx:id="usernameField" promptText="Username" maxWidth="250" />
+
+        <!-- Password -->
+        <PasswordField fx:id="passwordField" promptText="Password" maxWidth="250" />
+
+        <!-- Confirm Password (only for Sign Up) -->
+        <PasswordField fx:id="confirmPasswordField" promptText="Confirm Password" maxWidth="250" visible="false" managed="false" />
+
+        <!-- Submit Button -->
+        <Button fx:id="submitButton" text="Sign In" onAction="#onSubmitClicked" maxWidth="250" />
+
+        <!-- Switch Mode -->
+        <HBox alignment="CENTER">
+            <Label fx:id="switchLabel" text="Don't have an account?" />
+            <Hyperlink fx:id="switchModeLink" text="Sign Up" onAction="#onSwitchModeClicked" />
+        </HBox>
+
+        <!-- Status -->
+        <Label fx:id="statusLabel" text="" textFill="red" />
+    </VBox>
+</StackPane>
