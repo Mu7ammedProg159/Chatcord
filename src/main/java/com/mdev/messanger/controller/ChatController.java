@@ -94,6 +94,7 @@ public class ChatController {
         try {
             clientThread = new ClientThread(username, tag, SERVER_PORT, SERVER_IP);
             clientThread.listen(this::displayMessage);
+            clientThread.sendMessage("__REGISTER__");
 
         } catch (SocketException e){
             throw new RuntimeException(e);

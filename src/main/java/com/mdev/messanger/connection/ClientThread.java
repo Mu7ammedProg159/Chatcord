@@ -31,7 +31,9 @@ public class ClientThread {
                     DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
                     socket.receive(packet);
                     String received = new String(packet.getData(), 0, packet.getLength(), StandardCharsets.UTF_8);
-
+                    if (received.contains("__REGISTER__")){
+                        continue;
+                    }
                     Platform.runLater(() -> onMessageReceived.accept(received));
                 }
             } catch (IOException e) {
