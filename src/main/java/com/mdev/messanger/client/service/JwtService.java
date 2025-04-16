@@ -1,4 +1,4 @@
-package com.mdev.messanger.service;
+package com.mdev.messanger.client.service;
 
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;

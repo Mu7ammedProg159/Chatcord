@@ -1,4 +1,4 @@
-package com.mdev.messanger;
+package com.mdev.messanger.client;
 
 import javafx.application.Application;
 import javafx.application.Platform;

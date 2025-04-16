@@ -1,6 +1,6 @@
-package com.mdev.messanger.component;
+package com.mdev.messanger.client.component;
 
-import com.mdev.messanger.MessangerApplication.StageReadyEvent;
+import com.mdev.messanger.client.MessangerApplication.StageReadyEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;

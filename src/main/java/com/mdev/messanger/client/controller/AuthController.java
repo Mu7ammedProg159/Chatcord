@@ -1,16 +1,12 @@
-package com.mdev.messanger.controller;
+package com.mdev.messanger.client.controller;
 
-import com.mdev.messanger.component.StageInitializer;
-import com.mdev.messanger.service.AuthService;
-import com.mdev.messanger.service.TokenHandler;
-import com.mdev.messanger.service.UserSession;
+import com.mdev.messanger.client.component.StageInitializer;
+import com.mdev.messanger.client.service.AuthService;
+import com.mdev.messanger.client.service.TokenHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Component;
-
-import java.time.chrono.IsoEra;
 
 @Component
 public class AuthController {

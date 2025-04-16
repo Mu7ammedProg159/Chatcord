@@ -1,4 +1,4 @@
-package com.mdev.messanger.model;
+package com.mdev.messanger.client.model;
 
 public enum EStatus {
     Online,

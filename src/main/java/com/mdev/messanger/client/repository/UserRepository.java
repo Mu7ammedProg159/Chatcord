@@ -1,9 +1,7 @@
-package com.mdev.messanger.repository;
+package com.mdev.messanger.client.repository;
 
-import com.mdev.messanger.model.User;
+import com.mdev.messanger.client.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
-
-import java.util.List;
 
 public interface UserRepository extends JpaRepository<User, Long> {
     //User findByUsername(String username);

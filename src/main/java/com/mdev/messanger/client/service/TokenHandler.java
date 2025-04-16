@@ -1,7 +1,5 @@
-package com.mdev.messanger.service;
+package com.mdev.messanger.client.service;
 
-import lombok.Getter;
-import lombok.Setter;
 import org.springframework.stereotype.Component;
 
 @Component

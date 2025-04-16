@@ -1,4 +1,4 @@
-package com.mdev.messanger.config;
+package com.mdev.messanger.client.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

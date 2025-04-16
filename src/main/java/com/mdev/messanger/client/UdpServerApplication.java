@@ -1,4 +1,4 @@
-package com.mdev.messanger;
+package com.mdev.messanger.client;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

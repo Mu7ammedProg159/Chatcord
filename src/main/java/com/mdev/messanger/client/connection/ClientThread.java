@@ -1,4 +1,4 @@
-package com.mdev.messanger.connection;
+package com.mdev.messanger.client.connection;
 
 import javafx.application.Platform;
 

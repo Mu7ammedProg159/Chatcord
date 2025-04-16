@@ -1,8 +1,8 @@
-package com.mdev.messanger.service;
+package com.mdev.messanger.client.service;
 
-import com.mdev.messanger.model.EStatus;
-import com.mdev.messanger.model.User;
-import com.mdev.messanger.repository.UserRepository;
+import com.mdev.messanger.client.model.EStatus;
+import com.mdev.messanger.client.model.User;
+import com.mdev.messanger.client.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;

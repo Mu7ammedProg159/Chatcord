@@ -1,12 +1,11 @@
-package com.mdev.messanger.controller;
+package com.mdev.messanger.client.controller;
 
-import com.mdev.messanger.component.StageInitializer;
-import com.mdev.messanger.connection.ClientThread;
-import com.mdev.messanger.service.AuthService;
-import com.mdev.messanger.service.JwtService;
-import com.mdev.messanger.service.TokenHandler;
+import com.mdev.messanger.client.component.StageInitializer;
+import com.mdev.messanger.client.connection.ClientThread;
+import com.mdev.messanger.client.service.AuthService;
+import com.mdev.messanger.client.service.JwtService;
+import com.mdev.messanger.client.service.TokenHandler;
 import jakarta.annotation.PostConstruct;
-import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.ListView;
@@ -16,9 +15,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import java.io.IOException;
 import java.net.*;
-import java.nio.charset.StandardCharsets;
 
 @Component
 @Scope("prototype")
