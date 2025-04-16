@@ -1,6 +1,7 @@
 package com.mdev.messanger.controller;
 
 import com.mdev.messanger.component.StageInitializer;
+import com.mdev.messanger.service.AuthService;
 import com.mdev.messanger.service.JwtService;
 import com.mdev.messanger.service.TokenHandler;
 import javafx.fxml.FXML;
@@ -39,11 +40,18 @@ public class ChatController {
     @Autowired
     private JwtService jwtService;
 
+    @Autowired
+    private AuthService authService;
+
     private String username;
+    private String tag;
 
     @FXML
     public void initialize() {
-        username = jwtService.validateTokenAndGetUsername(tokenHandler.getToken());
+
+        String[] usernameAndTag = jwtService.validateTokenAndGetUsername(tokenHandler.getToken()).split("#");
+        username = usernameAndTag[0];
+        tag = usernameAndTag[1];
 
         chatTitle.setText("Welcome, " + username);
 
@@ -68,6 +76,7 @@ public class ChatController {
 
     @FXML
     public void onLogoutClick() {
+        authService.logoutUser(username, tag);
         tokenHandler.clear();
         stageInitializer.switchScenes("/view/sign-view.fxml", "Login", 800, 600);
     }

@@ -16,6 +16,9 @@ import java.time.chrono.IsoEra;
 public class AuthController {
 
     @FXML
+    private TextField emailField;
+
+    @FXML
     private TextField usernameField;
 
     @FXML
@@ -67,6 +70,8 @@ public class AuthController {
             submitButton.setText("Register");
             switchLabel.setText("Already have an account?");
             switchModeLink.setText("Sign In");
+            usernameField.setVisible(true);
+            usernameField.setManaged(true);
             confirmPasswordField.setVisible(true);
             confirmPasswordField.setManaged(true);
         }
@@ -75,6 +80,8 @@ public class AuthController {
             submitButton.setText("Sign In");
             switchLabel.setText("Don't you have an account?");
             switchModeLink.setText("Register");
+            usernameField.setVisible(false);
+            usernameField.setManaged(false);
             confirmPasswordField.setVisible(false);
             confirmPasswordField.setManaged(false);
         }
@@ -83,12 +90,13 @@ public class AuthController {
 
     public void onSubmitClicked(){
 
+        String email = emailField.getText();
         String username = usernameField.getText();
         String password = passwordField.getText();
         String confirmPassword = confirmPasswordField.getText();
 
         if (isRegisterMode){
-            if (username.isEmpty() || password.isEmpty() || confirmPassword.isEmpty()){
+            if (email.isEmpty() || username.isEmpty() || password.isEmpty() || confirmPassword.isEmpty()){
                 statusLabel.setText("Please fill all the fields.");
                 return;
             }
@@ -97,27 +105,27 @@ public class AuthController {
                 return;
             }
             //Todo: Call user registration service for database management.
-            if (!authService.isUserRegistered(username)){
-                authService.signUp(username, password);
+            if (!authService.isUserRegistered(email)){
+                authService.signUp(email, username, password);
                 statusLabel.setText("Account Created!");
                 isRegisterMode = !isRegisterMode;
                 updateMode();
             }
             else {
-                statusLabel.setText("Account already registered with this Username.");
+                statusLabel.setText("Account already registered with this Email Address.");
             }
         }
         else {
-            if (username.isEmpty() || password.isEmpty()){
-                statusLabel.setText("Please enter your username or password.");
+            if (email.isEmpty() || password.isEmpty()){
+                statusLabel.setText("Please enter your email or password.");
                 return;
             }
             // TODO: Call user login service from database.
-            String userToken = authService.signIn(username, password);
+            String userToken = authService.signIn(email, password);
             if (userToken != null) {
                 statusLabel.setText("Signed In with token: " + userToken);
                 tokenHandler.setToken(userToken);
-                stageInitializer.switchScenes("/view/Chat-view.fxml", "Chatcord", 800, 800);
+                stageInitializer.switchScenes("/view/Chat-view.fxml", "Chatcord", 800, 600);
             }
             else
                 statusLabel.setText("Username or password are incorrect.");
