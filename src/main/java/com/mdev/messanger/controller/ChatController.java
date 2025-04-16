@@ -1,17 +1,27 @@
 package com.mdev.messanger.controller;
 
 import com.mdev.messanger.component.StageInitializer;
+import com.mdev.messanger.connection.ClientThread;
 import com.mdev.messanger.service.AuthService;
 import com.mdev.messanger.service.JwtService;
 import com.mdev.messanger.service.TokenHandler;
+import jakarta.annotation.PostConstruct;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.VBox;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
+import java.net.*;
+import java.nio.charset.StandardCharsets;
+
 @Component
+@Scope("prototype")
 public class ChatController {
     @FXML
     private Label chatTitle;
@@ -43,8 +53,31 @@ public class ChatController {
     @Autowired
     private AuthService authService;
 
+    private final int SERVER_PORT;
+    private final String SERVER_IP;
+
     private String username;
     private String tag;
+
+    private ClientThread clientThread;
+
+    public ChatController(@Value("${spring.application.udp.server.port}") int serverPort, @Value("${spring.application.udp.server.ip}") String serverIp) {
+        SERVER_PORT = serverPort;
+        SERVER_IP = serverIp;
+    }
+
+    @PostConstruct
+    public void init() {
+    }
+
+    private void displayMessage(String receiveMessage) {
+        if (!receiveMessage.isEmpty()) {
+            Label msgLabel = new Label(receiveMessage);
+            msgLabel.setStyle("-fx-background-color: #5865f2; -fx-text-fill: white; -fx-padding: 8; -fx-background-radius: 8;");
+            messagesContainer.getChildren().add(msgLabel);
+            messageField.clear();
+        }
+    }
 
     @FXML
     public void initialize() {
@@ -55,23 +88,26 @@ public class ChatController {
 
         chatTitle.setText("Welcome, " + username);
 
+
         contactsListView.getItems().addAll("Friend A", "Friend B", "Group 1");
+
+        try {
+            clientThread = new ClientThread(username, tag, SERVER_PORT, SERVER_IP);
+            clientThread.listen(this::displayMessage);
+
+        } catch (SocketException e){
+            throw new RuntimeException(e);
+        }
 
         sendButton.setOnAction(e -> sendMessage());
 
         // Optional: scroll to bottom on new message
-        messagesContainer.heightProperty().addListener((obs, oldVal, newVal) ->
-                chatScrollPane.setVvalue(chatScrollPane.getVmax()));
+        messagesContainer.heightProperty().addListener((obs, oldVal, newVal) -> chatScrollPane.setVvalue(chatScrollPane.getVmax()));
     }
 
     private void sendMessage() {
-        String message = messageField.getText().trim();
-        if (!message.isEmpty()) {
-            Label msgLabel = new Label(username + ": " + message);
-            msgLabel.setStyle("-fx-background-color: #5865f2; -fx-text-fill: white; -fx-padding: 8; -fx-background-radius: 8;");
-            messagesContainer.getChildren().add(msgLabel);
-            messageField.clear();
-        }
+        clientThread.sendMessage(messageField.getText());
+        messageField.clear();
     }
 
     @FXML
