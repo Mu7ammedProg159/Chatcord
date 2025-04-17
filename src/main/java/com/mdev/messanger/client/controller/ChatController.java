@@ -7,9 +7,15 @@ import com.mdev.messanger.client.service.JwtService;
 import com.mdev.messanger.client.service.TokenHandler;
 import jakarta.annotation.PostConstruct;
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.control.ListView;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.shape.Circle;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Scope;
@@ -50,11 +56,14 @@ public class ChatController {
     @Autowired
     private AuthService authService;
 
+    private String lastMessageSender = null;
+
     private final int SERVER_PORT;
     private final String SERVER_IP;
 
     private String username;
     private String tag;
+    private Image profileImage = new Image(getClass().getResource("images/pfp2.png").toExternalForm());
 
     private ClientThread clientThread;
 
@@ -103,7 +112,46 @@ public class ChatController {
         messagesContainer.heightProperty().addListener((obs, oldVal, newVal) -> chatScrollPane.setVvalue(chatScrollPane.getVmax()));
     }
 
+    private Node createMessageNode(String username, String message, Image profileImage) {
+        boolean isSameSenderAsLast = username.equals(lastMessageSender);
+        lastMessageSender = username;
+
+        VBox messageGroup = new VBox();
+        messageGroup.setSpacing(2);
+
+        if (!isSameSenderAsLast) {
+            // Profile Image
+            ImageView imageView = new ImageView(profileImage);
+            imageView.setFitHeight(40);
+            imageView.setFitWidth(40);
+            imageView.setClip(new Circle(20, 20, 20));
+
+            // Username
+            Label nameLabel = new Label(username);
+            nameLabel.setStyle("-fx-text-fill: #ffffff; -fx-font-weight: bold;");
+
+            HBox header = new HBox(imageView, nameLabel);
+            header.setSpacing(10);
+            header.setAlignment(Pos.CENTER_LEFT);
+
+            messageGroup.getChildren().add(header);
+        }
+
+        // Message bubble
+        Label messageLabel = new Label(message);
+        messageLabel.setWrapText(true);
+        messageLabel.setStyle("-fx-text-fill: #dddddd; -fx-background-color: #4f545c; -fx-padding: 8px 10px; -fx-background-radius: 8;");
+        messageLabel.setMaxWidth(400);
+
+        HBox messageBox = new HBox(messageLabel);
+        messageBox.setAlignment(Pos.CENTER_LEFT);
+        messageGroup.getChildren().add(messageBox);
+
+        return messageGroup;
+    }
+
     private void sendMessage() {
+        Node messageNode = createMessageNode(username, messageField.getText(), profileImage);
         clientThread.sendMessage(messageField.getText());
         messageField.clear();
     }
