@@ -6,6 +6,11 @@ import javafx.scene.Node;
 import javafx.scene.image.Image;
 import lombok.Setter;
 
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+
 import java.io.*;
 import java.net.*;
 import java.nio.charset.StandardCharsets;
@@ -18,6 +23,8 @@ public class ClientThread {
     private final int serverPort;
     private final String serverIp;
     private DatagramSocket socket;
+
+    private String debugString;
 
     @Setter
     private MessageDispatcher messageDispatcher;
@@ -32,6 +39,7 @@ public class ClientThread {
 
     public void listen(MessageDispatcher onMessageReceived) {
         new Thread(() -> {
+            System.out.println("Started listening...");
             try {
                 byte[] buffer = new byte[65507];
                 DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
@@ -64,6 +72,9 @@ public class ClientThread {
             DatagramPacket packet = new DatagramPacket(
                     jsonBytes, jsonBytes.length,
                     InetAddress.getByName(serverIp), serverPort);
+
+            System.out.println("Sending message: " + json);
+
             socket.send(packet);
 
         } catch (IOException e) {

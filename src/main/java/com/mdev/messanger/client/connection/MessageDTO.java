@@ -13,6 +13,8 @@ public class MessageDTO implements Serializable {
     private String username;
     private String message;
     private String profileImageURL;
+    private long timestamp;
+    private EMessageStatus messageStatus;
 
     @Override
     public String toString() {
@@ -20,6 +22,8 @@ public class MessageDTO implements Serializable {
                 "username='" + username + '\'' +
                 ", message='" + message + '\'' +
                 ", profileImageURL='" + profileImageURL + '\'' +
+                ", timestamp='" + timestamp + '\'' +
+                ", MessageStatus='" + messageStatus + '\'' +
                 '}';
     }
 }

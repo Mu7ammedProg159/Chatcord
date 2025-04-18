@@ -1,7 +1,9 @@
 package com.mdev.messanger.client.controller;
 
+import com.mdev.messanger.client.component.SpringFXMLLoader;
 import com.mdev.messanger.client.component.StageInitializer;
 import com.mdev.messanger.client.connection.ClientThread;
+import com.mdev.messanger.client.connection.EMessageStatus;
 import com.mdev.messanger.client.connection.MessageDTO;
 import com.mdev.messanger.client.service.AuthService;
 import com.mdev.messanger.client.service.JwtService;
@@ -9,6 +11,7 @@ import com.mdev.messanger.client.service.TokenHandler;
 import jakarta.annotation.PostConstruct;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.*;
@@ -23,6 +26,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
 import java.net.*;
 
 @Component
@@ -45,6 +49,9 @@ public class ChatController {
     @FXML
     private Button sendButton;
 
+    @FXML
+    private Button debugger;
+
     @Autowired
     private TokenHandler tokenHandler;
 
@@ -57,6 +64,9 @@ public class ChatController {
     @Autowired
     private AuthService authService;
 
+    @Autowired
+    private SpringFXMLLoader springFXMLLoader;
+
     private String lastMessageSender = null;
 
     private final int SERVER_PORT;
@@ -67,6 +77,8 @@ public class ChatController {
 
     private String profileImageURL = "/images/pfp.png";
     private Image pfpImage = new Image(getClass().getResource(profileImageURL).toExternalForm());
+
+    private String debugString;
 
     private ClientThread clientThread;
 
@@ -97,9 +109,7 @@ public class ChatController {
 
         //System.out.println(getClass().getResource("/images/pfp2.png"));
 
-
         chatTitle.setText("Welcome, " + username);
-
 
         contactsListView.getItems().addAll("Friend A", "Friend B", "Group 1");
 
@@ -108,12 +118,25 @@ public class ChatController {
             //clientThread.listen(this::displayMessage);
             clientThread.listen(dto -> {
                 Platform.runLater(() -> {
-                    Image profilePicture = new Image(getClass().getResource(dto.getProfileImageURL()).toExternalForm());
-                    Node messageNode = createMessageNode(dto.getUsername(), dto.getMessage(), profilePicture);
-                    messagesContainer.getChildren().add(messageNode);
+                    System.out.println("DTO received: " + dto.getMessage());
+                    /*Image profilePicture = new Image(getClass().getResource(dto.getProfileImageURL()).toExternalForm());
+                    //Node messageNode = createMessageNode(dto.getUsername(), dto.getMessage(), profilePicture);
+                    System.out.println("--------------------- TESTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT -------");
+                    try {
+                        FXMLLoader loader = springFXMLLoader.getLoader("/view/message-view.fxml");
+                        Node messageNode = loader.load();
+                        MessageBubbleController controller = loader.getController();
+                        controller.setData(dto);
+                        //debugString = String.valueOf(controller.getUsername());
+                        debugger.setText(String.valueOf(controller.getUsername()));
+                        messagesContainer.getChildren().add(messageNode);
+
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }*/
                 });
             });
-            clientThread.sendMessage(new MessageDTO("SERVER", "__REGISTER__", "/images/pfp.png"));
+            clientThread.sendMessage(new MessageDTO("SERVER", "__REGISTER__", "/images/pfp.png", 0L, EMessageStatus.SENT));
 
         } catch (SocketException e){
             throw new RuntimeException(e);
@@ -168,17 +191,21 @@ public class ChatController {
         String message = messageField.getText();
 
         if (!message.isEmpty()){
-            MessageDTO messageDTO = new MessageDTO(username, message, profileImageURL);
+
+            MessageDTO messageDTO = new MessageDTO(username, message, profileImageURL, System.currentTimeMillis(), EMessageStatus.SENT);
             //Node messageNode = createMessageNode(username, message, pfpImage);
             //messagesContainer.getChildren().add(messageNode);
 
-            System.out.println("--------------------- TESTING PURPOSES -----------------");
-            System.out.println("--------- " + messageDTO.toString() + " ------------");
-            System.out.println("--------------------- TESTING PURPOSES -----------------");
+
 
             clientThread.sendMessage(messageDTO);
             messageField.clear();
         }
+    }
+
+    @FXML
+    public void onDebugBtn(){
+        contactsListView.getItems().set(0, String.valueOf(getClass().getResource("/view/message-view.fxml")));
     }
 
     @FXML
