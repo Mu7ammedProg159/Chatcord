@@ -65,7 +65,8 @@ public class ChatController {
     private String username;
     private String tag;
 
-    private String profileImage = "/images/pfp.png";
+    private String profileImageURL = "/images/pfp.png";
+    private Image pfpImage = new Image(getClass().getResource(profileImageURL).toExternalForm());
 
     private ClientThread clientThread;
 
@@ -108,11 +109,11 @@ public class ChatController {
             clientThread.listen(dto -> {
                 Platform.runLater(() -> {
                     Image profilePicture = new Image(getClass().getResource(dto.getProfileImageURL()).toExternalForm());
-                    Node messageNode = createMessageNode(dto.getUsername(), dto.getMessage(), dto.getProfileImageURL());
+                    Node messageNode = createMessageNode(dto.getUsername(), dto.getMessage(), profilePicture);
                     messagesContainer.getChildren().add(messageNode);
                 });
             });
-            //clientThread.sendMessage(new MessageDTO("SERVER", "__REGISTER__", "/images/pfp.png"));
+            clientThread.sendMessage(new MessageDTO("SERVER", "__REGISTER__", "/images/pfp.png"));
 
         } catch (SocketException e){
             throw new RuntimeException(e);
@@ -124,7 +125,7 @@ public class ChatController {
         messagesContainer.heightProperty().addListener((obs, oldVal, newVal) -> chatScrollPane.setVvalue(chatScrollPane.getVmax()));
     }
 
-    private Node createMessageNode(String username, String message, String profileImageURL) {
+    private Node createMessageNode(String username, String message, Image profileImageURL) {
         boolean isSameSenderAsLast = username.equals(lastMessageSender);
         lastMessageSender = username;
 
@@ -133,8 +134,8 @@ public class ChatController {
 
         if (!isSameSenderAsLast) {
             // Profile Image
-            Image image = new Image(getClass().getResource(profileImageURL).toExternalForm());
-            ImageView imageView = new ImageView(image);
+
+            ImageView imageView = new ImageView(profileImageURL);
             imageView.setFitHeight(40);
             imageView.setFitWidth(40);
             imageView.setClip(new Circle(20, 20, 20));
@@ -167,12 +168,14 @@ public class ChatController {
         String message = messageField.getText();
 
         if (!message.isEmpty()){
-            MessageDTO messageDTO = new MessageDTO(username, message, profileImage);
-            Node messageNode = createMessageNode(username, message, profileImage);
-            messagesContainer.getChildren().add(messageNode);
+            MessageDTO messageDTO = new MessageDTO(username, message, profileImageURL);
+            //Node messageNode = createMessageNode(username, message, pfpImage);
+            //messagesContainer.getChildren().add(messageNode);
+
             System.out.println("--------------------- TESTING PURPOSES -----------------");
             System.out.println("--------- " + messageDTO.toString() + " ------------");
             System.out.println("--------------------- TESTING PURPOSES -----------------");
+
             clientThread.sendMessage(messageDTO);
             messageField.clear();
         }

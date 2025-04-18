@@ -1,5 +1,6 @@
 package com.mdev.messanger.client.connection;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import javafx.application.Platform;
 import javafx.scene.Node;
 import javafx.scene.image.Image;
@@ -31,24 +32,23 @@ public class ClientThread {
 
     public void listen(MessageDispatcher onMessageReceived) {
         new Thread(() -> {
-            byte[] buffer = new byte[65507];
             try {
+                byte[] buffer = new byte[65507];
+                DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
                 while (true) {
-                    DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
                     socket.receive(packet);
 
-                    ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(packet.getData(), 0, packet.getLength());
-                    ObjectInputStream objectInputStream = new ObjectInputStream(byteArrayInputStream);
-
-                    MessageDTO receivedMessage = (MessageDTO) objectInputStream.readObject();
+                    String json = new String(packet.getData(), 0, packet.getLength(), StandardCharsets.UTF_8);
+                    ObjectMapper mapper = new ObjectMapper();
+                    MessageDTO receivedMessage = mapper.readValue(json, MessageDTO.class);
 
                     if (receivedMessage.getMessage().contains("__REGISTER__")){
                         continue;
                     }
 
-                    messageDispatcher.onMessageReceived(receivedMessage);
+                    onMessageReceived.onMessageReceived(receivedMessage);
                 }
-            } catch (IOException | ClassNotFoundException e) {
+            } catch (IOException e) {
                 e.printStackTrace();
             }
         }).start();
@@ -56,16 +56,16 @@ public class ClientThread {
 
     public void sendMessage(MessageDTO messageText) {
         try {
-            ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
-            ObjectOutputStream objectStream = new ObjectOutputStream(byteStream);
-            objectStream.writeObject(messageText);
-            objectStream.flush();
 
-            byte[] sendData = byteStream.toByteArray();
+            ObjectMapper mapper = new ObjectMapper();
+            String json = mapper.writeValueAsString(messageText); // Serialize to JSON
+            byte[] jsonBytes = json.getBytes(StandardCharsets.UTF_8);
 
-            DatagramPacket packet = new DatagramPacket(sendData, sendData.length,
+            DatagramPacket packet = new DatagramPacket(
+                    jsonBytes, jsonBytes.length,
                     InetAddress.getByName(serverIp), serverPort);
             socket.send(packet);
+
         } catch (IOException e) {
             e.printStackTrace();
         }
