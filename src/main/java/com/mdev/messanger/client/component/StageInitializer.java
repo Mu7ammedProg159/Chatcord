@@ -34,7 +34,6 @@ public class StageInitializer implements ApplicationListener<StageReadyEvent> {
     @Override
     public void onApplicationEvent(StageReadyEvent event) {
 
-
         // to-do Here you can add your details for JavaFx
             this.primaryStage = event.getStage();
         try {

@@ -1,0 +1,25 @@
+package com.mdev.messanger.client.connection;
+
+import lombok.*;
+
+import java.io.Serializable;
+
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
+public class MessageDTO implements Serializable {
+
+    private String username;
+    private String message;
+    private String profileImageURL;
+
+    @Override
+    public String toString() {
+        return "MessageDTO{" +
+                "username='" + username + '\'' +
+                ", message='" + message + '\'' +
+                ", profileImageURL='" + profileImageURL + '\'' +
+                '}';
+    }
+}

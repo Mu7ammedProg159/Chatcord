@@ -2,10 +2,12 @@ package com.mdev.messanger.client.controller;
 
 import com.mdev.messanger.client.component.StageInitializer;
 import com.mdev.messanger.client.connection.ClientThread;
+import com.mdev.messanger.client.connection.MessageDTO;
 import com.mdev.messanger.client.service.AuthService;
 import com.mdev.messanger.client.service.JwtService;
 import com.mdev.messanger.client.service.TokenHandler;
 import jakarta.annotation.PostConstruct;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -24,7 +26,6 @@ import org.springframework.stereotype.Component;
 import java.net.*;
 
 @Component
-@Scope("prototype")
 public class ChatController {
     @FXML
     private Label chatTitle;
@@ -63,7 +64,8 @@ public class ChatController {
 
     private String username;
     private String tag;
-    private Image profileImage = new Image(getClass().getResource("images/pfp2.png").toExternalForm());
+
+    private String profileImage = "/images/pfp.png";
 
     private ClientThread clientThread;
 
@@ -92,6 +94,9 @@ public class ChatController {
         username = usernameAndTag[0];
         tag = usernameAndTag[1];
 
+        //System.out.println(getClass().getResource("/images/pfp2.png"));
+
+
         chatTitle.setText("Welcome, " + username);
 
 
@@ -99,8 +104,15 @@ public class ChatController {
 
         try {
             clientThread = new ClientThread(username, tag, SERVER_PORT, SERVER_IP);
-            clientThread.listen(this::displayMessage);
-            clientThread.sendMessage("__REGISTER__");
+            //clientThread.listen(this::displayMessage);
+            clientThread.listen(dto -> {
+                Platform.runLater(() -> {
+                    Image profilePicture = new Image(getClass().getResource(dto.getProfileImageURL()).toExternalForm());
+                    Node messageNode = createMessageNode(dto.getUsername(), dto.getMessage(), dto.getProfileImageURL());
+                    messagesContainer.getChildren().add(messageNode);
+                });
+            });
+            //clientThread.sendMessage(new MessageDTO("SERVER", "__REGISTER__", "/images/pfp.png"));
 
         } catch (SocketException e){
             throw new RuntimeException(e);
@@ -112,7 +124,7 @@ public class ChatController {
         messagesContainer.heightProperty().addListener((obs, oldVal, newVal) -> chatScrollPane.setVvalue(chatScrollPane.getVmax()));
     }
 
-    private Node createMessageNode(String username, String message, Image profileImage) {
+    private Node createMessageNode(String username, String message, String profileImageURL) {
         boolean isSameSenderAsLast = username.equals(lastMessageSender);
         lastMessageSender = username;
 
@@ -121,7 +133,8 @@ public class ChatController {
 
         if (!isSameSenderAsLast) {
             // Profile Image
-            ImageView imageView = new ImageView(profileImage);
+            Image image = new Image(getClass().getResource(profileImageURL).toExternalForm());
+            ImageView imageView = new ImageView(image);
             imageView.setFitHeight(40);
             imageView.setFitWidth(40);
             imageView.setClip(new Circle(20, 20, 20));
@@ -151,9 +164,18 @@ public class ChatController {
     }
 
     private void sendMessage() {
-        Node messageNode = createMessageNode(username, messageField.getText(), profileImage);
-        clientThread.sendMessage(messageField.getText());
-        messageField.clear();
+        String message = messageField.getText();
+
+        if (!message.isEmpty()){
+            MessageDTO messageDTO = new MessageDTO(username, message, profileImage);
+            Node messageNode = createMessageNode(username, message, profileImage);
+            messagesContainer.getChildren().add(messageNode);
+            System.out.println("--------------------- TESTING PURPOSES -----------------");
+            System.out.println("--------- " + messageDTO.toString() + " ------------");
+            System.out.println("--------------------- TESTING PURPOSES -----------------");
+            clientThread.sendMessage(messageDTO);
+            messageField.clear();
+        }
     }
 
     @FXML
