@@ -211,6 +211,7 @@ public class ChatController {
     public void onLogoutClick() {
         authService.logoutUser(username, tag);
         tokenHandler.clear();
+        clientThread.close();
         stageInitializer.switchScenes("/view/sign-view.fxml", "Login", 800, 600);
     }
 }

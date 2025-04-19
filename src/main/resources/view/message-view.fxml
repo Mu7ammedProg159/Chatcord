@@ -1,32 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.image.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.shape.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Circle?>
 
-<HBox xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mdev.messanger.client.controller.MessageBubbleController" spacing="10" alignment="TOP_LEFT">
+<HBox alignment="TOP_LEFT" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mdev.messanger.client.controller.MessageBubbleController">
 
     <!-- PFP wrapped in StackPane for space reservation -->
-    <StackPane prefWidth="40" prefHeight="40">
+    <StackPane prefHeight="40.0" prefWidth="40.0">
         <ImageView fx:id="pfp" fitHeight="40" fitWidth="40">
             <clip>
                 <Circle centerX="20" centerY="20" radius="20" />
             </clip>
         </ImageView>
-        <Region fx:id="pfpPlaceholder" visible="false" managed="false" prefWidth="40" prefHeight="40" />
+        <Region fx:id="pfpPlaceholder" managed="false" prefHeight="40" prefWidth="40" visible="false" />
     </StackPane>
 
     <!-- Message Content -->
-    <VBox fx:id="root" alignment="TOP_LEFT" spacing="5" style="-fx-padding: 10;">
-        <HBox fx:id="usernameAndTimeContainer" alignment="CENTER_LEFT" spacing="10">
+    <VBox fx:id="root" alignment="TOP_LEFT" spacing="5.0" style="-fx-padding: 10;">
+        <HBox fx:id="usernameAndTimeContainer" alignment="CENTER_LEFT">
             <Label fx:id="username" style="-fx-text-fill: white; -fx-font-weight: bold;" />
             <Label fx:id="timestamp" style="-fx-text-fill: #999999; -fx-font-size: 10;" />
         </HBox>
         <HBox>
             <children>
-                <Label fx:id="message" maxWidth="400" style="-fx-text-fill: #dddddd; -fx-padding: 4 4;" wrapText="true" />
+                <VBox fx:id="messageContainer">
+                    <children>
+                        <Label fx:id="message" maxWidth="400" style="-fx-text-fill: #dddddd;" wrapText="true" />
+                    </children>
+                </VBox>
                 <Label fx:id="status" alignment="CENTER" disable="true" textAlignment="CENTER" visible="false">
                     <HBox.margin>
                         <Insets top="8.0" />

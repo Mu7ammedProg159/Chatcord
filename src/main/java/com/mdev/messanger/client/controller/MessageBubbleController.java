@@ -7,6 +7,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
+import javafx.scene.layout.VBox;
 import lombok.Getter;
 import org.springframework.stereotype.Component;
 
@@ -22,11 +23,12 @@ public class MessageBubbleController {
     @FXML private Label timestamp;
     @FXML private Label status;
     @FXML private ImageView pfp;
-    @FXML private HBox usernameAndTimeContainer;
     @FXML private Region pfpPlaceholder;
+    @FXML private VBox messageContainer;
 
     private String lastSender;
     private long lastMessageTimestamp;
+    private int messageOffset;
 
     public void setData(MessageDTO dto) {
         username.setText(dto.getUsername());
@@ -44,9 +46,14 @@ public class MessageBubbleController {
             if (dto.getProfileImageURL() != null) {
                 Image img = new Image(getClass().getResource(dto.getProfileImageURL()).toExternalForm());
                 pfp.setImage(img);
+
+                messageContainer.setStyle("");
                 setMessageElementsVisibility(true);
             }
         } else {
+            //messageContainer.setStyle("-fx-padding: 10 10 2 10; -fx-background-color:  #202225;");
+            messageContainer.setStyle("");
+            messageContainer.setStyle("-fx-translate-y: -40;");
             setMessageElementsVisibility(false); // hide the profile pic
         }
 
@@ -59,13 +66,17 @@ public class MessageBubbleController {
     public void setMessageElementsVisibility(boolean visibility){
 
         pfp.setVisible(visibility);
-        //pfp.setManaged(visibility);
+        pfp.setManaged(visibility);
 
         pfpPlaceholder.setVisible(!visibility);
         pfpPlaceholder.setManaged(!visibility);
 
-        usernameAndTimeContainer.setVisible(visibility);
-        usernameAndTimeContainer.setManaged(visibility);
+        timestamp.setVisible(visibility);
+        timestamp.setManaged(visibility);
+
+        username.setVisible(visibility);
+        username.setManaged(visibility);
+
     }
 
     private String convertToHourTime(long timestampMillis) {
