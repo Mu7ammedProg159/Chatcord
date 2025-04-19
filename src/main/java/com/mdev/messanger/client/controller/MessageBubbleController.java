@@ -5,6 +5,8 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Region;
 import lombok.Getter;
 import org.springframework.stereotype.Component;
 
@@ -20,25 +22,50 @@ public class MessageBubbleController {
     @FXML private Label timestamp;
     @FXML private Label status;
     @FXML private ImageView pfp;
+    @FXML private HBox usernameAndTimeContainer;
+    @FXML private Region pfpPlaceholder;
+
+    private String lastSender;
+    private long lastMessageTimestamp;
 
     public void setData(MessageDTO dto) {
         username.setText(dto.getUsername());
         message.setText(dto.getMessage());
+        status.setText(String.valueOf(dto.getMessageStatus()));
+
+        boolean isSameSender = dto.getUsername().equals(lastSender);
+        boolean isLastMessageExpired = (dto.getTimestamp() - lastMessageTimestamp) > 60_000;
 
         String time = convertToHourTime(dto.getTimestamp());
         timestamp.setText(time);
 
-        if (dto.getProfileImageURL() != null) {
-            Image img = new Image(getClass().getResource(dto.getProfileImageURL()).toExternalForm());
-            pfp.setImage(img);
+        // Only show PFP if sender changed
+        if (!isSameSender || isLastMessageExpired) {
+            if (dto.getProfileImageURL() != null) {
+                Image img = new Image(getClass().getResource(dto.getProfileImageURL()).toExternalForm());
+                pfp.setImage(img);
+                setMessageElementsVisibility(true);
+            }
+        } else {
+            setMessageElementsVisibility(false); // hide the profile pic
         }
 
-        System.out.println("--------------------- TESTING PURPOSES BUBBLE -----------------");
-        System.out.println("--------- " + dto.toString() + " ------------");
-        System.out.println("--------------------- TESTING PURPOSES BUBBLE -----------------");
+        lastSender = dto.getUsername(); // Update the last sender
+        lastMessageTimestamp = dto.getTimestamp(); // Update the last message timestamp.
 
-        message.setStyle("-fx-background-color: #5865f2; -fx-text-fill: white; -fx-padding: 8 10; -fx-background-radius: 8;");
-        //if (dto.getUsername().equalsIgnoreCase("SERVER")) { }
+        //message.setStyle("-fx-background-color: #5865f2; -fx-text-fill: white; -fx-padding: 8 10; -fx-background-radius: 8;");
+    }
+
+    public void setMessageElementsVisibility(boolean visibility){
+
+        pfp.setVisible(visibility);
+        //pfp.setManaged(visibility);
+
+        pfpPlaceholder.setVisible(!visibility);
+        pfpPlaceholder.setManaged(!visibility);
+
+        usernameAndTimeContainer.setVisible(visibility);
+        usernameAndTimeContainer.setManaged(visibility);
     }
 
     private String convertToHourTime(long timestampMillis) {

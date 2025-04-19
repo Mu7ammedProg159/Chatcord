@@ -23,7 +23,6 @@ import javafx.scene.layout.VBox;
 import javafx.scene.shape.Circle;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -94,7 +93,7 @@ public class ChatController {
     private void displayMessage(String receiveMessage) {
         if (!receiveMessage.isEmpty()) {
             Label msgLabel = new Label(receiveMessage);
-            msgLabel.setStyle("-fx-background-color: #5865f2; -fx-text-fill: white; -fx-padding: 8; -fx-background-radius: 8;");
+            //msgLabel.setStyle("-fx-background-color: #5865f2; -fx-text-fill: white; -fx-padding: 8; -fx-background-radius: 8;");
             messagesContainer.getChildren().add(msgLabel);
             messageField.clear();
         }
@@ -107,8 +106,6 @@ public class ChatController {
         username = usernameAndTag[0];
         tag = usernameAndTag[1];
 
-        //System.out.println(getClass().getResource("/images/pfp2.png"));
-
         chatTitle.setText("Welcome, " + username);
 
         contactsListView.getItems().addAll("Friend A", "Friend B", "Group 1");
@@ -118,22 +115,24 @@ public class ChatController {
             //clientThread.listen(this::displayMessage);
             clientThread.listen(dto -> {
                 Platform.runLater(() -> {
-                    System.out.println("DTO received: " + dto.getMessage());
-                    /*Image profilePicture = new Image(getClass().getResource(dto.getProfileImageURL()).toExternalForm());
+                    //System.out.println("DTO received: " + dto.getMessage());
+                    Image profilePicture = new Image(getClass().getResource(dto.getProfileImageURL()).toExternalForm());
                     //Node messageNode = createMessageNode(dto.getUsername(), dto.getMessage(), profilePicture);
-                    System.out.println("--------------------- TESTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT -------");
                     try {
                         FXMLLoader loader = springFXMLLoader.getLoader("/view/message-view.fxml");
                         Node messageNode = loader.load();
                         MessageBubbleController controller = loader.getController();
                         controller.setData(dto);
                         //debugString = String.valueOf(controller.getUsername());
+                        System.out.println("--------------------- RECEIVING -----------------------");
+                        System.out.println("Message Received as:  " + dto.toString());
+                        System.out.println("--------------------- RECEIVING -----------------------");
                         debugger.setText(String.valueOf(controller.getUsername()));
                         messagesContainer.getChildren().add(messageNode);
 
                     } catch (IOException e) {
                         throw new RuntimeException(e);
-                    }*/
+                    }
                 });
             });
             clientThread.sendMessage(new MessageDTO("SERVER", "__REGISTER__", "/images/pfp.png", 0L, EMessageStatus.SENT));

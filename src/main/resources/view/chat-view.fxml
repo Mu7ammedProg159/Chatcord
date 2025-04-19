@@ -21,7 +21,7 @@
                      <Insets />
                   </HBox.margin>
                </Button>
-               <Separator prefWidth="5.0" />
+               <Separator prefWidth="5.0" visible="false" />
                <Button fx:id="debugger" mnemonicParsing="false" onAction="#onDebugBtn" style="-fx-background-color: #ff5555; -fx-text-fill: white;" text="DEBUG ONLY" />
             </children>
          </HBox>
@@ -39,15 +39,19 @@
             <HBox alignment="CENTER_LEFT" spacing="10">
                 <Label fx:id="chatTitle" style="-fx-text-fill: white; -fx-font-size: 16px;" text="Chat with ..." />
             </HBox>
-
-            <!-- Chat Messages -->
-            <ScrollPane fx:id="chatScrollPane" fitToWidth="true" VBox.vgrow="ALWAYS">
-                <content>
-                    <VBox fx:id="messagesContainer" spacing="10" style="-fx-padding: 10;">
+         <Pane prefHeight="539.0" prefWidth="560.0">
+            <children>
+      
+                  <!-- Chat Messages -->
+                  <ScrollPane fx:id="chatScrollPane" fitToWidth="true" prefHeight="498.0" prefWidth="560.0" style="-fx-background-color: #2f3136;">
+                      <content>
+                          <VBox fx:id="messagesContainer" prefHeight="496.0" prefWidth="756.0" spacing="10" style="-fx-padding: 10; -fx-background-color: #202225;">
                         <!-- Individual message bubbles will be dynamically added here -->
                     </VBox>
-                </content>
-            </ScrollPane>
+                      </content>
+                  </ScrollPane>
+            </children>
+         </Pane>
 
             <!-- Message Input -->
             <HBox spacing="10">
