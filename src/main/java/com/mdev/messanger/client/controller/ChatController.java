@@ -27,6 +27,8 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.net.*;
+import java.util.Arrays;
+import java.util.List;
 
 @Component
 public class ChatController {
@@ -34,7 +36,7 @@ public class ChatController {
     private Label chatTitle;
 
     @FXML
-    private ListView<String> contactsListView;
+    private VBox contactsListView;
 
     @FXML
     private VBox messagesContainer;
@@ -74,7 +76,7 @@ public class ChatController {
     private String username;
     private String tag;
 
-    private String profileImageURL = "/images/pfp.png";
+    private String profileImageURL = "/images/pfp3.png";
     private Image pfpImage = new Image(getClass().getResource(profileImageURL).toExternalForm());
 
     private String debugString;
@@ -108,31 +110,33 @@ public class ChatController {
 
         chatTitle.setText("Welcome, " + username);
 
-        contactsListView.getItems().addAll("Friend A", "Friend B", "Group 1");
+        try{
+            //Label contactLabel = new Label("Friend A");
+            FXMLLoader loader = springFXMLLoader.getLoader("/view/contact-view.fxml");
+            Node contactNode = loader.load();
+            ContactController controller = loader.getController();
+            controller.setData(dto);
+
+            List<Label> contactLabel = Arrays.asList(
+                    new Label("Friend A"),
+                    new Label("Friend B"),
+                    new Label("Friend C")
+                    );
+
+        } catch (IOException e){
+            throw new RuntimeException(e);
+        }
+
+        for (Label i : contactLabel){
+            contactsListView.getChildren().add(i);
+        }
 
         try {
             clientThread = new ClientThread(username, tag, SERVER_PORT, SERVER_IP);
             //clientThread.listen(this::displayMessage);
             clientThread.listen(dto -> {
                 Platform.runLater(() -> {
-                    //System.out.println("DTO received: " + dto.getMessage());
-                    Image profilePicture = new Image(getClass().getResource(dto.getProfileImageURL()).toExternalForm());
-                    //Node messageNode = createMessageNode(dto.getUsername(), dto.getMessage(), profilePicture);
-                    try {
-                        FXMLLoader loader = springFXMLLoader.getLoader("/view/message-view.fxml");
-                        Node messageNode = loader.load();
-                        MessageBubbleController controller = loader.getController();
-                        controller.setData(dto);
-                        //debugString = String.valueOf(controller.getUsername());
-                        System.out.println("--------------------- RECEIVING -----------------------");
-                        System.out.println("Message Received as:  " + dto.toString());
-                        System.out.println("--------------------- RECEIVING -----------------------");
-                        debugger.setText(String.valueOf(controller.getUsername()));
-                        messagesContainer.getChildren().add(messageNode);
-
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
-                    }
+                    sentMessage(dto);
                 });
             });
             clientThread.sendMessage(new MessageDTO("SERVER", "__REGISTER__", "/images/pfp.png", 0L, EMessageStatus.SENT));
@@ -145,6 +149,26 @@ public class ChatController {
 
         // Optional: scroll to bottom on new message
         messagesContainer.heightProperty().addListener((obs, oldVal, newVal) -> chatScrollPane.setVvalue(chatScrollPane.getVmax()));
+    }
+
+    private void sentMessage(MessageDTO dto) {
+        //System.out.println("DTO received: " + dto.getMessage());
+        Image profilePicture = new Image(getClass().getResource(dto.getProfileImageURL()).toExternalForm());
+        //Node messageNode = createMessageNode(dto.getUsername(), dto.getMessage(), profilePicture);
+        try {
+            FXMLLoader loader = springFXMLLoader.getLoader("/view/message-view.fxml");
+            Node messageNode = loader.load();
+            MessageBubbleController controller = loader.getController();
+            controller.setData(dto);
+            //debugString = String.valueOf(controller.getUsername());
+            System.out.println("--------------------- RECEIVING -----------------------");
+            System.out.println("Message Received as:  " + dto.toString());
+            System.out.println("--------------------- RECEIVING -----------------------");
+            messagesContainer.getChildren().add(messageNode);
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private Node createMessageNode(String username, String message, Image profileImageURL) {
@@ -204,7 +228,7 @@ public class ChatController {
 
     @FXML
     public void onDebugBtn(){
-        contactsListView.getItems().set(0, String.valueOf(getClass().getResource("/view/message-view.fxml")));
+        System.out.println("DEBUG BUTTON: " + username);
     }
 
     @FXML

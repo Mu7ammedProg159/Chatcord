@@ -23,7 +23,7 @@
 
     <!-- Message Content -->
     <VBox fx:id="root" alignment="TOP_LEFT" spacing="5.0" style="-fx-padding: 10;">
-        <HBox fx:id="usernameAndTimeContainer" alignment="CENTER_LEFT">
+        <HBox fx:id="usernameAndTimeContainer" alignment="CENTER_LEFT" spacing="10.0">
             <Label fx:id="username" style="-fx-text-fill: white; -fx-font-weight: bold;" />
             <Label fx:id="timestamp" style="-fx-text-fill: #999999; -fx-font-size: 10;" />
         </HBox>

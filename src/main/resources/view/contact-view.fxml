@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+
+<AnchorPane xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mdev.messanger.client.controller">
+   <children>
+      <HBox spacing="10.0">
+         <children>
+            <ImageView fx:id="contactImage" fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true" />
+            <HBox spacing="15.0">
+               <children>
+                  <VBox alignment="CENTER_LEFT">
+                     <children>
+                        <Label fx:id="chatName" style="-fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14;" />
+                        <Label fx:id="lastChatMessage" style="-fx-text-fill: #636363;" wrapText="true" />
+                     </children>
+                     <HBox.margin>
+                        <Insets bottom="7.0" />
+                     </HBox.margin>
+                  </VBox>
+                  <VBox alignment="CENTER" spacing="5.0">
+                     <children>
+                        <Label fx:id="timestamp" style="-fx-text-fill: #636363;" textFill="#636363">
+                           <VBox.margin>
+                              <Insets />
+                           </VBox.margin>
+                        </Label>
+                        <StackPane alignment="CENTER_RIGHT">
+                           <children>
+                              <Label fx:id="unseenMessagesCounter" alignment="CENTER" style="-fx-background-color: #4a65b7; -fx-background-radius: 10; -fx-label-padding: 0 5; -fx-text-fill: #202225;" textAlignment="CENTER" textFill="#4a65b7">
+                                 <StackPane.margin>
+                                    <Insets right="2.0" />
+                                 </StackPane.margin>
+                              </Label>
+                           </children>
+                        </StackPane>
+                     </children>
+                     <HBox.margin>
+                        <Insets right="10.0" />
+                     </HBox.margin>
+                  </VBox>
+               </children>
+            </HBox>
+         </children>
+      </HBox>
+   </children>
+</AnchorPane>

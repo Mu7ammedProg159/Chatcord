@@ -40,36 +40,32 @@ public class MessageBubbleController {
 
         String time = convertToHourTime(dto.getTimestamp());
         timestamp.setText(time);
+        Image img = new Image(getClass().getResource(dto.getProfileImageURL()).toExternalForm());
+        pfp.setImage(img);
 
-        // Only show PFP if sender changed
+        /*// Only show PFP if sender changed
         if (!isSameSender || isLastMessageExpired) {
             if (dto.getProfileImageURL() != null) {
-                Image img = new Image(getClass().getResource(dto.getProfileImageURL()).toExternalForm());
-                pfp.setImage(img);
-
-                messageContainer.setStyle("");
-                setMessageElementsVisibility(true);
+                //setMessageElementsVisibility(true);
             }
         } else {
             //messageContainer.setStyle("-fx-padding: 10 10 2 10; -fx-background-color:  #202225;");
-            messageContainer.setStyle("");
-            messageContainer.setStyle("-fx-translate-y: -40;");
-            setMessageElementsVisibility(false); // hide the profile pic
+            System.out.println("Just Print Anything");
+            //setMessageElementsVisibility(false); // hide the profile pic
         }
 
         lastSender = dto.getUsername(); // Update the last sender
-        lastMessageTimestamp = dto.getTimestamp(); // Update the last message timestamp.
+        lastMessageTimestamp = dto.getTimestamp(); // Update the last message timestamp.*/
 
         //message.setStyle("-fx-background-color: #5865f2; -fx-text-fill: white; -fx-padding: 8 10; -fx-background-radius: 8;");
     }
 
     public void setMessageElementsVisibility(boolean visibility){
+        pfp.setVisible(true);
+        pfp.setManaged(true);
 
-        pfp.setVisible(visibility);
-        pfp.setManaged(visibility);
-
-        pfpPlaceholder.setVisible(!visibility);
-        pfpPlaceholder.setManaged(!visibility);
+        //pfpPlaceholder.setVisible(!visibility);
+        //pfpPlaceholder.setManaged(!visibility);
 
         timestamp.setVisible(visibility);
         timestamp.setManaged(visibility);
