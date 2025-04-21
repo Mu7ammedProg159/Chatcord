@@ -1,4 +1,4 @@
-package com.mdev.messanger.client.controller;
+package com.mdev.messanger.client.controller.ui;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;

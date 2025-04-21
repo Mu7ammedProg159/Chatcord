@@ -1,4 +1,4 @@
-package com.mdev.messanger.client.controller;
+package com.mdev.messanger.client.controller.ui;
 
 import com.mdev.messanger.client.component.StageInitializer;
 import com.mdev.messanger.client.service.AuthService;

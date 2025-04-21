@@ -3,7 +3,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<StackPane fx:id="rootPane" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mdev.messanger.client.controller.AuthController">
+<StackPane fx:id="rootPane" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mdev.messanger.client.controller.ui.AuthController">
     <VBox alignment="CENTER" spacing="20" style="-fx-background-color: #f4f4f4; -fx-padding: 40;">
         <Label fx:id="titleLabel" style="-fx-font-size: 24; -fx-font-weight: bold;" text="Welcome" />
       <TextField fx:id="emailField" maxWidth="250.0" promptText="Email Address" />

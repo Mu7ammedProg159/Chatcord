@@ -1,20 +1,12 @@
 package com.mdev.messanger.client.connection;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import javafx.application.Platform;
-import javafx.scene.Node;
-import javafx.scene.image.Image;
+import com.mdev.messanger.client.dto.MessageDTO;
 import lombok.Setter;
-
-import java.time.Instant;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 
 import java.io.*;
 import java.net.*;
 import java.nio.charset.StandardCharsets;
-import java.util.function.Consumer;
 
 public class ClientThread {
 

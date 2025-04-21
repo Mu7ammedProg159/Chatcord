@@ -1,10 +1,10 @@
-package com.mdev.messanger.client.controller;
+package com.mdev.messanger.client.controller.ui;
 
 import com.mdev.messanger.client.component.SpringFXMLLoader;
 import com.mdev.messanger.client.component.StageInitializer;
 import com.mdev.messanger.client.connection.ClientThread;
 import com.mdev.messanger.client.connection.EMessageStatus;
-import com.mdev.messanger.client.connection.MessageDTO;
+import com.mdev.messanger.client.dto.MessageDTO;
 import com.mdev.messanger.client.service.AuthService;
 import com.mdev.messanger.client.service.JwtService;
 import com.mdev.messanger.client.service.TokenHandler;
@@ -12,22 +12,22 @@ import jakarta.annotation.PostConstruct;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.control.ListView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.HBox;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
-import javafx.scene.shape.Circle;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.net.*;
-import java.util.Arrays;
 import java.util.List;
 
 @Component
@@ -49,6 +49,9 @@ public class ChatController {
 
     @FXML
     private Button sendButton;
+
+    @FXML
+    private ImageView addContactButton;
 
     @FXML
     private Button debugger;
@@ -92,15 +95,6 @@ public class ChatController {
     public void init() {
     }
 
-    private void displayMessage(String receiveMessage) {
-        if (!receiveMessage.isEmpty()) {
-            Label msgLabel = new Label(receiveMessage);
-            //msgLabel.setStyle("-fx-background-color: #5865f2; -fx-text-fill: white; -fx-padding: 8; -fx-background-radius: 8;");
-            messagesContainer.getChildren().add(msgLabel);
-            messageField.clear();
-        }
-    }
-
     @FXML
     public void initialize() {
 
@@ -109,15 +103,16 @@ public class ChatController {
         tag = usernameAndTag[1];
 
         chatTitle.setText("Welcome, " + username);
+        List<Label> contactLabel;
 
-        try{
+        /*try{
             //Label contactLabel = new Label("Friend A");
             FXMLLoader loader = springFXMLLoader.getLoader("/view/contact-view.fxml");
             Node contactNode = loader.load();
             ContactController controller = loader.getController();
-            controller.setData(dto);
+            controller.setData();
 
-            List<Label> contactLabel = Arrays.asList(
+            contactLabel = Arrays.asList(
                     new Label("Friend A"),
                     new Label("Friend B"),
                     new Label("Friend C")
@@ -129,7 +124,7 @@ public class ChatController {
 
         for (Label i : contactLabel){
             contactsListView.getChildren().add(i);
-        }
+        }*/
 
         try {
             clientThread = new ClientThread(username, tag, SERVER_PORT, SERVER_IP);
@@ -171,55 +166,12 @@ public class ChatController {
         }
     }
 
-    private Node createMessageNode(String username, String message, Image profileImageURL) {
-        boolean isSameSenderAsLast = username.equals(lastMessageSender);
-        lastMessageSender = username;
-
-        VBox messageGroup = new VBox();
-        messageGroup.setSpacing(2);
-
-        if (!isSameSenderAsLast) {
-            // Profile Image
-
-            ImageView imageView = new ImageView(profileImageURL);
-            imageView.setFitHeight(40);
-            imageView.setFitWidth(40);
-            imageView.setClip(new Circle(20, 20, 20));
-
-            // Username
-            Label nameLabel = new Label(username);
-            nameLabel.setStyle("-fx-text-fill: #ffffff; -fx-font-weight: bold;");
-
-            HBox header = new HBox(imageView, nameLabel);
-            header.setSpacing(10);
-            header.setAlignment(Pos.CENTER_LEFT);
-
-            messageGroup.getChildren().add(header);
-        }
-
-        // Message bubble
-        Label messageLabel = new Label(message);
-        messageLabel.setWrapText(true);
-        messageLabel.setStyle("-fx-text-fill: #dddddd; -fx-background-color: #4f545c; -fx-padding: 8px 10px; -fx-background-radius: 8;");
-        messageLabel.setMaxWidth(400);
-
-        HBox messageBox = new HBox(messageLabel);
-        messageBox.setAlignment(Pos.CENTER_LEFT);
-        messageGroup.getChildren().add(messageBox);
-
-        return messageGroup;
-    }
-
     private void sendMessage() {
         String message = messageField.getText();
 
         if (!message.isEmpty()){
 
-            MessageDTO messageDTO = new MessageDTO(username, message, profileImageURL, System.currentTimeMillis(), EMessageStatus.SENT);
-            //Node messageNode = createMessageNode(username, message, pfpImage);
-            //messagesContainer.getChildren().add(messageNode);
-
-
+            MessageDTO messageDTO = new MessageDTO(username, message, profileImageURL, System.currentTimeMillis(), EMessageStatus.SENT);//Node messageNode = createMessageNode(username, message, pfpImage);
 
             clientThread.sendMessage(messageDTO);
             messageField.clear();
@@ -237,5 +189,44 @@ public class ChatController {
         tokenHandler.clear();
         clientThread.close();
         stageInitializer.switchScenes("/view/sign-view.fxml", "Login", 800, 600);
+    }
+
+    @FXML
+    public void onAddContactClick(MouseEvent mouseEvent) {
+        try {
+            FXMLLoader loader = springFXMLLoader.getLoader("/view/addContactPopup-view.fxml");
+            Parent root = loader.load();
+            AddContactController controller = loader.getController();
+
+            FXMLLoader contactLoader = springFXMLLoader.getLoader("/view/contact-view.fxml");
+            Node contactNode = contactLoader.load();
+            ContactController contactController = contactLoader.getController();
+            //contactController.setData();
+
+            Stage popup = new Stage();
+            controller.setStage(popup);
+            controller.setOnContactAdded(contactStr -> {
+                Label newContact = new Label(contactStr);
+                newContact.setStyle("-fx-text-fill: #202225; -fx-background-color: #1e2023");
+                newContact.setOnMouseClicked(e -> loadChat(contactStr));
+                contactsListView.getChildren().add(newContact);
+            });
+
+            popup.setScene(new Scene(root));
+            popup.setTitle("Add Contact");
+            popup.initModality(Modality.APPLICATION_MODAL);
+            popup.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void loadChat(String contactId) {
+        messagesContainer.getChildren().clear();
+        chatTitle.setText("Chat with " + contactId);
+
+        // TODO: Load the chat history for this contact
+        // You'll probably want a `Map<String, List<MessageDTO>>` to simulate storage
     }
 }

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+
+<Pane prefHeight="200.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mdev.messanger.client.controller.ui.AddContactController">
+    <children>
+        <VBox alignment="CENTER" prefHeight="200.0" prefWidth="300.0" spacing="20.0">
+            <padding>
+                <Insets bottom="10" left="10" right="10" top="10" />
+            </padding>
+            <children>
+                <Pane>
+                    <children>
+                        <Label alignment="CENTER" prefHeight="17.0" prefWidth="279.0" style="-fx-font-weight: bold;" text="Add a Friend" textAlignment="CENTER">
+                            <font>
+                                <Font name="System Bold" size="18.0" />
+                            </font>
+                        </Label>
+                    </children>
+                </Pane>
+                <TextField fx:id="usernameField" promptText="Username" />
+                <TextField fx:id="tagField" promptText="#Tag (e.g. #1234)" />
+                <HBox alignment="CENTER" spacing="10">
+                    <children>
+                        <Button onAction="#onCancel" text="Cancel" />
+                        <Button onAction="#onAddContact" text="Add" />
+                    </children>
+                </HBox>
+            </children>
+        </VBox>
+    </children>
+</Pane>

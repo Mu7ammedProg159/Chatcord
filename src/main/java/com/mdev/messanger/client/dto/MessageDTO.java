@@ -1,5 +1,6 @@
-package com.mdev.messanger.client.connection;
+package com.mdev.messanger.client.dto;
 
+import com.mdev.messanger.client.connection.EMessageStatus;
 import lombok.*;
 
 import java.io.Serializable;

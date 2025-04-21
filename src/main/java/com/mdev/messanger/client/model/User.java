@@ -17,6 +17,7 @@ public class User {
     private String Password;
     private String email;
     private String tag;
+    private String profileImageURL;
     private String messagesHistory;
     private EStatus Status;
 }

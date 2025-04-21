@@ -1,11 +1,10 @@
-package com.mdev.messanger.client.controller;
+package com.mdev.messanger.client.controller.ui;
 
-import com.mdev.messanger.client.connection.MessageDTO;
+import com.mdev.messanger.client.dto.MessageDTO;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import lombok.Getter;
