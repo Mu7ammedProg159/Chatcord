@@ -13,14 +13,13 @@ public class UserDTO {
     private String tag;
     private String userSocket;
     private String lastMessage;
-    private String profileImageURL;
+    private String profileImageURL = "/images/default_pfp.png";
     private LocalDateTime timestamp;
 
-    public UserDTO(String username, String tag, String pfpURL){
+    public UserDTO(String username, String tag){
         super();
         this.username = username;
         this.tag = tag;
-        this.profileImageURL = pfpURL;
     }
 
 }
