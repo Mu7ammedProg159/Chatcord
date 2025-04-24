@@ -1,5 +1,6 @@
 package com.mdev.messanger.client.dto;
 
+import com.mdev.messanger.client.model.EStatus;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -14,7 +15,7 @@ public class UserDTO {
     private String userSocket;
     private String lastMessage;
     private String profileImageURL = "/images/default_pfp.png";
-    private LocalDateTime timestamp;
+    private EStatus eStatus = EStatus.Offline;
 
     public UserDTO(String username, String tag){
         super();
@@ -22,4 +23,9 @@ public class UserDTO {
         this.tag = tag;
     }
 
+    public UserDTO(String tag, String username, EStatus eStatus) {
+        this.tag = tag;
+        this.username = username;
+        this.eStatus = eStatus;
+    }
 }

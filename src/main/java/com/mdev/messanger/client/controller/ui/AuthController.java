@@ -121,7 +121,7 @@ public class AuthController {
             if (userToken != null) {
                 statusLabel.setText("Signed In with token: " + userToken);
                 tokenHandler.setToken(userToken);
-                stageInitializer.switchScenes("/view/Chat-view.fxml", "Chatcord", 800, 600);
+                stageInitializer.switchScenes("/view/chat-view.fxml", "Chatcord", 800, 600);
             }
             else
                 statusLabel.setText("Username or password are incorrect.");

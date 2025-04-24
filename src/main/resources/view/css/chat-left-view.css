@@ -1,0 +1,34 @@
+
+.settingsBtn {
+    -fx-background-radius: 2px;
+    -fx-background-color: #202225;
+}
+
+.settingsBtn:hover {
+    -fx-background-radius: 2px;
+    -fx-background-color: #2e3136;
+}
+
+.settingsBtn:pressed {
+    -fx-background-radius: 2px;
+    -fx-background-color: #37393e;
+}
+
+.sendButton {
+    -fx-background-color: #0372ef;
+    -fx-text-fill: white;
+    -fx-background-radius: 20px;
+}
+
+.sendButton:hover{
+    -fx-background-color: #0b82f2;
+    -fx-text-fill: white;
+    -fx-background-radius: 20px;
+}
+
+.sendButton:pressed{
+    -fx-background-color: #0269c9;
+    -fx-text-fill: white;
+    -fx-background-radius: 20px;
+}
+

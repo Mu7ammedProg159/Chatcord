@@ -1,0 +1,19 @@
+
+.cancelButton
+{
+    -fx-background-color: #792417;
+    -fx-text-fill:  #1e2023;
+    -fx-background-radius: 0px;
+}
+
+.cancelButton:hover {
+    -fx-background-color: #5e1910;
+    -fx-text-fill:  #1e2023;
+    -fx-background-radius: 0px;
+}
+
+.cancelButton:pressed {
+    -fx-background-color: #461813;
+    -fx-text-fill:  #1e2023;
+    -fx-background-radius: 0px;
+}

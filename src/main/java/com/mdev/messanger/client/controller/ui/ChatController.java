@@ -22,6 +22,9 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -56,6 +59,9 @@ public class ChatController {
     @FXML
     private Button debugger;
 
+    @FXML
+    private Button settingsBtn;
+
     @Autowired
     private TokenHandler tokenHandler;
 
@@ -83,6 +89,8 @@ public class ChatController {
     private Image pfpImage = new Image(getClass().getResource(profileImageURL).toExternalForm());
 
     private String debugString;
+
+    private final Logger logger = LoggerFactory.getLogger(ChatController.class);
 
     private ClientThread clientThread;
 
@@ -156,9 +164,9 @@ public class ChatController {
             MessageBubbleController controller = loader.getController();
             controller.setData(dto);
             //debugString = String.valueOf(controller.getUsername());
-            System.out.println("--------------------- RECEIVING -----------------------");
-            System.out.println("Message Received as:  " + dto.toString());
-            System.out.println("--------------------- RECEIVING -----------------------");
+
+            logger.info("Message Received as:  {}", dto.toString());
+
             messagesContainer.getChildren().add(messageNode);
 
         } catch (IOException e) {
@@ -198,10 +206,10 @@ public class ChatController {
             Parent root = loader.load();
             AddContactController controller = loader.getController();
 
-            FXMLLoader contactLoader = springFXMLLoader.getLoader("/view/contact-view.fxml");
+            /*FXMLLoader contactLoader = springFXMLLoader.getLoader("/view/contact-view.fxml");
             Node contactNode = contactLoader.load();
             ContactController contactController = contactLoader.getController();
-            //contactController.setData();
+            //contactController.setData();*/
 
             Stage popup = new Stage();
             controller.setStage(popup);
@@ -228,5 +236,33 @@ public class ChatController {
 
         // TODO: Load the chat history for this contact
         // You'll probably want a `Map<String, List<MessageDTO>>` to simulate storage
+    }
+
+    @FXML
+    public void onSettingsClicked(){
+        try {
+        FXMLLoader loader = springFXMLLoader.getLoader("/view/settings-view.fxml");
+        Parent root = loader.load();
+        SettingsController controller = loader.getController();
+
+            /*FXMLLoader contactLoader = springFXMLLoader.getLoader("/view/contact-view.fxml");
+            Node contactNode = contactLoader.load();
+            ContactController contactController = contactLoader.getController();
+            //contactController.setData();*/
+
+        Stage popup = new Stage();
+        popup.initStyle(StageStyle.UNDECORATED);
+        controller.initialize();
+
+        popup.setScene(new Scene(root));
+        popup.initModality(Modality.APPLICATION_MODAL);
+        controller.setStage(popup);
+        popup.show();
+
+        logger.info("The Account Stage is " + controller.getStage());
+
+        } catch (IOException e) {
+        e.printStackTrace();
+    }
     }
 }

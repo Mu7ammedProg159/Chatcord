@@ -3,16 +3,24 @@ package com.mdev.messanger.client;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.stage.Stage;
+import lombok.Getter;
+import lombok.Setter;
+import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.ApplicationEvent;
 import org.springframework.context.ConfigurableApplicationContext;
 
 public class MessangerApplication extends Application {
-	private ConfigurableApplicationContext applicationContext;
+
+	@Setter
+	@Getter
+	private static ConfigurableApplicationContext applicationContext;
 
 	@Override
 	public void init() {
-		applicationContext = new SpringApplicationBuilder(SpringBootApp.class).run();
+		applicationContext = new SpringApplicationBuilder(SpringBootApp.class)
+				.web(WebApplicationType.SERVLET)
+				.run();
 	}
 
 	@Override
