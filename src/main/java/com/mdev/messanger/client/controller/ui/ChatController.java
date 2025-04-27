@@ -77,16 +77,13 @@ public class ChatController {
     @Autowired
     private SpringFXMLLoader springFXMLLoader;
 
-    private String lastMessageSender = null;
-
-    private final int SERVER_PORT;
-    private final String SERVER_IP;
+    private String lastMessageSender;
 
     private String username;
     private String tag;
 
-    private String profileImageURL = "/images/pfp3.png";
-    private Image pfpImage = new Image(getClass().getResource(profileImageURL).toExternalForm());
+    private String profileImageURL;
+    private Image pfpImage;
 
     private String debugString;
 
@@ -94,10 +91,8 @@ public class ChatController {
 
     private ClientThread clientThread;
 
-    public ChatController(@Value("${spring.application.udp.server.port}") int serverPort, @Value("${spring.application.udp.server.ip}") String serverIp) {
-        SERVER_PORT = serverPort;
-        SERVER_IP = serverIp;
-    }
+    @Value("${spring.application.udp.server.port}") int SERVER_PORT;
+    @Value("${spring.application.udp.server.ip}") String SERVER_IP;
 
     @PostConstruct
     public void init() {
@@ -105,6 +100,9 @@ public class ChatController {
 
     @FXML
     public void initialize() {
+
+        profileImageURL = "/images/pfp3.png";
+        pfpImage = new Image(getClass().getResource(profileImageURL).toExternalForm());
 
         String[] usernameAndTag = jwtService.validateTokenAndGetUsername(tokenHandler.getToken()).split("#");
         username = usernameAndTag[0];

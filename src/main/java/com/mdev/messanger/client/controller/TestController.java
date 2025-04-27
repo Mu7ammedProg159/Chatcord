@@ -1,4 +1,4 @@
-package com.mdev.messanger.client.service;
+package com.mdev.messanger.client.controller;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
