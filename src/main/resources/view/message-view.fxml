@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Circle?>
 
-<HBox alignment="TOP_LEFT" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mdev.messanger.client.controller.ui.MessageBubbleController">
+<HBox alignment="TOP_LEFT" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mdev.chatcord.client.controller.ui.MessageBubbleController">
 
     <!-- PFP wrapped in StackPane for space reservation -->
     <StackPane prefHeight="40.0" prefWidth="40.0">
