@@ -1,0 +1,65 @@
+
+.backgroundImage{
+    -fx-background-image: url(login_background.jpg);
+    -fx-background-size: contain;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-background-size: 100% 100%;
+    -fx-border-radius: 20px;
+}
+
+.textField {
+    -fx-background-radius: 7px;
+    -fx-border-radius: 7px;
+    -fx-background-color: #202225;
+    -fx-border-color: #35383c;
+    -fx-border-width: 2px;
+    -fx-text-fill: #71baea;
+}
+
+.submitBtn{
+    -fx-background-radius: 7px;
+    -fx-background-color:  #0269c9;
+}
+
+.submitBtn:hover{
+    -fx-background-color: #4654c0;
+}
+
+.submitBtn:pressed{
+    -fx-background-color: #3a48a3;
+}
+
+.textField:focused{
+    -fx-border-color: #6fabf2;
+}
+
+.onCancel{
+    -fx-background-radius: 0px;
+    -fx-background-color: transparent;
+}
+
+.onCancel:hover{
+    -fx-background-radius: 0px;
+    -fx-background-color: #da3e44;
+}
+
+.windowBtn{
+    -fx-background-radius: 0px;
+    -fx-background-color: transparent;
+}
+
+.windowBtn:hover{
+    -fx-background-radius: 0px;
+    -fx-background-color: #1c1859EA;
+}
+
+@font-face {
+    font-family: 'Carter One';
+    src: url('CarterOne-Regular.ttf');
+}
+
+.chatcord-label {
+    -fx-font-family: 'Carter One';
+    -fx-font-size: 23px;
+}

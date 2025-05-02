@@ -1,10 +1,16 @@
 package com.mdev.chatcord.client.component;
 
-import com.mdev.chatcord.client.MessangerApplication.StageReadyEvent;
+import com.mdev.chatcord.client.ChatcordApplication.StageReadyEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
+import lombok.Getter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationListener;
@@ -18,9 +24,10 @@ public class StageInitializer implements ApplicationListener<StageReadyEvent> {
     //@Value("classpath:/view/hello-view.fxml")
     //private Resource helloResource;
 
-    @Value("classpath:/view/sign-view.fxml")
+    @Value("classpath:/view/login/sign-view.fxml")
     private Resource signResource;
 
+    @Getter
     private Stage primaryStage;
 
     private final String applicationTitle;
@@ -39,10 +46,24 @@ public class StageInitializer implements ApplicationListener<StageReadyEvent> {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(signResource.getURL());
             fxmlLoader.setControllerFactory(aClass -> applicationContext.getBean(aClass));
-            Parent parent = fxmlLoader.load();
+            AnchorPane parent = fxmlLoader.load();
 
-            primaryStage.setScene(new Scene(parent, 800, 600));
+            Rectangle clip = new Rectangle();
+            clip.widthProperty().bind(parent.widthProperty());
+            clip.heightProperty().bind(parent.heightProperty());
+            clip.setArcWidth(20);
+            clip.setArcHeight(20);
+            parent.setClip(clip);
+
             primaryStage.setTitle(applicationTitle);
+
+            primaryStage.initStyle(StageStyle.UNDECORATED);
+            primaryStage.initStyle(StageStyle.TRANSPARENT); // For fully custom windows
+
+            Scene scene = new Scene(parent, 1380, 750);
+            scene.setFill(Color.TRANSPARENT); // Make scene background transparent
+
+            primaryStage.setScene(scene);
             primaryStage.show();
 
         } catch (IOException e) {
@@ -50,6 +71,7 @@ public class StageInitializer implements ApplicationListener<StageReadyEvent> {
         }
 
     }
+
 
     public void switchScenes(String fxmlPath, String title, int width, int height) {
         try {

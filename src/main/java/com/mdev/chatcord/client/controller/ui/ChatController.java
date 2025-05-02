@@ -4,10 +4,8 @@ import com.mdev.chatcord.client.component.SpringFXMLLoader;
 import com.mdev.chatcord.client.component.StageInitializer;
 import com.mdev.chatcord.client.connection.ClientThread;
 import com.mdev.chatcord.client.connection.EMessageStatus;
+import com.mdev.chatcord.client.dto.JwtRequest;
 import com.mdev.chatcord.client.dto.MessageDTO;
-import com.mdev.chatcord.client.service.AuthService;
-import com.mdev.chatcord.client.service.JwtService;
-import com.mdev.chatcord.client.service.TokenHandler;
 import jakarta.annotation.PostConstruct;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -63,16 +61,10 @@ public class ChatController {
     private Button settingsBtn;
 
     @Autowired
-    private TokenHandler tokenHandler;
-
-    @Autowired
     private StageInitializer stageInitializer;
 
     @Autowired
-    private JwtService jwtService;
-
-    @Autowired
-    private AuthService authService;
+    private JwtRequest jwtRequest;
 
     @Autowired
     private SpringFXMLLoader springFXMLLoader;
@@ -104,9 +96,8 @@ public class ChatController {
         profileImageURL = "/images/pfp3.png";
         pfpImage = new Image(getClass().getResource(profileImageURL).toExternalForm());
 
-        String[] usernameAndTag = jwtService.validateTokenAndGetUsername(tokenHandler.getToken()).split("#");
-        username = usernameAndTag[0];
-        tag = usernameAndTag[1];
+        username = jwtRequest.getUserDTO().getUsername();
+        tag = jwtRequest.getUserDTO().getTag();
 
         chatTitle.setText("Welcome, " + username);
         List<Label> contactLabel;
@@ -191,10 +182,9 @@ public class ChatController {
 
     @FXML
     public void onLogoutClick() {
-        authService.logoutUser(username, tag);
-        tokenHandler.clear();
+        //userService.logoutUser(username, tag);
         clientThread.close();
-        stageInitializer.switchScenes("/view/sign-view.fxml", "Login", 800, 600);
+        stageInitializer.switchScenes("/view/login/sign-view.fxml", "Login", 800, 600);
     }
 
     @FXML

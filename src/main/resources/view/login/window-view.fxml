@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.text.Font?>
+
+<HBox fx:id="dragRegion" alignment="TOP_RIGHT" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mdev.chatcord.client.controller.ui.windowController">
+   <children>
+      <Button fx:id="minimizeButton" mnemonicParsing="false" onAction="#onMinimizeClicked" styleClass="windowBtn" text="─" textFill="#e4e4e4">
+         <font>
+            <Font name="Open Sans Regular" size="18.0" />
+         </font>
+         <HBox.margin>
+            <Insets />
+         </HBox.margin>
+      </Button>
+      <Button fx:id="maximizeButton" layoutX="1345.0" layoutY="20.0" mnemonicParsing="false" onAction="#onMaximizeClicked" styleClass="windowBtn" text="☐" textFill="#e4e4e4">
+         <font>
+            <Font name="Open Sans Regular" size="18.0" />
+         </font>
+      </Button>
+      <Button fx:id="cancelButton" layoutX="1345.0" layoutY="20.0" mnemonicParsing="false" onAction="#onCancelClicked" styleClass="onCancel" text="⨉" textFill="#e4e4e4">
+         <font>
+            <Font name="Open Sans Regular" size="18.0" />
+         </font>
+      </Button>
+   </children>
+</HBox>

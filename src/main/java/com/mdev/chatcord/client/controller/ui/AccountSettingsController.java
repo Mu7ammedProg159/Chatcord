@@ -1,5 +1,6 @@
 package com.mdev.chatcord.client.controller.ui;
 
+import com.mdev.chatcord.client.dto.JwtRequest;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Hyperlink;
@@ -7,6 +8,7 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
@@ -32,8 +34,16 @@ public class AccountSettingsController {
     @FXML
     private Label usernameLabel;
 
+    @Autowired
+    private JwtRequest jwtRequest;
+
     @FXML
     public void onChangePhoto(ActionEvent event) {
+
+        emailLabel.setText(jwtRequest.getUserDTO().getEmail());
+        usernameLabel.setText(jwtRequest.getUserDTO().getUsername());
+        tagLabel.setText(jwtRequest.getUserDTO().getTag());
+
         FileChooser fileChooser = new FileChooser();
 
         // Set extension filter for image files

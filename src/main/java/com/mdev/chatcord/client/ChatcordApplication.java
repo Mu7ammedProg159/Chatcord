@@ -3,14 +3,11 @@ package com.mdev.chatcord.client;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.stage.Stage;
-import lombok.Getter;
-import lombok.Setter;
-import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.ApplicationEvent;
 import org.springframework.context.ConfigurableApplicationContext;
 
-public class MessangerApplication extends Application {
+public class ChatcordApplication extends Application {
 
 	private static ConfigurableApplicationContext applicationContext;
 
