@@ -1,6 +1,6 @@
 package com.mdev.chatcord.client.dto;
 
-import com.mdev.chatcord.client.connection.EMessageStatus;
+import com.mdev.chatcord.client.enums.EMessageStatus;
 import lombok.*;
 
 import java.io.Serializable;

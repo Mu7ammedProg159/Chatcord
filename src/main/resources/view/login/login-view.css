@@ -34,6 +34,10 @@
     -fx-border-color: #6fabf2;
 }
 
+.textFieldError{
+    -fx-border-color: #f56c69;
+}
+
 .onCancel{
     -fx-background-radius: 0px;
     -fx-background-color: transparent;
@@ -62,4 +66,18 @@
 .chatcord-label {
     -fx-font-family: 'Carter One';
     -fx-font-size: 23px;
+}
+
+.credentialLabel{
+    -fx-text-fill: #b5b5b5;
+    -fx-font-family: 'Open Sans ExtraBold';
+    -fx-font-style: Regular;
+    -fx-font-size: 12px;
+}
+
+.credentialLabelError{
+    -fx-text-fill: #f56c69;
+    -fx-font-family: 'Open Sans ExtraBold';
+    -fx-font-style: Italic;
+    -fx-font-size: 12px;
 }

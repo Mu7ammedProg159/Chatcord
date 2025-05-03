@@ -1,4 +1,4 @@
-package com.mdev.chatcord.client.connection;
+package com.mdev.chatcord.client.enums;
 
 public enum EMessageStatus {
     SENT,

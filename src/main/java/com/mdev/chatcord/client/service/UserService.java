@@ -2,12 +2,11 @@ package com.mdev.chatcord.client.service;
 
 import com.mdev.chatcord.client.dto.JwtRequest;
 import com.mdev.chatcord.client.dto.UserDTO;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpRequest;
-import org.springframework.http.MediaType;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
@@ -23,26 +22,58 @@ public class UserService {
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
-    public UserDTO login(String email, String password){
+    @Getter
+    private String errorMessage = "";
 
-        String jwtToken = webClient.post()
-                .uri(jwtRequest.getDomain() + jwtRequest.getAuthUri() + "/login")
-                .contentType(MediaType.APPLICATION_JSON)
-                .bodyValue(Map.of("email", email, "password", password))
-                .retrieve()
-                .bodyToMono(String.class)
-                .block();
+    public String register(String email, String password, String username){
+
+        try {
+            return webClient.post()
+                    .uri(jwtRequest.getDomain() + jwtRequest.getAuthUri() + "/register")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .bodyValue(Map.of("email", email, "password", password, "username", username))
+                    .retrieve()
+                    .onStatus(HttpStatusCode::isError, GlobalWebClientExceptionHandler::handleResponse)
+                    .bodyToMono(String.class)
+                    .block();
+        } catch (RuntimeException e) {
+            return e.getMessage();
+        }
+
+    }
+
+    public Object login(String email, String password) {
+
+        String jwtToken;
+        try {
+            jwtToken = webClient.post()
+                    .uri(jwtRequest.getDomain() + jwtRequest.getAuthUri() + "/login")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .bodyValue(Map.of("email", email, "password", password))
+                    .retrieve()
+                    .onStatus(HttpStatusCode::isError, GlobalWebClientExceptionHandler::handleResponse)
+                    .bodyToMono(String.class)
+                    .block();
+        } catch (RuntimeException e) {
+            return e.getMessage();
+        }
 
         logger.info("This is the token for the signed user: " + jwtToken);
 
-        jwtRequest.setUserDTO(webClient.get()
-                .uri(jwtRequest.getDomain() + jwtRequest.getAuthUri() + "/users/me")
-                .header(HttpHeaders.AUTHORIZATION, "Bearer " + jwtToken)
-                .retrieve()
-                .bodyToMono(UserDTO.class)
-                .block());
+        try{
+            jwtRequest.setUserDTO(webClient.get()
+                    .uri(jwtRequest.getDomain() + jwtRequest.getAuthUri() + "/users/me")
+                    .header(HttpHeaders.AUTHORIZATION, "Bearer " + jwtToken)
+                    .retrieve()
+                    .onStatus(HttpStatusCode::isError, GlobalWebClientExceptionHandler::handleResponse)
+                    .bodyToMono(UserDTO.class)
+                    .block());
 
-        return jwtRequest.getUserDTO();
+            return jwtRequest.getUserDTO();
+
+        } catch (RuntimeException e){
+            return e.getMessage();
+        }
     }
 }
 

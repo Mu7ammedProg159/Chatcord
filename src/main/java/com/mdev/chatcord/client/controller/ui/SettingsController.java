@@ -1,6 +1,7 @@
 package com.mdev.chatcord.client.controller.ui;
 
 import com.mdev.chatcord.client.component.SpringFXMLLoader;
+import com.mdev.chatcord.client.enums.ESettingStage;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;

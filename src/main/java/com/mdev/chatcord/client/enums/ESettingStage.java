@@ -1,4 +1,4 @@
-package com.mdev.chatcord.client.controller.ui;
+package com.mdev.chatcord.client.enums;
 
 public enum ESettingStage {
     AccountStage,

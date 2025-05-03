@@ -3,7 +3,7 @@ package com.mdev.chatcord.client.controller.ui;
 import com.mdev.chatcord.client.component.SpringFXMLLoader;
 import com.mdev.chatcord.client.component.StageInitializer;
 import com.mdev.chatcord.client.connection.ClientThread;
-import com.mdev.chatcord.client.connection.EMessageStatus;
+import com.mdev.chatcord.client.enums.EMessageStatus;
 import com.mdev.chatcord.client.dto.JwtRequest;
 import com.mdev.chatcord.client.dto.MessageDTO;
 import jakarta.annotation.PostConstruct;
@@ -184,7 +184,7 @@ public class ChatController {
     public void onLogoutClick() {
         //userService.logoutUser(username, tag);
         clientThread.close();
-        stageInitializer.switchScenes("/view/login/sign-view.fxml", "Login", 800, 600);
+        stageInitializer.switchScenes("/view/login/sign-view.fxml", "Login", 1380, 750);
     }
 
     @FXML
