@@ -13,13 +13,15 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.Collections;
 
 @Component
-public class LoginController {
+public class LoginController implements UIErrorHandler {
 
     @FXML
     private TextField emailField, usernameField;
@@ -55,6 +57,8 @@ public class LoginController {
     private boolean isRegisterMode;
 
     private Image loginImageURL = new Image(getClass().getResource("/images/login-page-illustration.png").toExternalForm());
+
+    private final Logger logger = LoggerFactory.getLogger(getClass());
 
     @FXML
     public void initialize() {
@@ -124,49 +128,39 @@ public class LoginController {
         String password = passwordField.getText();
         String confirmPassword = confirmPasswordField.getText();
 
-        changeLoginStatus(ELoginStatus.SUCCESS);
+        clearStyles(emailLabel, emailField);
+        clearStyles(passwordLabel, passwordField);
+        clearStyles(confirmPasswordLabel, confirmPasswordField);
+        clearStyles(emailLabel, usernameField);
 
         if (isRegisterMode) {
 
-            if (email.isEmpty() || username.isEmpty() || password.isEmpty() || confirmPassword.isEmpty()) {
-                emailLabel.setText("EMAIL ADDRESS – " + "Please fill all the fields.");
-                emailLabel.getStyleClass().add("credentialLabelError");
-                emailField.getStyleClass().add("textFieldError");
-                usernameField.getStyleClass().add("textFieldError");
-                passwordField.getStyleClass().add("textFieldError");
-                confirmPasswordField.getStyleClass().add("textFieldError");
+            if (isAnyFieldEmpty(email, username, password, confirmPassword)) {
+                setError(emailLabel, "EMAIL ADDRESS – Please fill all the fields.",
+                        emailField, usernameField, passwordField, confirmPasswordField);
                 return;
             }
+
             if (!password.equals(confirmPassword)) {
-                passwordLabel.setText("PASSWORD – " + "Passwords do not match.");
-                confirmPasswordLabel.setText("CONFIRM PASSWORD – Passwords do not match.");
-                passwordLabel.getStyleClass().add("credentialLabelError");
-                confirmPasswordLabel.getStyleClass().add("credentialLabelError");
-                passwordField.getStyleClass().add("textFieldError");
-                confirmPasswordField.getStyleClass().add("textFieldError");
+                setError(passwordLabel, "PASSWORD – Passwords do not match.", passwordField);
+                setError(confirmPasswordLabel, "CONFIRM PASSWORD – Passwords do not match.", confirmPasswordField);
                 return;
             }
-            //Todo: Call user registration service for database management.
-//            if (!authService.isUserRegistered(email)){
-//                authService.signUp(email, username, password);
-//                statusLabel.setText("Account Created!");
-//                isRegisterMode = !isRegisterMode;
-            try{
+
+            try {
                 String registerResponse = userService.register(email, password, username);
 
-                emailLabel.setText("EMAIL ADDRESS *");
-                passwordLabel.setText("PASSWORD *");
+                clearStyles(emailLabel, emailField);
+                clearStyles(passwordLabel, passwordField);
+                clearStyles(confirmPasswordLabel, confirmPasswordField);
+                clearStyles(emailLabel, usernameField);
 
-                emailLabel.getStyleClass().add("credentialLabel");
-                emailField.getStyleClass().add("textField");
-
-                usernameField.getStyleClass().add("textField");
-
-                passwordField.getStyleClass().add("textField");
-                confirmPasswordField.getStyleClass().add("textField");
-            } catch (RuntimeException e){
-                emailLabel.setText("EMAIL ADDRESS – " + e.getMessage());
-                emailLabel.getStyleClass().add("credentialLabelError");
+                logger.info(registerResponse);
+            } catch (RuntimeException e) {
+                setError(emailLabel, "EMAIL ADDRESS – " + e.getMessage(), emailField);
+                clearStyles(passwordLabel, passwordField);
+                clearStyles(confirmPasswordLabel, confirmPasswordField);
+                clearStyles(emailLabel, usernameField);
             }
 
             updateMode();

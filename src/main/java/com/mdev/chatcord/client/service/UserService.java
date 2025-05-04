@@ -28,7 +28,7 @@ public class UserService {
     public String register(String email, String password, String username){
 
         try {
-            return webClient.post()
+            String message = webClient.post()
                     .uri(jwtRequest.getDomain() + jwtRequest.getAuthUri() + "/register")
                     .contentType(MediaType.APPLICATION_JSON)
                     .bodyValue(Map.of("email", email, "password", password, "username", username))
@@ -36,8 +36,10 @@ public class UserService {
                     .onStatus(HttpStatusCode::isError, GlobalWebClientExceptionHandler::handleResponse)
                     .bodyToMono(String.class)
                     .block();
+            return message;
+
         } catch (RuntimeException e) {
-            return e.getMessage();
+            throw new RuntimeException(e.getMessage());
         }
 
     }
