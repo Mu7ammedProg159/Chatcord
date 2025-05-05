@@ -7,11 +7,10 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.input.Clipboard;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
-import javafx.stage.Stage;
 import javafx.util.Duration;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +19,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @Component
 @Getter
 @RequiredArgsConstructor
@@ -27,7 +28,7 @@ public class OtpController implements EventStageHandler, UIErrorHandler{
 
     @FXML private HBox backgroundHBox;
     @FXML private Label toEmail;
-    @FXML private TextField num0, num1, num2, num3;
+    @FXML private TextField num0, num1, num2, num3, num4, num5;
     @FXML private Hyperlink resendLink;
 
     private String otp;
@@ -59,16 +60,19 @@ public class OtpController implements EventStageHandler, UIErrorHandler{
     }
 
     public void onVerify(){
-        otp = num0.getText() + num1.getText() + num2.getText() + num3.getText();
         String email = toEmail.getText();
+        otp = num0.getText() + num1.getText() + num2.getText() + num3.getText() + num4.getText() + num5.getText();
         try{
             userService.verify(email, otp);
-
+            onClose.run();
         } catch (RuntimeException e) {
             setError(null, null, num0);
             setError(null, null, num1);
             setError(null, null, num2);
             setError(null, null, num3);
+            setError(null, null, num4);
+            setError(null, null, num5);
+            logger.info(e.getMessage());
         }
 
     }
@@ -117,27 +121,44 @@ public class OtpController implements EventStageHandler, UIErrorHandler{
 
         onOtpFilled(num2, num3, num1);
 
+        onOtpFilled(num3, num4, num2);
+
+        onOtpFilled(num4, num5, num3);
+
         final boolean[] isAllFilled = {false};
 
-        num3.textProperty().addListener((obs, oldText, newText) -> {
+        num5.textProperty().addListener((obs, oldText, newText) -> {
 
             if (!newText.matches("\\d*")) {
-                num3.setText(newText.replaceAll("[^\\d]", ""));
+                num5.setText(newText.replaceAll("[^\\d]", ""));
             }
 
-            if (num3.getText().length() > 1) {
-                num3.setText(num3.getText().substring(0, 1));
+            if (num5.getText().length() > 1) {
+                num5.setText(num5.getText().substring(0, 1));
             }
 
-            if (!isAllFilled[0] && num3.getText().length() == 1) {
+            if (!isAllFilled[0] && num5.getText().length() == 1) {
                 isAllFilled[0] = true;
+
+                try{
+                    onVerify();
+
+                } catch (RuntimeException e){
+                    setError(null, null, num0);
+                    setError(null, null, num1);
+                    setError(null, null, num2);
+                    setError(null, null, num3);
+                    setError(null, null, num4);
+                    setError(null, null, num5);
+                    return;
+                }
                 logger.info("Now I should do /verify-email Webclient"); // move to next field
             }
         });
-        num3.setOnKeyPressed(event -> {
-            if (event.getCode() == KeyCode.BACK_SPACE && num3.getText().isEmpty() && num2 != null) {
+        num5.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.BACK_SPACE && num5.getText().isEmpty() && num4 != null) {
                 isAllFilled[0] = false;
-                num2.requestFocus();
+                num4.requestFocus();
             }
         });
     }
@@ -156,6 +177,26 @@ public class OtpController implements EventStageHandler, UIErrorHandler{
                 next.requestFocus(); // move to next field
             }
         });
+
+        List<TextField> otpFields = List.of(num0, num1, num2, num3, num4, num5);
+
+        for (TextField tf : otpFields) {
+            tf.setOnKeyPressed(e -> {
+                // Detect Ctrl+V or Cmd+V
+                if ((e.isControlDown() || e.isMetaDown()) && e.getCode() == KeyCode.V) {
+                    Clipboard clipboard = Clipboard.getSystemClipboard();
+                    if (clipboard.hasString()) {
+                        String pasted = clipboard.getString().replaceAll("[^\\d]", "");
+                        if (pasted.length() == otpFields.size()) {
+                            for (int j = 0; j < otpFields.size(); j++) {
+                                otpFields.get(j).setText(String.valueOf(pasted.charAt(j)));
+                            }
+                            otpFields.get(otpFields.size() - 1).requestFocus();
+                        }
+                    }
+                }
+            });
+        }
 
         // Handle backspace key to move to previous field
         current.setOnKeyPressed(event -> {

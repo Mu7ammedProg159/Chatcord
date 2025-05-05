@@ -194,28 +194,23 @@ public class LoginController implements UIErrorHandler {
             }
             // TODO: Call user login service from database.
 
-            var loginResponse = userService.login(email, password);
-
-            if (loginResponse instanceof String) {
-                emailLabel.setText("EMAIL ADDRESS – " + loginResponse);
-                passwordLabel.setText("PASSWORD – " + loginResponse);
-
-                changeLoginStatus(ELoginStatus.ERROR);
-
-                //Change this accordingly when you have access to the Exception Handling commit.
-                if (((String) loginResponse).equalsIgnoreCase(
-                        "Please verify your Email Address first before logging in")){
-                    loadOtpWindow(email);
-                }
-
-
-            } else {
+            try {
+                userService.login(email, password);
                 emailLabel.setText("EMAIL ADDRESS *");
                 passwordLabel.setText("PASSWORD *");
 
                 changeLoginStatus(ELoginStatus.SUCCESS);
                 //statusLabel.setText("You have successfully Signed In");
                 stageInitializer.switchScenes("/view/chat-view.fxml", "Chatcord", 1350, 720);
+
+            } catch (RuntimeException e) {
+                emailLabel.setText("EMAIL ADDRESS – " + e.getMessage());
+                passwordLabel.setText("PASSWORD – " + e.getMessage());
+
+                changeLoginStatus(ELoginStatus.ERROR);
+
+                if (e.getMessage().equalsIgnoreCase("Please verify your email address to login."))
+                    loadOtpWindow(email);
             }
         }
     }
@@ -231,7 +226,11 @@ public class LoginController implements UIErrorHandler {
 
         otpController.getNum0().requestFocus();
 
-        otpController.setOnClose(() -> stackPane.getChildren().remove(otpOverlay));
+        otpController.setOnClose(() -> {
+            stackPane.getChildren().remove(otpOverlay);
+            isRegisterMode = false;
+            updateMode();
+        });
     }
 
     private void changeLoginStatus(ELoginStatus eLoginStatus) {

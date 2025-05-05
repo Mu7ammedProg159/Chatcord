@@ -93,7 +93,7 @@ public class UserService {
                     .bodyToMono(String.class)
                     .block();
         } catch (RuntimeException e) {
-            return e.getMessage();
+            throw new RuntimeException(e.getMessage());
         }
 
         logger.info("This is the token for the signed user: " + jwtToken);
@@ -110,7 +110,7 @@ public class UserService {
             return jwtRequest.getUserDTO();
 
         } catch (RuntimeException e){
-            return e.getMessage();
+            throw new RuntimeException(e.getMessage());
         }
     }
 }
