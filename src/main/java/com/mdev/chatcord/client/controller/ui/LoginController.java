@@ -1,27 +1,39 @@
 package com.mdev.chatcord.client.controller.ui;
 
+import com.mdev.chatcord.client.component.SpringFXMLLoader;
 import com.mdev.chatcord.client.component.StageInitializer;
 import com.mdev.chatcord.client.dto.UserDTO;
 import com.mdev.chatcord.client.enums.ELoginStatus;
 import com.mdev.chatcord.client.service.UserService;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
 import java.util.Collections;
 
 @Component
 public class LoginController implements UIErrorHandler {
+
+    @FXML
+    private StackPane stackPane;
 
     @FXML
     private TextField emailField, usernameField;
@@ -53,6 +65,9 @@ public class LoginController implements UIErrorHandler {
 
     @Autowired
     StageInitializer stageInitializer;
+
+    @Autowired
+    SpringFXMLLoader springFXMLLoader;
 
     private boolean isRegisterMode;
 
@@ -121,7 +136,7 @@ public class LoginController implements UIErrorHandler {
         confirmPasswordVBox.setManaged(b);
     }
 
-    public void onSubmitClicked() {
+    public void onSubmitClicked() throws IOException {
 
         String email = emailField.getText();
         String username = usernameField.getText();
@@ -155,12 +170,16 @@ public class LoginController implements UIErrorHandler {
                 clearStyles(confirmPasswordLabel, confirmPasswordField);
                 clearStyles(emailLabel, usernameField);
 
+                loadOtpWindow(email);
+
                 logger.info(registerResponse);
             } catch (RuntimeException e) {
                 setError(emailLabel, "EMAIL ADDRESS – " + e.getMessage(), emailField);
                 clearStyles(passwordLabel, passwordField);
                 clearStyles(confirmPasswordLabel, confirmPasswordField);
                 clearStyles(emailLabel, usernameField);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
             }
 
             updateMode();
@@ -178,11 +197,17 @@ public class LoginController implements UIErrorHandler {
             var loginResponse = userService.login(email, password);
 
             if (loginResponse instanceof String) {
-                statusLabel.setText((String) loginResponse);
                 emailLabel.setText("EMAIL ADDRESS – " + loginResponse);
                 passwordLabel.setText("PASSWORD – " + loginResponse);
 
                 changeLoginStatus(ELoginStatus.ERROR);
+
+                //Change this accordingly when you have access to the Exception Handling commit.
+                if (((String) loginResponse).equalsIgnoreCase(
+                        "Please verify your Email Address first before logging in")){
+                    loadOtpWindow(email);
+                }
+
 
             } else {
                 emailLabel.setText("EMAIL ADDRESS *");
@@ -193,6 +218,20 @@ public class LoginController implements UIErrorHandler {
                 stageInitializer.switchScenes("/view/chat-view.fxml", "Chatcord", 1350, 720);
             }
         }
+    }
+
+    private void loadOtpWindow(String email) throws IOException {
+        FXMLLoader otpLoader = springFXMLLoader.getLoader("/view/verification-otp.fxml");
+        Parent otpOverlay = otpLoader.load();
+        OtpController otpController = otpLoader.getController();
+
+        otpController.setToEmail(email);
+
+        stackPane.getChildren().add(otpOverlay);
+
+        otpController.getNum0().requestFocus();
+
+        otpController.setOnClose(() -> stackPane.getChildren().remove(otpOverlay));
     }
 
     private void changeLoginStatus(ELoginStatus eLoginStatus) {

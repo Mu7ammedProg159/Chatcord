@@ -44,6 +44,42 @@ public class UserService {
 
     }
 
+    public String verify(String email, String otp){
+
+        try {
+            String message = webClient.post()
+                    .uri(jwtRequest.getDomain() + jwtRequest.getAuthUri() + "/verify-email")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .bodyValue(Map.of("email", email, "otp", otp))
+                    .retrieve()
+                    .onStatus(HttpStatusCode::isError, GlobalWebClientExceptionHandler::handleResponse)
+                    .bodyToMono(String.class)
+                    .block();
+            return message;
+
+        } catch (RuntimeException e) {
+            throw new RuntimeException(e.getMessage());
+        }
+    }
+
+    public String resendOtp(String email){
+
+        try {
+            String message = webClient.post()
+                    .uri(jwtRequest.getDomain() + jwtRequest.getAuthUri() + "/resend-otp")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .bodyValue(Map.of("email", email))
+                    .retrieve()
+                    .onStatus(HttpStatusCode::isError, GlobalWebClientExceptionHandler::handleResponse)
+                    .bodyToMono(String.class)
+                    .block();
+            return message;
+
+        } catch (RuntimeException e) {
+            throw new RuntimeException(e.getMessage());
+        }
+    }
+
     public Object login(String email, String password) {
 
         String jwtToken;

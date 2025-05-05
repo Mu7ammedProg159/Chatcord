@@ -5,18 +5,26 @@ import javafx.scene.control.TextField;
 
 public interface UIErrorHandler {
     public default void setError(Label label, String message, TextField... fields) {
-        label.setText(message);
-        label.getStyleClass().add("credentialLabelError");
+        if (label != null){
+            label.setText(message);
+            label.getStyleClass().removeAll();
+            label.getStyleClass().add("credentialLabelError");
+        }
 
-        for (TextField field : fields) {
-            field.getStyleClass().add("textFieldError");
+        if (fields != null){
+            for (TextField field : fields) {
+                field.getStyleClass().add("textFieldError");
+                field.getStyleClass().removeAll();
+            }
         }
     }
 
     public default void clearStyles(Label label, TextField... fields) {
+        label.getStyleClass().removeAll();
         label.getStyleClass().add("credentialLabel");
 
         for (TextField field : fields) {
+            field.getStyleClass().removeAll();
             field.getStyleClass().add("textField");
         }
     }
