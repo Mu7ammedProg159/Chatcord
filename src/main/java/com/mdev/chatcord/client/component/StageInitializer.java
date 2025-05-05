@@ -4,6 +4,7 @@ import com.mdev.chatcord.client.ChatcordApplication.StageReadyEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -54,6 +55,10 @@ public class StageInitializer implements ApplicationListener<StageReadyEvent> {
             clip.setArcWidth(20);
             clip.setArcHeight(20);
             parent.setClip(clip);
+
+            Image APP_LOGO = new Image(getClass().getResource("/images/app_logo.png").toExternalForm());
+
+            primaryStage.getIcons().add(APP_LOGO);
 
             primaryStage.setTitle(applicationTitle);
 

@@ -31,7 +31,7 @@ public class LoginController implements UIErrorHandler {
 
     @FXML
     private Label statusLabel, appNameLabel, switchLabel, titleLabel, titleSlogan, emailLabel,
-            passwordLabel, confirmPasswordLabel;
+            passwordLabel, confirmPasswordLabel, usernameLabel;
 
     @FXML
     private VBox emailVBox, usernameVBox, passwordVBox, confirmPasswordVBox;
@@ -46,7 +46,7 @@ public class LoginController implements UIErrorHandler {
     private ImageView loginImage;
 
     @FXML
-    private Hyperlink switchModeLink;
+    private Hyperlink switchModeLink, debugLink;
 
     @Autowired
     UserService userService;
@@ -73,10 +73,22 @@ public class LoginController implements UIErrorHandler {
 
         isRegisterMode = !isRegisterMode;
         switchModeLink.setVisited(false);
+
         updateMode();
     }
 
+    @FXML
+    public void onDebugLinkClicked(){
+        clearAllStyles();
+        logger.info(emailLabel.getStyleClass().toString());
+        logger.info(passwordLabel.getStyleClass().toString());
+        logger.info(confirmPasswordLabel.getStyleClass().toString());
+        logger.info(usernameLabel.getStyleClass().toString());
+    }
+
     public void updateMode() {
+
+
         if (isRegisterMode) {
             titleLabel.setText("Create Account");
             submitButton.setText("Register");
@@ -89,6 +101,8 @@ public class LoginController implements UIErrorHandler {
 
             hideFields(true);
             loginImage.setImage(loginImageURL);
+
+            clearAllStyles();
 
             // Just reverse the children order
             //Collections.swap(loginPanelChildren, 0, 1);
@@ -105,9 +119,17 @@ public class LoginController implements UIErrorHandler {
             loginImageURL = new Image(getClass().getResource("/images/login-page-illustration.png").toExternalForm());
             loginImage.setImage(loginImageURL);
             //Collections.swap(loginPanelChildren, 1, 0);
+            clearAllStyles();
 
         }
         clearFields();
+    }
+
+    private void clearAllStyles() {
+        clearStyles(emailLabel, emailField);
+        clearStyles(passwordLabel, passwordField);
+        clearStyles(confirmPasswordLabel, confirmPasswordField);
+        clearStyles(usernameLabel, usernameField);
     }
 
     private void hideFields(boolean b) {
@@ -128,10 +150,7 @@ public class LoginController implements UIErrorHandler {
         String password = passwordField.getText();
         String confirmPassword = confirmPasswordField.getText();
 
-        clearStyles(emailLabel, emailField);
-        clearStyles(passwordLabel, passwordField);
-        clearStyles(confirmPasswordLabel, confirmPasswordField);
-        clearStyles(emailLabel, usernameField);
+        clearAllStyles();
 
         if (isRegisterMode) {
 
@@ -150,17 +169,12 @@ public class LoginController implements UIErrorHandler {
             try {
                 String registerResponse = userService.register(email, password, username);
 
-                clearStyles(emailLabel, emailField);
-                clearStyles(passwordLabel, passwordField);
-                clearStyles(confirmPasswordLabel, confirmPasswordField);
-                clearStyles(emailLabel, usernameField);
+                clearAllStyles();
 
                 logger.info(registerResponse);
             } catch (RuntimeException e) {
                 setError(emailLabel, "EMAIL ADDRESS – " + e.getMessage(), emailField);
-                clearStyles(passwordLabel, passwordField);
-                clearStyles(confirmPasswordLabel, confirmPasswordField);
-                clearStyles(emailLabel, usernameField);
+                return;
             }
 
             updateMode();
@@ -179,16 +193,20 @@ public class LoginController implements UIErrorHandler {
 
             if (loginResponse instanceof String) {
                 statusLabel.setText((String) loginResponse);
-                emailLabel.setText("EMAIL ADDRESS – " + loginResponse);
-                passwordLabel.setText("PASSWORD – " + loginResponse);
+                //emailLabel.setText("EMAIL ADDRESS – " + loginResponse);
+                //passwordLabel.setText("PASSWORD – " + loginResponse);
 
-                changeLoginStatus(ELoginStatus.ERROR);
+                //changeLoginStatus(ELoginStatus.ERROR);
+                setError(emailLabel, "EMAIL ADDRESS – " + loginResponse);
+                setError(passwordLabel, "PASSWORD – " + loginResponse);
 
             } else {
-                emailLabel.setText("EMAIL ADDRESS *");
-                passwordLabel.setText("PASSWORD *");
+//                emailLabel.setText("EMAIL ADDRESS *");
+//                passwordLabel.setText("PASSWORD *");
 
-                changeLoginStatus(ELoginStatus.SUCCESS);
+                clearStyles(emailLabel, emailField);
+                clearStyles(passwordLabel, passwordField);
+                //changeLoginStatus(ELoginStatus.SUCCESS);
                 //statusLabel.setText("You have successfully Signed In");
                 stageInitializer.switchScenes("/view/chat-view.fxml", "Chatcord", 1350, 720);
             }
