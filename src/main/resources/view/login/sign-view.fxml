@@ -16,125 +16,134 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane minHeight="750.0" minWidth="1380.0" styleClass="backgroundImage" stylesheets="@login-view.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mdev.chatcord.client.controller.ui.LoginController">
+
+<AnchorPane xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mdev.chatcord.client.controller.ui.LoginController">
    <children>
-      <Label fx:id="appNameLabel" styleClass="chatcord-label" stylesheets="@login-view.css" text="Chatcord" textFill="#ffffffb1">
-         <font>
-            <Font size="9.0" />
-         </font>
-         <padding>
-            <Insets left="25.0" top="15.0" />
-         </padding>
-      </Label>
-      <HBox alignment="CENTER" layoutY="183.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <StackPane fx:id="stackPane" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-             <VBox alignment="CENTER" HBox.hgrow="NEVER">
-                 <children>
-                   <StackPane>
-                       <children>
-                           <Pane style="-fx-background-color: #220225D5; -fx-background-radius: 15;">
-                           <effect>
-                              <DropShadow height="18.0" radius="8.5" width="18.0" />
-                           </effect></Pane>
-                           <HBox fx:id="loginPanelHBox" alignment="CENTER">
-                               <children>
-                                   <VBox alignment="CENTER" spacing="20" style="-fx-padding: 40; -fx-background-radius: 15;">
-                                       <VBox alignment="CENTER">
+            <AnchorPane minHeight="750.0" minWidth="1380.0" styleClass="backgroundImage" stylesheets="@login-view.css">
+               <children>
+                  <Label fx:id="appNameLabel" styleClass="chatcord-label" stylesheets="@login-view.css" text="Chatcord" textFill="#ffffffb1">
+                     <font>
+                        <Font size="9.0" />
+                     </font>
+                     <padding>
+                        <Insets left="25.0" top="15.0" />
+                     </padding>
+                  </Label>
+                  <HBox alignment="CENTER" layoutY="183.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <children>
+                         <VBox alignment="CENTER" HBox.hgrow="NEVER">
+                             <children>
+                               <StackPane>
+                                   <children>
+                                       <Pane style="-fx-background-color: #220225D5; -fx-background-radius: 15;">
+                                       <effect>
+                                          <DropShadow height="18.0" radius="8.5" width="18.0" />
+                                       </effect>
+                                    </Pane>
+                                       <HBox fx:id="loginPanelHBox" alignment="CENTER">
                                            <children>
-                                               <Label fx:id="titleLabel" style="-fx-font-size: 24; -fx-font-weight: bold; -fx-font-family: Open Sans;" text="Welcome back!" textFill="#cfcfcfda">
-                                                   <font>
-                                                       <Font name="Open Sans Italic" size="12.0" />
-                                                   </font>
-                                               </Label>
-                                               <Label fx:id="titleSlogan" style="-fx-font-size: 15; -fx-font-family: Open Sans;" text="We're so excited to see you again!" textFill="#b0b0b0fa">
-                                                   <font>
-                                                       <Font name="Open Sans Light" size="57.0" />
-                                                   </font>
-                                               </Label>
+                                               <VBox alignment="CENTER" spacing="20" style="-fx-padding: 40; -fx-background-radius: 15;">
+                                                   <VBox alignment="CENTER">
+                                                       <children>
+                                                           <Label fx:id="titleLabel" style="-fx-font-size: 24; -fx-font-weight: bold; -fx-font-family: Open Sans;" text="Welcome back!" textFill="#cfcfcfda">
+                                                               <font>
+                                                                   <Font name="Open Sans Italic" size="12.0" />
+                                                               </font>
+                                                           </Label>
+                                                           <Label fx:id="titleSlogan" style="-fx-font-size: 15; -fx-font-family: Open Sans;" text="We're so excited to see you again!" textFill="#b0b0b0fa">
+                                                               <font>
+                                                                   <Font name="Open Sans Light" size="57.0" />
+                                                               </font>
+                                                           </Label>
+                                                       </children>
+                                                   </VBox>
+                                                   <VBox fx:id="emailVBox" alignment="CENTER_LEFT" fillWidth="false" spacing="3.0">
+                                                       <children>
+                                                           <Label fx:id="emailLabel" alignment="TOP_LEFT" styleClass="credentialLabel" stylesheets="@login-view.css" text="EMAIL ADDRESS *" textFill="#b5b5b5">
+                                                               <font>
+                                                                   <Font name="Open Sans ExtraBold" size="12.0" />
+                                                               </font>
+                                                           </Label>
+                                                           <TextField fx:id="emailField" minHeight="35.0" minWidth="400.0" promptText="Email Address" styleClass="textField" stylesheets="@login-view.css" />
+                                                       </children>
+                                                   </VBox>
+                                                   <VBox fx:id="usernameVBox" alignment="CENTER_LEFT" fillWidth="false" managed="false" spacing="3.0" visible="false">
+                                                       <children>
+                                                           <Label fx:id="titleLabel111" alignment="TOP_LEFT" text="USERNAME  *" textFill="#b5b5b5">
+                                                               <font>
+                                                                   <Font name="Open Sans ExtraBold" size="12.0" />
+                                                               </font>
+                                                           </Label>
+                                                           <!-- Username -->
+                                                           <TextField fx:id="usernameField" minHeight="35.0" minWidth="400.0" promptText="Username" styleClass="textField" stylesheets="@login-view.css" />
+                                                       </children>
+                                                   </VBox>
+                                                   <VBox fx:id="passwordVBox" alignment="CENTER_LEFT" fillWidth="false" prefWidth="286.0" spacing="3.0">
+                                                       <children>
+                                                           <Label fx:id="passwordLabel" alignment="TOP_LEFT" styleClass="credentialLabel" stylesheets="@login-view.css" text="PASSWORD *" textFill="#b5b5b5">
+                                                               <font>
+                                                                   <Font name="Open Sans ExtraBold" size="12.0" />
+                                                               </font>
+                                                           </Label>
+                     
+                                                                                            <!-- Password -->
+                                                           <PasswordField fx:id="passwordField" minHeight="35.0" minWidth="400.0" prefHeight="30.0" prefWidth="277.0" promptText="Password" styleClass="textField" stylesheets="@login-view.css" />
+                                                       </children>
+                                                   </VBox>
+                                                   <VBox fx:id="confirmPasswordVBox" alignment="CENTER_LEFT" fillWidth="false" managed="false" spacing="3.0" visible="false">
+                                                       <children>
+                                                           <Label fx:id="confirmPasswordLabel" alignment="TOP_LEFT" text="CONFIRM PASSWORD *" textFill="#b5b5b5">
+                                                               <font>
+                                                                   <Font name="Open Sans ExtraBold" size="12.0" />
+                                                               </font>
+                                                           </Label>
+                                                           <!-- Confirm Password (only for Sign Up) -->
+                                                           <PasswordField fx:id="confirmPasswordField" minHeight="35.0" minWidth="400.0" promptText="Confirm Password" styleClass="textField" stylesheets="@login-view.css" />
+                                                       </children>
+                                                   </VBox>
+                                                   <!-- Status -->
+                                                   <Label fx:id="statusLabel" managed="false" text="" textFill="red" visible="false" />
+                     
+                                                                                    <!-- Submit Button -->
+                                                   <Button fx:id="submitButton" defaultButton="true" minHeight="35.0" minWidth="400.0" onAction="#onSubmitClicked" styleClass="submitBtn" stylesheets="@login-view.css" text="Log In" textFill="#ffffffd5">
+                                                       <font>
+                                                           <Font name="System Bold" size="13.0" />
+                                                       </font>
+                                                   </Button>
+                     
+                                                                                    <!-- Switch Mode -->
+                                                   <HBox alignment="CENTER_LEFT">
+                                                       <Label fx:id="switchLabel" text="Don't have an account?" textFill="#838383" />
+                                                       <Hyperlink fx:id="switchModeLink" onAction="#onSwitchModeClicked" prefWidth="52.0" text="Register" textFill="#00acff" />
+                                                   </HBox>
+                                               </VBox>
+                                               <AnchorPane>
+                                                   <children>
+                                                       <VBox alignment="CENTER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                           <children>
+                                                               <ImageView fx:id="loginImage" fitHeight="549.0" fitWidth="291.0" pickOnBounds="true" preserveRatio="true" VBox.vgrow="ALWAYS">
+                                                                   <image>
+                                                                       <Image url="@../../images/login-page-illustration.png" />
+                                                                   </image>
+                                                               </ImageView>
+                                                           </children>
+                                                       </VBox>
+                                                   </children>
+                                               </AnchorPane>
                                            </children>
-                                       </VBox>
-                                       <VBox fx:id="emailVBox" alignment="CENTER_LEFT" fillWidth="false" spacing="3.0">
-                                           <children>
-                                               <Label fx:id="emailLabel" alignment="TOP_LEFT" styleClass="credentialLabel" stylesheets="@login-view.css" text="EMAIL ADDRESS *" textFill="#b5b5b5">
-                                                   <font>
-                                                       <Font name="Open Sans ExtraBold" size="12.0" />
-                                                   </font>
-                                               </Label>
-                                               <TextField fx:id="emailField" minHeight="35.0" minWidth="400.0" promptText="Email Address" styleClass="textField" stylesheets="@login-view.css" />
-                                           </children>
-                                       </VBox>
-                                       <VBox fx:id="usernameVBox" alignment="CENTER_LEFT" fillWidth="false" managed="false" spacing="3.0" visible="false">
-                                           <children>
-                                               <Label fx:id="usernameLabel" alignment="TOP_LEFT" text="USERNAME  *" textFill="#b5b5b5">
-                                                   <font>
-                                                       <Font name="Open Sans ExtraBold" size="12.0" />
-                                                   </font>
-                                               </Label>
-                                               <!-- Username -->
-                                               <TextField fx:id="usernameField" minHeight="35.0" minWidth="400.0" promptText="Username" styleClass="textField" stylesheets="@login-view.css" />
-                                           </children>
-                                       </VBox>
-                                       <VBox fx:id="passwordVBox" alignment="CENTER_LEFT" fillWidth="false" prefWidth="286.0" spacing="3.0">
-                                           <children>
-                                               <Label fx:id="passwordLabel" alignment="TOP_LEFT" styleClass="credentialLabel" stylesheets="@login-view.css" text="PASSWORD *" textFill="#b5b5b5">
-                                                   <font>
-                                                       <Font name="Open Sans ExtraBold" size="12.0" />
-                                                   </font>
-                                               </Label>
-         
-                                                                                <!-- Password -->
-                                               <PasswordField fx:id="passwordField" minHeight="35.0" minWidth="400.0" prefHeight="30.0" prefWidth="277.0" promptText="Password" styleClass="textField" stylesheets="@login-view.css" />
-                                           </children>
-                                       </VBox>
-                                       <VBox fx:id="confirmPasswordVBox" alignment="CENTER_LEFT" fillWidth="false" managed="false" spacing="3.0" visible="false">
-                                           <children>
-                                               <Label fx:id="confirmPasswordLabel" alignment="TOP_LEFT" text="CONFIRM PASSWORD *" textFill="#b5b5b5">
-                                                   <font>
-                                                       <Font name="Open Sans ExtraBold" size="12.0" />
-                                                   </font>
-                                               </Label>
-                                               <!-- Confirm Password (only for Sign Up) -->
-                                               <PasswordField fx:id="confirmPasswordField" minHeight="35.0" minWidth="400.0" promptText="Confirm Password" styleClass="textField" stylesheets="@login-view.css" />
-                                           </children>
-                                       </VBox>
-                                       <!-- Status -->
-                                       <Label fx:id="statusLabel" managed="false" text="" textFill="red" visible="false" />
-         
-                                                                        <!-- Submit Button -->
-                                       <Button fx:id="submitButton" defaultButton="true" minHeight="35.0" minWidth="400.0" onAction="#onSubmitClicked" styleClass="submitBtn" stylesheets="@login-view.css" text="Log In" textFill="#ffffffd5">
-                                           <font>
-                                               <Font name="System Bold" size="13.0" />
-                                           </font>
-                                       </Button>
-         
-                                                                        <!-- Switch Mode -->
-                                       <HBox alignment="CENTER_LEFT">
-                                           <Label fx:id="switchLabel" text="Don't have an account?" textFill="#838383" />
-                                           <Hyperlink fx:id="switchModeLink" onAction="#onSwitchModeClicked" prefWidth="52.0" text="Register" />
                                        </HBox>
-                                   </VBox>
-                                   <AnchorPane>
-                                       <children>
-                                           <VBox alignment="CENTER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                               <children>
-                                                   <ImageView fx:id="loginImage" fitHeight="549.0" fitWidth="291.0" pickOnBounds="true" preserveRatio="true" VBox.vgrow="ALWAYS">
-                                                       <image>
-                                                           <Image url="@../../images/login-page-illustration.png" />
-                                                       </image>
-                                                   </ImageView>
-                                          <Hyperlink fx:id="debugLink" onAction="#onDebugLinkClicked" prefWidth="52.0" text="DEBUG" />
-                                               </children>
-                                           </VBox>
-                                       </children>
-                                   </AnchorPane>
-                               </children>
-                           </HBox>
-                       </children>
-                   </StackPane>
-                 </children>
-             </VBox>
+                                   </children>
+                               </StackPane>
+                             </children>
+                         </VBox>
+                     </children>
+                  </HBox>
+                   <fx:include source="window-view.fxml" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
+               </children>
+            </AnchorPane>
          </children>
-      </HBox>
-       <fx:include source="window-view.fxml" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
+      </StackPane>
    </children>
 </AnchorPane>

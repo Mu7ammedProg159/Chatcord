@@ -16,7 +16,6 @@ public class GlobalWebClientExceptionHandler {
                     case UNAUTHORIZED, FORBIDDEN, NOT_FOUND, LOCKED, TOO_MANY_REQUESTS, CONFLICT, BAD_REQUEST, INTERNAL_SERVER_ERROR -> errorBody;
                     default -> "Error (" + status.value() + "): " + errorBody;
                 };
-
                 return Mono.error(new RuntimeException(message));
             });
     }

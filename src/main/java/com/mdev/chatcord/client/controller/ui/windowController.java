@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 
 
 @Component
-public class windowController {
+public class windowController implements EventStageHandler{
 
     @FXML
     private Button cancelButton, maximizeButton, minimizeButton;
@@ -36,13 +36,13 @@ public class windowController {
     // Mouse pressed handler to capture initial mouse position
     private void handleMousePressed(MouseEvent event) {
         // Capture current position of the mouse relative to the screen
-        xOffset = event.getScreenX() - getStageMouseEvent(event.getSource()).getX();
-        yOffset = event.getScreenY() - getStageMouseEvent(event.getSource()).getY();
+        xOffset = event.getScreenX() - getStageMouseEvent(event).getX();
+        yOffset = event.getScreenY() - getStageMouseEvent(event).getY();
     }
 
     // Mouse dragged handler to move the window
     private void handleMouseDragged(MouseEvent event) {
-        Stage stage = getStageMouseEvent(event.getSource());
+        Stage stage = getStageMouseEvent(event);
 
         // Move the window based on the current mouse position
         stage.setX(event.getScreenX() - xOffset);
@@ -62,15 +62,6 @@ public class windowController {
     public void onMinimizeClicked(ActionEvent event){
         stage = getStageActionEvent(event);
         stage.setIconified(true); // Minimizes to taskbar
-    }
-
-    private Stage getStageActionEvent(ActionEvent event) {
-        return (Stage) ((Node) event.getSource()).getScene().getWindow();
-    }
-
-    // Utility method to get the stage from the event source
-    private Stage getStageMouseEvent(Object source) {
-        return (Stage) ((Node) source).getScene().getWindow();
     }
 
 }

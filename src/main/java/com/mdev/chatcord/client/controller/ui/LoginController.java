@@ -1,27 +1,39 @@
 package com.mdev.chatcord.client.controller.ui;
 
+import com.mdev.chatcord.client.component.SpringFXMLLoader;
 import com.mdev.chatcord.client.component.StageInitializer;
 import com.mdev.chatcord.client.dto.UserDTO;
 import com.mdev.chatcord.client.enums.ELoginStatus;
 import com.mdev.chatcord.client.service.UserService;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
 import java.util.Collections;
 
 @Component
 public class LoginController implements UIErrorHandler {
+
+    @FXML
+    private StackPane stackPane;
 
     @FXML
     private TextField emailField, usernameField;
@@ -31,7 +43,7 @@ public class LoginController implements UIErrorHandler {
 
     @FXML
     private Label statusLabel, appNameLabel, switchLabel, titleLabel, titleSlogan, emailLabel,
-            passwordLabel, confirmPasswordLabel, usernameLabel;
+            passwordLabel, confirmPasswordLabel;
 
     @FXML
     private VBox emailVBox, usernameVBox, passwordVBox, confirmPasswordVBox;
@@ -46,13 +58,16 @@ public class LoginController implements UIErrorHandler {
     private ImageView loginImage;
 
     @FXML
-    private Hyperlink switchModeLink, debugLink;
+    private Hyperlink switchModeLink;
 
     @Autowired
     UserService userService;
 
     @Autowired
     StageInitializer stageInitializer;
+
+    @Autowired
+    SpringFXMLLoader springFXMLLoader;
 
     private boolean isRegisterMode;
 
@@ -73,22 +88,10 @@ public class LoginController implements UIErrorHandler {
 
         isRegisterMode = !isRegisterMode;
         switchModeLink.setVisited(false);
-
         updateMode();
     }
 
-    @FXML
-    public void onDebugLinkClicked(){
-        clearAllStyles();
-        logger.info(emailLabel.getStyleClass().toString());
-        logger.info(passwordLabel.getStyleClass().toString());
-        logger.info(confirmPasswordLabel.getStyleClass().toString());
-        logger.info(usernameLabel.getStyleClass().toString());
-    }
-
     public void updateMode() {
-
-
         if (isRegisterMode) {
             titleLabel.setText("Create Account");
             submitButton.setText("Register");
@@ -101,8 +104,6 @@ public class LoginController implements UIErrorHandler {
 
             hideFields(true);
             loginImage.setImage(loginImageURL);
-
-            clearAllStyles();
 
             // Just reverse the children order
             //Collections.swap(loginPanelChildren, 0, 1);
@@ -119,17 +120,9 @@ public class LoginController implements UIErrorHandler {
             loginImageURL = new Image(getClass().getResource("/images/login-page-illustration.png").toExternalForm());
             loginImage.setImage(loginImageURL);
             //Collections.swap(loginPanelChildren, 1, 0);
-            clearAllStyles();
 
         }
         clearFields();
-    }
-
-    private void clearAllStyles() {
-        clearStyles(emailLabel, emailField);
-        clearStyles(passwordLabel, passwordField);
-        clearStyles(confirmPasswordLabel, confirmPasswordField);
-        clearStyles(usernameLabel, usernameField);
     }
 
     private void hideFields(boolean b) {
@@ -143,14 +136,17 @@ public class LoginController implements UIErrorHandler {
         confirmPasswordVBox.setManaged(b);
     }
 
-    public void onSubmitClicked() {
+    public void onSubmitClicked() throws IOException {
 
         String email = emailField.getText();
         String username = usernameField.getText();
         String password = passwordField.getText();
         String confirmPassword = confirmPasswordField.getText();
 
-        clearAllStyles();
+        clearStyles(emailLabel, emailField);
+        clearStyles(passwordLabel, passwordField);
+        clearStyles(confirmPasswordLabel, confirmPasswordField);
+        clearStyles(emailLabel, usernameField);
 
         if (isRegisterMode) {
 
@@ -169,12 +165,21 @@ public class LoginController implements UIErrorHandler {
             try {
                 String registerResponse = userService.register(email, password, username);
 
-                clearAllStyles();
+                clearStyles(emailLabel, emailField);
+                clearStyles(passwordLabel, passwordField);
+                clearStyles(confirmPasswordLabel, confirmPasswordField);
+                clearStyles(emailLabel, usernameField);
+
+                loadOtpWindow(email);
 
                 logger.info(registerResponse);
             } catch (RuntimeException e) {
                 setError(emailLabel, "EMAIL ADDRESS – " + e.getMessage(), emailField);
-                return;
+                clearStyles(passwordLabel, passwordField);
+                clearStyles(confirmPasswordLabel, confirmPasswordField);
+                clearStyles(emailLabel, usernameField);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
             }
 
             updateMode();
@@ -192,25 +197,41 @@ public class LoginController implements UIErrorHandler {
             var loginResponse = userService.login(email, password);
 
             if (loginResponse instanceof String) {
-                statusLabel.setText((String) loginResponse);
-                //emailLabel.setText("EMAIL ADDRESS – " + loginResponse);
-                //passwordLabel.setText("PASSWORD – " + loginResponse);
+                emailLabel.setText("EMAIL ADDRESS – " + loginResponse);
+                passwordLabel.setText("PASSWORD – " + loginResponse);
 
-                //changeLoginStatus(ELoginStatus.ERROR);
-                setError(emailLabel, "EMAIL ADDRESS – " + loginResponse);
-                setError(passwordLabel, "PASSWORD – " + loginResponse);
+                changeLoginStatus(ELoginStatus.ERROR);
+
+                //Change this accordingly when you have access to the Exception Handling commit.
+                if (((String) loginResponse).equalsIgnoreCase(
+                        "Please verify your Email Address first before logging in")){
+                    loadOtpWindow(email);
+                }
+
 
             } else {
-//                emailLabel.setText("EMAIL ADDRESS *");
-//                passwordLabel.setText("PASSWORD *");
+                emailLabel.setText("EMAIL ADDRESS *");
+                passwordLabel.setText("PASSWORD *");
 
-                clearStyles(emailLabel, emailField);
-                clearStyles(passwordLabel, passwordField);
-                //changeLoginStatus(ELoginStatus.SUCCESS);
+                changeLoginStatus(ELoginStatus.SUCCESS);
                 //statusLabel.setText("You have successfully Signed In");
                 stageInitializer.switchScenes("/view/chat-view.fxml", "Chatcord", 1350, 720);
             }
         }
+    }
+
+    private void loadOtpWindow(String email) throws IOException {
+        FXMLLoader otpLoader = springFXMLLoader.getLoader("/view/verification-otp.fxml");
+        Parent otpOverlay = otpLoader.load();
+        OtpController otpController = otpLoader.getController();
+
+        otpController.setToEmail(email);
+
+        stackPane.getChildren().add(otpOverlay);
+
+        otpController.getNum0().requestFocus();
+
+        otpController.setOnClose(() -> stackPane.getChildren().remove(otpOverlay));
     }
 
     private void changeLoginStatus(ELoginStatus eLoginStatus) {
