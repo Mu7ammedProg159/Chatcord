@@ -1,5 +1,6 @@
 package com.mdev.chatcord.client.controller.ui;
 
+import com.mdev.chatcord.client.annotation.DraggableWindow;
 import com.mdev.chatcord.client.component.DragWindow;
 import com.mdev.chatcord.client.service.UserService;
 import javafx.animation.KeyFrame;
@@ -32,10 +33,12 @@ import java.util.Objects;
 @Component
 @Getter
 @RequiredArgsConstructor
-public class OtpController extends DragWindow implements EventStageHandler, UIErrorHandler{
+@DraggableWindow
+public class OtpController implements EventStageHandler, UIErrorHandler{
 
+    @FXML private HBox dragRegion;
     @FXML private TextFlow textFlow, successTextFlow;
-    @FXML private HBox backgroundHBox, dragRegion;
+    @FXML private HBox backgroundHBox;
     @FXML private Label toEmail, headerLabel, subHeaderLabel, resendLabel;
     @FXML private TextField num0, num1, num2, num3, num4, num5;
     @FXML private Hyperlink resendLink;
@@ -60,10 +63,6 @@ public class OtpController extends DragWindow implements EventStageHandler, UIEr
 
     @FXML
     public void initialize(){
-
-        //Handle Window Drag
-        dragRegion.setOnMousePressed(this::handleMousePressed);
-        dragRegion.setOnMouseDragged(this::handleMouseDragged);
 
         successTextFlow.setVisible(false);
         successTextFlow.setManaged(false);

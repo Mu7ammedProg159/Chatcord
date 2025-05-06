@@ -1,6 +1,7 @@
 package com.mdev.chatcord.client.component;
 
 import com.mdev.chatcord.client.ChatcordApplication.StageReadyEvent;
+import com.mdev.chatcord.client.annotation.aspect.DraggableWindowInitializer;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -15,6 +16,7 @@ import lombok.Getter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationListener;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
 
@@ -32,9 +34,9 @@ public class StageInitializer implements ApplicationListener<StageReadyEvent> {
     private Stage primaryStage;
 
     private final String applicationTitle;
-    private ApplicationContext applicationContext;
+    private final AnnotationConfigApplicationContext applicationContext;
 
-    public StageInitializer(@Value("${spring.application.ui.title}") String applicationTitle, ApplicationContext applicationContext) {
+    public StageInitializer(@Value("${spring.application.ui.title}") String applicationTitle, AnnotationConfigApplicationContext applicationContext) {
         this.applicationTitle = applicationTitle;
         this.applicationContext = applicationContext;
     }
@@ -46,7 +48,7 @@ public class StageInitializer implements ApplicationListener<StageReadyEvent> {
             this.primaryStage = event.getStage();
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(signResource.getURL());
-            fxmlLoader.setControllerFactory(aClass -> applicationContext.getBean(aClass));
+            fxmlLoader.setControllerFactory(applicationContext::getBean);
             AnchorPane parent = fxmlLoader.load();
 
             Rectangle clip = new Rectangle();

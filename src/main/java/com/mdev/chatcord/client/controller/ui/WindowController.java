@@ -1,5 +1,6 @@
 package com.mdev.chatcord.client.controller.ui;
 
+import com.mdev.chatcord.client.annotation.DraggableWindow;
 import com.mdev.chatcord.client.component.DragWindow;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -12,26 +13,20 @@ import org.springframework.stereotype.Component;
 
 
 @Component
-public class WindowController extends DragWindow implements EventStageHandler{
-
-    @FXML
-    private Button cancelButton, maximizeButton, minimizeButton;
+@DraggableWindow
+public class WindowController implements EventStageHandler{
 
     @FXML
     private HBox dragRegion;
 
-    private double xOffset = getXOffset();
-    private double yOffset = getYOffset();
+    @FXML
+    private Button cancelButton, maximizeButton, minimizeButton;
 
     private Stage stage;
 
     @FXML
     private void initialize() {
-        // Handle mouse press
-        dragRegion.setOnMousePressed(this::handleMousePressed);
 
-        // Handle mouse drag
-        dragRegion.setOnMouseDragged(this::handleMouseDragged);
     }
 
     public void onCancelClicked(ActionEvent event){
