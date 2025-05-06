@@ -12,6 +12,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
 import java.util.Map;
+import java.util.Objects;
 
 @RequiredArgsConstructor
 @Service
@@ -73,6 +74,24 @@ public class UserService {
                     .onStatus(HttpStatusCode::isError, GlobalWebClientExceptionHandler::handleResponse)
                     .bodyToMono(String.class)
                     .block();
+            return message;
+
+        } catch (RuntimeException e) {
+            throw new RuntimeException(e.getMessage());
+        }
+    }
+
+    public long canResendOtp(String email){
+
+        try {
+            long message = Long.parseLong(Objects.requireNonNull(webClient.post()
+                    .uri(jwtRequest.getDomain() + jwtRequest.getAuthUri() + "/retry-otp-send")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .bodyValue(Map.of("email", email))
+                    .retrieve()
+                    .onStatus(HttpStatusCode::isError, GlobalWebClientExceptionHandler::handleResponse)
+                    .bodyToMono(String.class)
+                    .block()));
             return message;
 
         } catch (RuntimeException e) {

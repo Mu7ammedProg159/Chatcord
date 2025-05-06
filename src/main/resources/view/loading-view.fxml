@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.shape.Circle?>
+
+
+<HBox fx:id="loadingDots" alignment="CENTER" spacing="3.0" style="-fx-background-color: transparent;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mdev.chatcord.client.controller.ui.LoadingController">
+   <children>
+        <Circle fx:id="dot1" fill="#f2f2f3" radius="4.0" HBox.hgrow="ALWAYS" />
+        <Circle fx:id="dot2" fill="#f2f2f3" radius="4.0" HBox.hgrow="ALWAYS" />
+        <Circle fx:id="dot3" fill="#f2f2f3" radius="4.0" HBox.hgrow="ALWAYS" />
+   </children>
+</HBox>

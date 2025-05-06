@@ -35,7 +35,7 @@
                                           <children>
                                               <VBox alignment="CENTER" prefHeight="243.0" prefWidth="450.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                                   <children>
-                                                      <ImageView fx:id="loginImage" fitHeight="203.0" fitWidth="209.0" pickOnBounds="true" preserveRatio="true" VBox.vgrow="ALWAYS">
+                                                      <ImageView fx:id="otpImage" fitHeight="203.0" fitWidth="209.0" pickOnBounds="true" preserveRatio="true" VBox.vgrow="ALWAYS">
                                                           <image>
                                                               <Image url="@../images/verification_illustration_1.png" />
                                                           </image>
@@ -48,12 +48,12 @@
                                     <children>
                                              <VBox alignment="CENTER" spacing="10.0">
                                                  <children>
-                                                     <Label text="Please verify your email" textFill="#cfcfcfda">
+                                                     <Label fx:id="headerLabel" text="Please verify your email" textFill="#cfcfcfda">
                                                          <font>
                                                              <Font name="Nexa Text-Trial Heavy" size="24.0" />
                                                          </font>
                                                      </Label>
-                                                     <Label text="You're almost there! We sent an email to" textFill="#b0b0b0fa">
+                                                     <Label fx:id="subHeaderLabel" text="You're almost there! We sent an email to" textFill="#b0b0b0fa">
                                                          <font>
                                                              <Font name="Open Sans Regular" size="18.0" />
                                                          </font>
@@ -65,7 +65,7 @@
                                              <Font name="Arial Rounded MT Bold" size="18.0" />
                                           </font>
                                        </Label>
-                                       <TextFlow maxWidth="450.0" textAlignment="CENTER">
+                                       <TextFlow fx:id="textFlow" maxWidth="450.0" textAlignment="CENTER">
                                           <children>
                                              <Text fill="#b0b0b0" strokeType="OUTSIDE" strokeWidth="0.0" text="Just enter the ">
                                                 <font>
@@ -94,9 +94,23 @@
                                              </Text>
                                           </children>
                                        </TextFlow>
+                                       <TextFlow fx:id="successTextFlow" layoutX="10.0" layoutY="118.0" managed="false" maxWidth="450.0" textAlignment="CENTER" visible="false">
+                                          <children>
+                                             <Text fill="#b0b0b0" strokeType="OUTSIDE" strokeWidth="0.0" text="Congratulations! ">
+                                                <font>
+                                                   <Font name="Open Sans Extrabold" size="15.0" />
+                                                </font>
+                                             </Text>
+                                             <Text fill="#b0b0b0" layoutX="19.0" layoutY="10.0" strokeType="OUTSIDE" strokeWidth="0.0" text="You've successfully verified your account. You can now login to connect with people!">
+                                                <font>
+                                                   <Font name="Open Sans Regular" size="15.0" />
+                                                </font>
+                                             </Text>
+                                          </children>
+                                       </TextFlow>
                                     </children>
                                  </VBox>
-                                       <VBox fx:id="emailVBox" alignment="CENTER" fillWidth="false" spacing="3.0">
+                                       <VBox fx:id="otpVBox" alignment="CENTER" fillWidth="false" spacing="3.0">
                                            <children>
                                        <HBox alignment="CENTER" prefHeight="50.0" prefWidth="403.0" VBox.vgrow="ALWAYS">
                                           <children>
@@ -130,7 +144,7 @@
          
                                                                               <!-- Switch Mode -->
                                        <HBox alignment="CENTER">
-                                           <Label fx:id="switchLabel" text="Didn't receive an email ?" textFill="#838383">
+                                           <Label fx:id="resendLabel" text="Didn't receive an email ?" textFill="#838383">
                                        <font>
                                           <Font size="13.0" />
                                        </font></Label>
@@ -148,5 +162,6 @@
              </VBox>
          </children>
       </HBox>
+      <HBox fx:id="dragRegion" prefHeight="35.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
    </children>
 </AnchorPane>

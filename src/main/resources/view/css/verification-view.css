@@ -37,6 +37,7 @@
 
 .textFieldError{
     -fx-border-color: #f56c69;
+    -fx-border-width: 3px;
 }
 
 .onCancel{

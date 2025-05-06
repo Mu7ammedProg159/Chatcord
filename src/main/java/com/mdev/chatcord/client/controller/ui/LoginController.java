@@ -43,7 +43,7 @@ public class LoginController implements UIErrorHandler {
 
     @FXML
     private Label statusLabel, appNameLabel, switchLabel, titleLabel, titleSlogan, emailLabel,
-            passwordLabel, confirmPasswordLabel;
+            passwordLabel, confirmPasswordLabel, usernameLabel;
 
     @FXML
     private VBox emailVBox, usernameVBox, passwordVBox, confirmPasswordVBox;
@@ -71,6 +71,11 @@ public class LoginController implements UIErrorHandler {
 
     private boolean isRegisterMode;
 
+    private final String emailLabelString = "EMAIL ADDRESS *";
+    private final String passwordLabelString = "PASSWORD *";
+    private final String confirmPasswordLabelString = "CONFIRM PASSWORD *";
+    private final String usernameLabelString = "USERNAME *";
+
     private Image loginImageURL = new Image(getClass().getResource("/images/login-page-illustration.png").toExternalForm());
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
@@ -85,7 +90,6 @@ public class LoginController implements UIErrorHandler {
 
     @FXML
     public void onSwitchModeClicked() {
-
         isRegisterMode = !isRegisterMode;
         switchModeLink.setVisited(false);
         updateMode();
@@ -122,6 +126,7 @@ public class LoginController implements UIErrorHandler {
             //Collections.swap(loginPanelChildren, 1, 0);
 
         }
+        clearAllStylesWithDefaultText();
         clearFields();
     }
 
@@ -143,11 +148,6 @@ public class LoginController implements UIErrorHandler {
         String password = passwordField.getText();
         String confirmPassword = confirmPasswordField.getText();
 
-        clearStyles(emailLabel, emailField);
-        clearStyles(passwordLabel, passwordField);
-        clearStyles(confirmPasswordLabel, confirmPasswordField);
-        clearStyles(emailLabel, usernameField);
-
         if (isRegisterMode) {
 
             if (isAnyFieldEmpty(email, username, password, confirmPassword)) {
@@ -165,10 +165,6 @@ public class LoginController implements UIErrorHandler {
             try {
                 String registerResponse = userService.register(email, password, username);
 
-                clearStyles(emailLabel, emailField);
-                clearStyles(passwordLabel, passwordField);
-                clearStyles(confirmPasswordLabel, confirmPasswordField);
-                clearStyles(emailLabel, usernameField);
 
                 loadOtpWindow(email);
 
@@ -177,35 +173,34 @@ public class LoginController implements UIErrorHandler {
                 setError(emailLabel, "EMAIL ADDRESS – " + e.getMessage(), emailField);
                 clearStyles(passwordLabel, passwordField);
                 clearStyles(confirmPasswordLabel, confirmPasswordField);
-                clearStyles(emailLabel, usernameField);
+                clearStyles(usernameLabel, usernameField);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
 
+
+
             updateMode();
-            //}
-//            else {
-//                statusLabel.setText("Account already registered with this Email Address.");
-//            }
+
         } else {
-            if (email.isEmpty() || password.isEmpty()) {
-                statusLabel.setText("Please enter your email or password.");
+            if (email.isEmpty()) {
+                setError(emailLabel, emailLabelString + " – Please enter your email.");
                 return;
             }
-            // TODO: Call user login service from database.
+            if (password.isEmpty()) {
+                setError(passwordLabel, "Please enter your password.");
+                return;
+            }
 
             try {
                 userService.login(email, password);
-                emailLabel.setText("EMAIL ADDRESS *");
-                passwordLabel.setText("PASSWORD *");
 
                 changeLoginStatus(ELoginStatus.SUCCESS);
-                //statusLabel.setText("You have successfully Signed In");
                 stageInitializer.switchScenes("/view/chat-view.fxml", "Chatcord", 1350, 720);
 
             } catch (RuntimeException e) {
-                emailLabel.setText("EMAIL ADDRESS – " + e.getMessage());
-                passwordLabel.setText("PASSWORD – " + e.getMessage());
+                emailLabel.setText(emailLabelString + " – " + e.getMessage());
+                passwordLabel.setText(passwordLabelString + " – " + e.getMessage());
 
                 changeLoginStatus(ELoginStatus.ERROR);
 
@@ -228,9 +223,21 @@ public class LoginController implements UIErrorHandler {
 
         otpController.setOnClose(() -> {
             stackPane.getChildren().remove(otpOverlay);
+            clearAllStylesWithDefaultText();
             isRegisterMode = false;
             updateMode();
         });
+    }
+
+    private void clearAllStylesWithDefaultText() {
+        emailLabel.setText(emailLabelString);
+        passwordLabel.setText(passwordLabelString);
+        confirmPasswordLabel.setText(confirmPasswordLabelString);
+        usernameLabel.setText(usernameLabelString);
+        clearStyles(emailLabel, emailField);
+        clearStyles(passwordLabel, passwordField);
+        clearStyles(confirmPasswordLabel, confirmPasswordField);
+        clearStyles(usernameLabel, usernameField);
     }
 
     private void changeLoginStatus(ELoginStatus eLoginStatus) {
