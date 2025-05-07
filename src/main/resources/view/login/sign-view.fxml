@@ -111,7 +111,7 @@
                                                            <Font name="Nexa Text-Trial Heavy" size="13.0" />
                                                        </font>
                                                 <graphic>
-                                                   <fx:include source="../loading-view.fxml" />
+                                                   <fx:include fx:id="loadingComponent" source="../loading-view.fxml" />
                                                 </graphic>
                                                    </Button>
                      

@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @DraggableWindow
-public class WindowController implements EventStageHandler{
+public class WindowController extends DragWindow implements EventStageHandler{
 
     @FXML
     private HBox dragRegion;
@@ -26,7 +26,8 @@ public class WindowController implements EventStageHandler{
 
     @FXML
     private void initialize() {
-
+        dragRegion.setOnMousePressed(this::handleMousePressed);
+        dragRegion.setOnMouseDragged(this::handleMouseDragged);
     }
 
     public void onCancelClicked(ActionEvent event){

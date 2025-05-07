@@ -2,9 +2,11 @@ package com.mdev.chatcord.client.controller.ui;
 
 import com.mdev.chatcord.client.component.SpringFXMLLoader;
 import com.mdev.chatcord.client.component.StageInitializer;
+import com.mdev.chatcord.client.component.ThrowingRunnable;
 import com.mdev.chatcord.client.dto.UserDTO;
 import com.mdev.chatcord.client.enums.ELoginStatus;
 import com.mdev.chatcord.client.service.UserService;
+import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -30,7 +32,7 @@ import java.io.IOException;
 import java.util.Collections;
 
 @Component
-public class LoginController implements UIErrorHandler {
+public class LoginController implements LoadingHandler, UIErrorHandler {
 
     @FXML
     private StackPane stackPane;
@@ -60,11 +62,16 @@ public class LoginController implements UIErrorHandler {
     @FXML
     private Hyperlink switchModeLink;
 
+    @FXML HBox loadingComponent;
+
     @Autowired
     UserService userService;
 
     @Autowired
     StageInitializer stageInitializer;
+
+    @Autowired
+    LoadingController loadingController;
 
     @Autowired
     SpringFXMLLoader springFXMLLoader;
@@ -192,20 +199,41 @@ public class LoginController implements UIErrorHandler {
                 return;
             }
 
+            ThrowingRunnable loadOnLogin = () -> {
+                Platform.runLater(() -> submitButton.setText(""));
+                try {
+                    userService.login(email, password);
+                } catch (RuntimeException e){
+                    Platform.runLater(() -> {
+                        emailLabel.setText(emailLabelString + " – " + e.getMessage());
+                        passwordLabel.setText(passwordLabelString + " – " + e.getMessage());
+                        submitButton.setText("Login");
+                        changeLoginStatus(ELoginStatus.ERROR);
+
+                        if (e.getMessage().equalsIgnoreCase("Please verify your email address to login.")) {
+                            try {
+                                loadOtpWindow(email);
+                            } catch (IOException ex) {
+                                throw new RuntimeException(ex);
+                            }
+                        }
+                    });
+                }
+            };
+
+            ThrowingRunnable loadOnSucceed = () -> {
+                Platform.runLater(() -> submitButton.setText("Login"));
+            };
+
+            loadingController.onLoad(loadOnLogin, loadOnSucceed, null);
+
+            changeLoginStatus(ELoginStatus.SUCCESS);
+
+
             try {
-                userService.login(email, password);
-
-                changeLoginStatus(ELoginStatus.SUCCESS);
                 stageInitializer.switchScenes("/view/chat-view.fxml", "Chatcord", 1350, 720);
-
-            } catch (RuntimeException e) {
-                emailLabel.setText(emailLabelString + " – " + e.getMessage());
-                passwordLabel.setText(passwordLabelString + " – " + e.getMessage());
-
-                changeLoginStatus(ELoginStatus.ERROR);
-
-                if (e.getMessage().equalsIgnoreCase("Please verify your email address to login."))
-                    loadOtpWindow(email);
+            } catch (Exception e) {
+                logger.error("Cannot load chat-view.fxml due to NullPointerException.");
             }
         }
     }

@@ -33,8 +33,7 @@ import java.util.Objects;
 @Component
 @Getter
 @RequiredArgsConstructor
-@DraggableWindow
-public class OtpController implements EventStageHandler, UIErrorHandler{
+public class OtpController extends DragWindow implements EventStageHandler, UIErrorHandler{
 
     @FXML private HBox dragRegion;
     @FXML private TextFlow textFlow, successTextFlow;
@@ -63,6 +62,9 @@ public class OtpController implements EventStageHandler, UIErrorHandler{
 
     @FXML
     public void initialize(){
+
+        dragRegion.setOnMousePressed(this::handleMousePressed);
+        dragRegion.setOnMouseDragged(this::handleMouseDragged);
 
         successTextFlow.setVisible(false);
         successTextFlow.setManaged(false);
@@ -94,12 +96,12 @@ public class OtpController implements EventStageHandler, UIErrorHandler{
         otp = num0.getText() + num1.getText() + num2.getText() + num3.getText() + num4.getText() + num5.getText();
         try{
             userService.verify(email, otp);
+            logger.info("Now I should do /verify-email Webclient"); // move to next field
+            switchToVerified();
         } catch (RuntimeException e) {
             setError(null, null, num0, num1, num2, num3, num4, num5);
             logger.info(e.getMessage());
         }
-        logger.info("Now I should do /verify-email Webclient"); // move to next field
-        switchToVerified();
     }
 
     @FXML

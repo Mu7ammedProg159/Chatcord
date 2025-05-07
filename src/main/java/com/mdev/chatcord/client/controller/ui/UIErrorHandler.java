@@ -1,6 +1,8 @@
 package com.mdev.chatcord.client.controller.ui;
 
+import javafx.concurrent.Task;
 import javafx.scene.Node;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 
@@ -21,7 +23,6 @@ public interface UIErrorHandler {
 
         if (fields != null){
             for (TextField field : fields) {
-                field.getStyleClass().removeAll("textField");
                 field.getStyleClass().add("textFieldError");
             }
         }

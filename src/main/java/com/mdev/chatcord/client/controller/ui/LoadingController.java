@@ -1,16 +1,22 @@
 package com.mdev.chatcord.client.controller.ui;
 
+import com.mdev.chatcord.client.component.ThrowingRunnable;
+import io.netty.util.Timeout;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
+import javafx.application.Platform;
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.layout.HBox;
 import javafx.scene.shape.Circle;
 import javafx.util.Duration;
+import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Component;
 
 @Component
+@NoArgsConstructor
 public class LoadingController implements UIErrorHandler {
 
     @FXML private HBox loadingDots;
@@ -18,26 +24,84 @@ public class LoadingController implements UIErrorHandler {
 
     private Timeline loadingAnimation;
 
+    @FXML
     public void initialize() {
-
-        setLoadingVisibility();
-
+        setLoadingVisibility(false);
         startDotLoadingAnimation(dot1, dot2, dot3);
     }
 
-    private void setLoadingVisibility() {
-        loadingDots.setDisable(true);
-        loadingDots.setManaged(false);
-        loadingDots.setVisible(false);
+    private void setLoadingVisibility(boolean b) {
+        loadingDots.setDisable(!b);
+        loadingDots.setManaged(b);
+        loadingDots.setVisible(b);
+    }
+
+    //@FXML
+    public void onLoad(ThrowingRunnable onLoad, ThrowingRunnable onSucceeded, ThrowingRunnable onFailed) throws RuntimeException{
+        setLoadingVisibility(true);
+
+        // Simulate or call actual login
+        Task<Void> loginTask = new Task<>() {
+            @Override
+            protected Void call() throws InterruptedException {
+                if (onLoad != null){
+                    try {
+                        onLoad.run();
+                        loadingAnimation.play();
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
+                } else {
+                    Thread.sleep(500);
+                    loadingAnimation.play();
+                }
+                return null;
+            }
+
+            @Override
+            protected void succeeded() {
+                loadingAnimation.stop();
+                setLoadingVisibility(false);
+                if (onSucceeded == null)
+                    return;
+                else {
+                    try {
+                        onSucceeded.run();
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+                // proceed to next page
+            }
+
+            @Override
+            protected void failed() {
+                try {
+                    Thread.sleep(500);
+                    loadingAnimation.stop();
+                    setLoadingVisibility(false);
+                    Platform.runLater(() -> {
+                        Throwable ex = getException();
+                        throw new RuntimeException(ex.getMessage());
+                    });
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+                return;
+            // show error
+            }
+        };
+
+        new Thread(loginTask).start();
     }
 
     public void startDotLoadingAnimation(Circle dot1, Circle dot2, Circle dot3) {
-        Timeline timeline = new Timeline();
+        loadingAnimation = new Timeline();
 
         Duration cycle = Duration.seconds(1.2); // total cycle time
         double interval = 0.4;
 
-        timeline.getKeyFrames().addAll(
+        loadingAnimation.getKeyFrames().addAll(
                 // Dot 1 brightens
                 new KeyFrame(Duration.seconds(0 * interval),
                         new KeyValue(dot1.opacityProperty(), 1),
@@ -64,8 +128,8 @@ public class LoadingController implements UIErrorHandler {
                 )
         );
 
-        timeline.setCycleCount(Animation.INDEFINITE);
-        timeline.setAutoReverse(false);
-        timeline.play();
+        loadingAnimation.setCycleCount(Animation.INDEFINITE);
+        loadingAnimation.setAutoReverse(false);
+        //loadingAnimation.play();
     }
 }

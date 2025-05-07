@@ -13,7 +13,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class DragWindow implements EventStageHandler {
+public abstract class DragWindow implements EventStageHandler {
     private double xOffset;
     private double yOffset;
 
