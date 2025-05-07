@@ -9,11 +9,18 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.slf4j.ILoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 
 @Component
 @DraggableWindow
+@NoArgsConstructor
 public class WindowController implements EventStageHandler{
 
     @FXML
@@ -24,9 +31,16 @@ public class WindowController implements EventStageHandler{
 
     private Stage stage;
 
+    private final Logger logger = LoggerFactory.getLogger(getClass());
+
     @FXML
     private void initialize() {
+        System.out.println("Dragging is running!.");
+    }
 
+
+    public void setDraggeablePressed(MouseEvent event){
+        logger.info("HBOX onDrag PRESSED");
     }
 
     public void onCancelClicked(ActionEvent event){

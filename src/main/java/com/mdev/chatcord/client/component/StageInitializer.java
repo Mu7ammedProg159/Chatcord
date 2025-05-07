@@ -34,9 +34,9 @@ public class StageInitializer implements ApplicationListener<StageReadyEvent> {
     private Stage primaryStage;
 
     private final String applicationTitle;
-    private final AnnotationConfigApplicationContext applicationContext;
+    private final ApplicationContext applicationContext;
 
-    public StageInitializer(@Value("${spring.application.ui.title}") String applicationTitle, AnnotationConfigApplicationContext applicationContext) {
+    public StageInitializer(@Value("${spring.application.ui.title}") String applicationTitle, ApplicationContext applicationContext) {
         this.applicationTitle = applicationTitle;
         this.applicationContext = applicationContext;
     }

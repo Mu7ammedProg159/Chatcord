@@ -33,7 +33,7 @@ import java.util.Objects;
 @Component
 @Getter
 @RequiredArgsConstructor
-@DraggableWindow
+//@DraggableWindow
 public class OtpController implements EventStageHandler, UIErrorHandler{
 
     @FXML private HBox dragRegion;
@@ -63,7 +63,6 @@ public class OtpController implements EventStageHandler, UIErrorHandler{
 
     @FXML
     public void initialize(){
-
         successTextFlow.setVisible(false);
         successTextFlow.setManaged(false);
         initializeFieldsProperties();
