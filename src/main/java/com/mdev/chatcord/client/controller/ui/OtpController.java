@@ -153,10 +153,7 @@ public class OtpController extends DragWindow implements EventStageHandler, UIEr
 
     public void switchToVerified(){
         // I need to disable & set managed to false for: 1- otpVBox, 2- resendLink Hyperlink, resendLabel, toEmail label, maybe the Textflow.
-        setVisibility(otpVBox, false);
-        setVisibility(textFlow, false);
-        setVisibility(toEmail, false);
-        setVisibility(subHeaderLabel, false);
+        setVisibility(false, otpVBox, textFlow, toEmail, subHeaderLabel);
 
         resendLabel.setText("Still need a help ?");
         resendLink.setText("help");
@@ -164,7 +161,7 @@ public class OtpController extends DragWindow implements EventStageHandler, UIEr
         // Change headerLabel to be a successful message
         headerLabel.setText("Email Verified Successfully!");
 
-        setVisibility(successTextFlow, true);
+        setVisibility(true, successTextFlow);
 
         // Change the image illustration to show a success procedure.
         Image successIimage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/images/verification_success.png")));

@@ -30,39 +30,30 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Component
 public class LoginController implements LoadingHandler, UIErrorHandler {
 
-    @FXML
-    private StackPane stackPane;
+    @FXML private StackPane stackPane;
 
-    @FXML
-    private TextField emailField, usernameField;
+    @FXML private TextField emailField, usernameField;
 
-    @FXML
-    private PasswordField passwordField, confirmPasswordField;
+    @FXML private PasswordField passwordField, confirmPasswordField;
 
-    @FXML
-    private Label statusLabel, appNameLabel, switchLabel, titleLabel, titleSlogan, emailLabel,
-            passwordLabel, confirmPasswordLabel, usernameLabel;
+    @FXML private Label statusLabel, appNameLabel, switchLabel, titleLabel, titleSlogan, emailLabel, passwordLabel, confirmPasswordLabel, usernameLabel;
 
-    @FXML
-    private VBox emailVBox, usernameVBox, passwordVBox, confirmPasswordVBox;
+    @FXML private VBox emailVBox, usernameVBox, passwordVBox, confirmPasswordVBox;
 
-    @FXML
-    private HBox loginPanelHBox;
+    @FXML private HBox loginPanelHBox, loadingComponent;
 
-    @FXML
-    private Button submitButton;
+    @FXML private Button submitButton;
 
-    @FXML
-    private ImageView loginImage;
+    @FXML private ImageView loginImage;
 
-    @FXML
-    private Hyperlink switchModeLink;
-
-    @FXML HBox loadingComponent;
+    @FXML private Hyperlink switchModeLink;
 
     @Autowired
     UserService userService;
@@ -78,10 +69,15 @@ public class LoginController implements LoadingHandler, UIErrorHandler {
 
     private boolean isRegisterMode;
 
-    private final String emailLabelString = "EMAIL ADDRESS *";
-    private final String passwordLabelString = "PASSWORD *";
-    private final String confirmPasswordLabelString = "CONFIRM PASSWORD *";
-    private final String usernameLabelString = "USERNAME *";
+    private final String [] labelString = {"EMAIL ADDRESS *", "PASSWORD *", "CONFIRM PASSWORD *", "USERNAME *"};
+
+    String email = null;
+    String password = null;
+    String username = null;
+    String confirmPassword = null;
+
+    Map<Label, TextField> formData = new HashMap<>();
+
 
     private Image loginImageURL = new Image(getClass().getResource("/images/login-page-illustration.png").toExternalForm());
 
@@ -89,9 +85,11 @@ public class LoginController implements LoadingHandler, UIErrorHandler {
 
     @FXML
     public void initialize() {
-        appNameLabel.setFont(Font.loadFont(getClass().
-                getResourceAsStream("/fonts/CarterOne-Regular.ttf"),
-                23));
+        appNameLabel.setFont(Font.loadFont(getClass().getResourceAsStream("/fonts/CarterOne-Regular.ttf"), 23));
+        formData.put(emailLabel, emailField);
+        formData.put(usernameLabel, usernameField);
+        formData.put(passwordLabel, passwordField);
+        formData.put(confirmPasswordLabel, confirmPasswordField);
         updateMode();
     }
 
@@ -113,7 +111,7 @@ public class LoginController implements LoadingHandler, UIErrorHandler {
             loginImageURL = new Image(getClass().getResource("/images/register_background.png").toExternalForm());
 
 
-            hideFields(true);
+            hideFields(true, usernameField, confirmPasswordField, usernameVBox, confirmPasswordVBox);
             loginImage.setImage(loginImageURL);
 
             // Just reverse the children order
@@ -137,29 +135,24 @@ public class LoginController implements LoadingHandler, UIErrorHandler {
         clearFields();
     }
 
-    private void hideFields(boolean b) {
-        usernameField.setVisible(b);
-        usernameField.setManaged(b);
-        confirmPasswordField.setVisible(b);
-        confirmPasswordField.setManaged(b);
-        usernameVBox.setVisible(b);
-        usernameVBox.setManaged(b);
-        confirmPasswordVBox.setVisible(b);
-        confirmPasswordVBox.setManaged(b);
+    private void hideFields(boolean b, Node... nodes) {
+        for (Node node: nodes) {
+            node.setVisible(b);
+            node.setManaged(b);
+        }
     }
 
     public void onSubmitClicked() throws IOException {
 
-        String email = emailField.getText();
-        String username = usernameField.getText();
-        String password = passwordField.getText();
-        String confirmPassword = confirmPasswordField.getText();
+        email = emailField.getText();
+        username = usernameField.getText();
+        password = passwordField.getText();
+        confirmPassword = confirmPasswordField.getText();
 
         if (isRegisterMode) {
 
             if (isAnyFieldEmpty(email, username, password, confirmPassword)) {
-                setError(emailLabel, "EMAIL ADDRESS – Please fill all the fields.",
-                        emailField, usernameField, passwordField, confirmPasswordField);
+                setError(emailLabel, "EMAIL ADDRESS – Please fill all the fields.", emailField, usernameField, passwordField, confirmPasswordField);
                 return;
             }
 
@@ -185,13 +178,11 @@ public class LoginController implements LoadingHandler, UIErrorHandler {
                 throw new RuntimeException(e);
             }
 
-
-
             updateMode();
 
         } else {
             if (email.isEmpty()) {
-                setError(emailLabel, emailLabelString + " – Please enter your email.");
+                setError(emailLabel, labelString[0] + " – Please enter your email.");
                 return;
             }
             if (password.isEmpty()) {
@@ -199,36 +190,9 @@ public class LoginController implements LoadingHandler, UIErrorHandler {
                 return;
             }
 
-            ThrowingRunnable loadOnLogin = () -> {
-                Platform.runLater(() -> submitButton.setText(""));
-                try {
-                    userService.login(email, password);
-                } catch (RuntimeException e){
-                    Platform.runLater(() -> {
-                        emailLabel.setText(emailLabelString + " – " + e.getMessage());
-                        passwordLabel.setText(passwordLabelString + " – " + e.getMessage());
-                        submitButton.setText("Login");
-                        changeLoginStatus(ELoginStatus.ERROR);
-
-                        if (e.getMessage().equalsIgnoreCase("Please verify your email address to login.")) {
-                            try {
-                                loadOtpWindow(email);
-                            } catch (IOException ex) {
-                                throw new RuntimeException(ex);
-                            }
-                        }
-                    });
-                }
-            };
-
-            ThrowingRunnable loadOnSucceed = () -> {
-                Platform.runLater(() -> submitButton.setText("Login"));
-            };
-
-            loadingController.onLoad(loadOnLogin, loadOnSucceed, null);
+            loadingController.onLoad(loadOnCall(), loadOnSuccess(), loadOnFailure());
 
             changeLoginStatus(ELoginStatus.SUCCESS);
-
 
             try {
                 stageInitializer.switchScenes("/view/chat-view.fxml", "Chatcord", 1350, 720);
@@ -253,34 +217,35 @@ public class LoginController implements LoadingHandler, UIErrorHandler {
             stackPane.getChildren().remove(otpOverlay);
             clearAllStylesWithDefaultText();
             isRegisterMode = false;
+            submitButton.requestFocus();
             updateMode();
         });
     }
 
     private void clearAllStylesWithDefaultText() {
-        emailLabel.setText(emailLabelString);
-        passwordLabel.setText(passwordLabelString);
-        confirmPasswordLabel.setText(confirmPasswordLabelString);
-        usernameLabel.setText(usernameLabelString);
-        clearStyles(emailLabel, emailField);
-        clearStyles(passwordLabel, passwordField);
-        clearStyles(confirmPasswordLabel, confirmPasswordField);
-        clearStyles(usernameLabel, usernameField);
+
+        int index = 0;
+
+        for (Map.Entry<Label, TextField> entry : formData.entrySet()){
+            entry.getKey().setText(labelString[index]);
+            clearStyles(entry.getKey(), entry.getValue());
+            index++;
+        }
     }
 
     private void changeLoginStatus(ELoginStatus eLoginStatus) {
 
         if (eLoginStatus.equals(ELoginStatus.SUCCESS)) {
-            emailLabel.getStyleClass().add("credentialLabel");
-            passwordLabel.getStyleClass().add("credentialLabel");
-            emailField.getStyleClass().add("textField");
-            passwordField.getStyleClass().add("textField");
+            for (Map.Entry<Label, TextField> entry: formData.entrySet()) {
+                entry.getKey().getStyleClass().add("credentialLabel");
+                entry.getValue().getStyleClass().add("textField");
+            }
         }
         else if (eLoginStatus.equals(ELoginStatus.ERROR)) {
-            emailLabel.getStyleClass().add("credentialLabelError");
-            passwordLabel.getStyleClass().add("credentialLabelError");
-            emailField.getStyleClass().add("textFieldError");
-            passwordField.getStyleClass().add("textFieldError");
+            for (Map.Entry<Label, TextField> entry: formData.entrySet()) {
+                entry.getKey().getStyleClass().add("credentialLabelError");
+                entry.getValue().getStyleClass().add("textFieldError");
+            }
         }
     }
 
@@ -288,7 +253,43 @@ public class LoginController implements LoadingHandler, UIErrorHandler {
         usernameField.clear();
         passwordField.clear();
         confirmPasswordField.clear();
-        statusLabel.setText("");
+    }
+
+    @Override
+    public ThrowingRunnable loadOnCall() {
+        return () -> {
+            Platform.runLater(() -> submitButton.setText(""));
+            try {
+                userService.login(email, password);
+            } catch (RuntimeException e) {
+                Platform.runLater(() -> {
+                    emailLabel.setText(labelString[0] + " – " + e.getMessage());
+                    passwordLabel.setText(labelString[1] + " – " + e.getMessage());
+                    submitButton.setText("Login");
+                    changeLoginStatus(ELoginStatus.ERROR);
+
+                    if (e.getMessage().equalsIgnoreCase("Please verify your email address to login.")) {
+                        try {
+                            loadOtpWindow(email);
+                        } catch (IOException ex) {
+                            throw new RuntimeException(ex);
+                        }
+                    }
+                });
+            }
+        };
+    }
+
+    @Override
+    public ThrowingRunnable loadOnSuccess() {
+        return () -> {
+            Platform.runLater(() -> submitButton.setText("Login"));
+        };
+    }
+
+    @Override
+    public ThrowingRunnable loadOnFailure() {
+        return null;
     }
 }
 

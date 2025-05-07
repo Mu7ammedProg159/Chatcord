@@ -8,10 +8,11 @@ import javafx.scene.control.TextField;
 
 public interface UIErrorHandler {
 
-    public default void setVisibility(Node node, boolean flag){
-        node.setVisible(flag);
-        node.setManaged(flag);
-        node.setDisable(!flag);
+    public default void setVisibility(boolean flag, Node... node){
+        for (Node field: node) {
+            field.setVisible(flag);
+            field.setManaged(flag);
+        }
     }
 
     public default void setError(Label label, String message, TextField... fields) {
