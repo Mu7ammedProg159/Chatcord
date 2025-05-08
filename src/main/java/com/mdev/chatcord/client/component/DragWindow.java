@@ -1,7 +1,7 @@
 package com.mdev.chatcord.client.component;
 
 
-import com.mdev.chatcord.client.controller.ui.EventStageHandler;
+import com.mdev.chatcord.client.implementation.EventStageHandler;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import lombok.AllArgsConstructor;

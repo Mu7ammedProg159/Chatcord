@@ -17,18 +17,18 @@
 .sendButton {
     -fx-background-color: #0372ef;
     -fx-text-fill: white;
-    -fx-background-radius: 20px;
+    -fx-background-radius: 10px;
 }
 
 .sendButton:hover{
     -fx-background-color: #0b82f2;
     -fx-text-fill: white;
-    -fx-background-radius: 20px;
+    -fx-background-radius: 10px;
 }
 
 .sendButton:pressed{
     -fx-background-color: #0269c9;
     -fx-text-fill: white;
-    -fx-background-radius: 20px;
+    -fx-background-radius: 10px;
 }
 

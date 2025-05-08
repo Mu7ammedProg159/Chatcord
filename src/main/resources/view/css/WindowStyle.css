@@ -1,0 +1,30 @@
+
+.onCancel{
+    -fx-background-radius: 0px;
+    -fx-background-color: transparent;
+}
+
+.onCancel:hover{
+    -fx-background-radius: 0 10 10 0px;
+    -fx-background-color: #da3e44;
+}
+
+.onCancelRound{
+    -fx-background-radius: 0px;
+    -fx-background-color: transparent;
+}
+
+.onCancelRound:hover{
+    -fx-background-radius: 0 10 10 0px;
+    -fx-background-color: #da3e44;
+}
+
+.windowBtn{
+    -fx-background-radius: 0px;
+    -fx-background-color: transparent;
+}
+
+.windowBtn:hover{
+    -fx-background-radius: 0px;
+    -fx-background-color: #1c1859EA;
+}

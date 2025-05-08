@@ -1,7 +1,8 @@
 package com.mdev.chatcord.client.controller.ui;
 
-import com.mdev.chatcord.client.annotation.DraggableWindow;
 import com.mdev.chatcord.client.component.DragWindow;
+import com.mdev.chatcord.client.implementation.EventStageHandler;
+import com.mdev.chatcord.client.implementation.UIErrorHandler;
 import com.mdev.chatcord.client.service.UserService;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -19,7 +20,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.TextFlow;
 import javafx.util.Duration;
-import javafx.scene.Node;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -33,7 +33,7 @@ import java.util.Objects;
 @Component
 @Getter
 @RequiredArgsConstructor
-public class OtpController extends DragWindow implements EventStageHandler, UIErrorHandler{
+public class OtpController extends DragWindow implements EventStageHandler, UIErrorHandler {
 
     @FXML private HBox dragRegion;
     @FXML private TextFlow textFlow, successTextFlow;

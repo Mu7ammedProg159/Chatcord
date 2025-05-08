@@ -1,6 +1,4 @@
-package com.mdev.chatcord.client.controller.ui;
-
-import com.mdev.chatcord.client.component.ThrowingRunnable;
+package com.mdev.chatcord.client.implementation;
 
 public interface LoadingHandler {
     ThrowingRunnable loadOnCall();

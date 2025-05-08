@@ -85,14 +85,35 @@ public class StageInitializer implements ApplicationListener<StageReadyEvent> {
             Resource fxmlResource = applicationContext.getResource("classpath:" + fxmlPath);
             FXMLLoader fxmlLoader = new FXMLLoader(fxmlResource.getURL());
             fxmlLoader.setControllerFactory(applicationContext::getBean);
-            Parent parent = fxmlLoader.load();
+            AnchorPane parent = fxmlLoader.load();
 
-            primaryStage.setScene(new Scene(parent, width, height));
-            primaryStage.setTitle(title);
+            Rectangle clip = new Rectangle();
+            clip.widthProperty().bind(parent.widthProperty());
+            clip.heightProperty().bind(parent.heightProperty());
+            clip.setArcWidth(20);
+            clip.setArcHeight(20);
+            parent.setClip(clip);
+
+            Scene scene = new Scene(parent, width, height);
+            scene.setFill(Color.TRANSPARENT);
+
+            Stage newStage = new Stage();
+            newStage.initStyle(StageStyle.UNDECORATED);
+            newStage.initStyle(StageStyle.TRANSPARENT);
+
+            Image APP_LOGO = new Image(getClass().getResource("/images/app_logo.png").toExternalForm());
+            primaryStage.getIcons().add(APP_LOGO);
+
+            newStage.setScene(scene);
+            newStage.setTitle(title);
+
+            // Optional: close the old stage if you want to replace it
+            primaryStage.close();
+
+            newStage.show();
 
         } catch (IOException e) {
             throw new RuntimeException("Failed to load: " + fxmlPath, e);
         }
-
     }
 }

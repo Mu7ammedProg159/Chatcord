@@ -2,11 +2,11 @@ package com.mdev.chatcord.client.controller.ui;
 
 import com.mdev.chatcord.client.component.SpringFXMLLoader;
 import com.mdev.chatcord.client.component.StageInitializer;
-import com.mdev.chatcord.client.component.ThrowingRunnable;
-import com.mdev.chatcord.client.dto.UserDTO;
+import com.mdev.chatcord.client.implementation.LoadingHandler;
+import com.mdev.chatcord.client.implementation.ThrowingRunnable;import com.mdev.chatcord.client.dto.UserDTO;
 import com.mdev.chatcord.client.enums.ELoginStatus;
+import com.mdev.chatcord.client.implementation.UIHandler;
 import com.mdev.chatcord.client.service.UserService;
-import javafx.animation.PauseTransition;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -24,8 +24,6 @@ import javafx.scene.text.Font;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import javafx.util.Duration;
-import lombok.Getter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +33,7 @@ import java.io.IOException;
 import java.util.*;
 
 @Component
-public class LoginController implements LoadingHandler, UIErrorHandler {
+public class LoginController implements LoadingHandler, UIHandler {
 
     @FXML private StackPane stackPane;
 
@@ -49,7 +47,6 @@ public class LoginController implements LoadingHandler, UIErrorHandler {
 
     @FXML private HBox loginPanelHBox, loadingComponent;
 
-    @Getter
     @FXML private Button submitButton;
 
     @FXML private ImageView loginImage;
@@ -86,7 +83,7 @@ public class LoginController implements LoadingHandler, UIErrorHandler {
 
     @FXML
     public void initialize() {
-        appNameLabel.setFont(Font.loadFont(getClass().getResourceAsStream("/fonts/CarterOne-Regular.ttf"), 23));
+        changeFont(appNameLabel, "/fonts/CarterOne-Regular.ttf", 23);
         formData = new LinkedHashMap<>();
         formData.put(emailLabel, emailField);
         formData.put(passwordLabel, passwordField);
@@ -195,12 +192,6 @@ public class LoginController implements LoadingHandler, UIErrorHandler {
             loadingController.onLoad(loadOnCall(), loadOnSuccess(), loadOnFailure());
 
             changeLoginStatus(ELoginStatus.SUCCESS);
-
-            try {
-                stageInitializer.switchScenes("/view/chat-view.fxml", "Chatcord", 1350, 720);
-            } catch (Exception e) {
-                logger.error("Cannot load chat-view.fxml due to NullPointerException.");
-            }
         }
     }
 
@@ -285,10 +276,12 @@ public class LoginController implements LoadingHandler, UIErrorHandler {
     @Override
     public ThrowingRunnable loadOnSuccess() {
         return () -> {
-            Platform.runLater(() -> {
-
-                submitButton.setText("Login");
-            });
+            Platform.runLater(() -> submitButton.setText("Login"));
+            try {
+                stageInitializer.switchScenes("/view/main-view.fxml", "Chatcord", 1350, 720);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
         };
     }
 

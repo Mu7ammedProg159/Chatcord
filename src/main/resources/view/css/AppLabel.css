@@ -1,0 +1,10 @@
+@font-face {
+    font-family: 'Carter One';
+    src: url('../../fonts/CarterOne-Regular.ttf');
+}
+
+.chatcord-label {
+    -fx-font-family: 'Carter One';
+    -fx-font-size: 23px;
+    -fx-text-fill: #ffffffb1;
+}

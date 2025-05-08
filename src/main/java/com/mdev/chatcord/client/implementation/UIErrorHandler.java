@@ -1,8 +1,6 @@
-package com.mdev.chatcord.client.controller.ui;
+package com.mdev.chatcord.client.implementation;
 
-import javafx.concurrent.Task;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 

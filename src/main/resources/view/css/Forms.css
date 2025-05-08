@@ -1,0 +1,43 @@
+.credentialLabel{
+    -fx-text-fill: #b5b5b5;
+    -fx-font-family: 'Open Sans ExtraBold';
+    -fx-font-style: Regular;
+    -fx-font-size: 12px;
+}
+
+.credentialLabelError{
+    -fx-text-fill: #f56c69;
+    -fx-font-family: 'Open Sans ExtraBold';
+    -fx-font-style: Italic;
+    -fx-font-size: 12px;
+}
+
+.textField {
+    -fx-background-radius: 7px;
+    -fx-border-radius: 7px;
+    -fx-background-color: #202225;
+    -fx-border-color: #35383c;
+    -fx-border-width: 2px;
+    -fx-text-fill: #71baea;
+}
+
+.submitBtn{
+    -fx-background-radius: 7px;
+    -fx-background-color:  #0269c9;
+}
+
+.submitBtn:hover{
+    -fx-background-color: #4654c0;
+}
+
+.submitBtn:pressed{
+    -fx-background-color: #3a48a3;
+}
+
+.textField:focused{
+    -fx-border-color: #6fabf2;
+}
+
+.textFieldError{
+    -fx-border-color: #f56c69;
+}
