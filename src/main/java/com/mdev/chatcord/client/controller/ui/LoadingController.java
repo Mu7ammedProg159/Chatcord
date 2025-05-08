@@ -13,8 +13,12 @@ import javafx.scene.layout.HBox;
 import javafx.scene.shape.Circle;
 import javafx.util.Duration;
 import lombok.NoArgsConstructor;
+import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+@Slf4j
 @Component
 @NoArgsConstructor
 public class LoadingController implements UIErrorHandler {
@@ -39,6 +43,7 @@ public class LoadingController implements UIErrorHandler {
     //@FXML
     public void onLoad(ThrowingRunnable onLoad, ThrowingRunnable onSucceeded, ThrowingRunnable onFailed) throws RuntimeException{
         setLoadingVisibility(true);
+        loadingAnimation.playFromStart();
 
         // Simulate or call actual login
         Task<Void> loginTask = new Task<>() {
@@ -47,47 +52,37 @@ public class LoadingController implements UIErrorHandler {
                 if (onLoad != null){
                     try {
                         onLoad.run();
-                        loadingAnimation.play();
                     } catch (Exception e) {
                         throw new RuntimeException(e);
                     }
-                } else {
-                    Thread.sleep(500);
-                    loadingAnimation.play();
                 }
+                //Thread.sleep(1000);
                 return null;
             }
 
             @Override
             protected void succeeded() {
-                loadingAnimation.stop();
-                setLoadingVisibility(false);
-                if (onSucceeded == null)
-                    return;
-                else {
+                if (onSucceeded != null){
                     try {
                         onSucceeded.run();
                     } catch (Exception e) {
                         throw new RuntimeException(e);
                     }
                 }
+                setLoadingVisibility(false);
+                loadingAnimation.stop();
                 // proceed to next page
             }
 
             @Override
             protected void failed() {
-                try {
-                    Thread.sleep(500);
-                    loadingAnimation.stop();
-                    setLoadingVisibility(false);
-                    Platform.runLater(() -> {
-                        Throwable ex = getException();
-                        throw new RuntimeException(ex.getMessage());
-                    });
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
-                return;
+                Platform.runLater(() -> {
+                    Throwable ex = getException();
+                    throw new RuntimeException(ex.getMessage());
+                });
+                loadingAnimation.stop();
+                setLoadingVisibility(false);
+
             // show error
             }
         };

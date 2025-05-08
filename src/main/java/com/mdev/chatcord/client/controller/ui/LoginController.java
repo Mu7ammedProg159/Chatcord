@@ -6,6 +6,7 @@ import com.mdev.chatcord.client.component.ThrowingRunnable;
 import com.mdev.chatcord.client.dto.UserDTO;
 import com.mdev.chatcord.client.enums.ELoginStatus;
 import com.mdev.chatcord.client.service.UserService;
+import javafx.animation.PauseTransition;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -23,16 +24,15 @@ import javafx.scene.text.Font;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import javafx.util.Duration;
+import lombok.Getter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Component
 public class LoginController implements LoadingHandler, UIErrorHandler {
@@ -49,6 +49,7 @@ public class LoginController implements LoadingHandler, UIErrorHandler {
 
     @FXML private HBox loginPanelHBox, loadingComponent;
 
+    @Getter
     @FXML private Button submitButton;
 
     @FXML private ImageView loginImage;
@@ -73,10 +74,10 @@ public class LoginController implements LoadingHandler, UIErrorHandler {
 
     String email = null;
     String password = null;
-    String username = null;
     String confirmPassword = null;
+    String username = null;
 
-    Map<Label, TextField> formData = new HashMap<>();
+    Map<Label, TextField> formData;
 
 
     private Image loginImageURL = new Image(getClass().getResource("/images/login-page-illustration.png").toExternalForm());
@@ -86,10 +87,11 @@ public class LoginController implements LoadingHandler, UIErrorHandler {
     @FXML
     public void initialize() {
         appNameLabel.setFont(Font.loadFont(getClass().getResourceAsStream("/fonts/CarterOne-Regular.ttf"), 23));
+        formData = new LinkedHashMap<>();
         formData.put(emailLabel, emailField);
-        formData.put(usernameLabel, usernameField);
         formData.put(passwordLabel, passwordField);
         formData.put(confirmPasswordLabel, confirmPasswordField);
+        formData.put(usernameLabel, usernameField);
         updateMode();
     }
 
@@ -124,7 +126,7 @@ public class LoginController implements LoadingHandler, UIErrorHandler {
             switchModeLink.setText("Register");
             titleSlogan.setText("We're so excited to see you again!");
 
-            hideFields(false);
+            hideFields(false, usernameField, confirmPasswordField, usernameVBox, confirmPasswordVBox);
 
             loginImageURL = new Image(getClass().getResource("/images/login-page-illustration.png").toExternalForm());
             loginImage.setImage(loginImageURL);
@@ -283,7 +285,10 @@ public class LoginController implements LoadingHandler, UIErrorHandler {
     @Override
     public ThrowingRunnable loadOnSuccess() {
         return () -> {
-            Platform.runLater(() -> submitButton.setText("Login"));
+            Platform.runLater(() -> {
+
+                submitButton.setText("Login");
+            });
         };
     }
 

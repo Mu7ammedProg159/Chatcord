@@ -164,7 +164,7 @@ public class OtpController extends DragWindow implements EventStageHandler, UIEr
         setVisibility(true, successTextFlow);
 
         // Change the image illustration to show a success procedure.
-        Image successIimage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/images/verification_success.png")));
+        Image successIimage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/images/verification_success_illustration.png")));
         otpImage.setImage(successIimage);
 
         // Change verifyButton's text into Log In
