@@ -1,4 +1,4 @@
-package com.mdev.chatcord.client.component;
+package com.mdev.chatcord.client.implementation;
 
 @FunctionalInterface
 public interface ThrowingRunnable {

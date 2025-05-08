@@ -1,6 +1,6 @@
 package com.mdev.chatcord.client.annotation.aspect;
 
-import com.mdev.chatcord.client.controller.ui.EventStageHandler;
+import com.mdev.chatcord.client.implementation.EventStageHandler;
 import jakarta.annotation.PostConstruct;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;

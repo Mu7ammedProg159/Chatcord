@@ -1,7 +1,7 @@
 package com.mdev.chatcord.client.controller.ui;
 
-import com.mdev.chatcord.client.component.ThrowingRunnable;
-import io.netty.util.Timeout;
+import com.mdev.chatcord.client.implementation.ThrowingRunnable;
+import com.mdev.chatcord.client.implementation.UIErrorHandler;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
@@ -40,6 +40,7 @@ public class LoadingController implements UIErrorHandler {
     public void onLoad(ThrowingRunnable onLoad, ThrowingRunnable onSucceeded, ThrowingRunnable onFailed) throws RuntimeException{
         setLoadingVisibility(true);
 
+        loadingAnimation.play();
         // Simulate or call actual login
         Task<Void> loginTask = new Task<>() {
             @Override
@@ -47,12 +48,10 @@ public class LoadingController implements UIErrorHandler {
                 if (onLoad != null){
                     try {
                         onLoad.run();
-                        loadingAnimation.play();
                     } catch (Exception e) {
                         throw new RuntimeException(e);
                     }
                 } else {
-                    Thread.sleep(500);
                     loadingAnimation.play();
                 }
                 return null;

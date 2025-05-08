@@ -2,17 +2,17 @@ package com.mdev.chatcord.client.controller.ui;
 
 import com.mdev.chatcord.client.component.SpringFXMLLoader;
 import com.mdev.chatcord.client.component.StageInitializer;
-import com.mdev.chatcord.client.component.ThrowingRunnable;
-import com.mdev.chatcord.client.dto.UserDTO;
+import com.mdev.chatcord.client.implementation.LoadingHandler;
+import com.mdev.chatcord.client.implementation.ThrowingRunnable;
 import com.mdev.chatcord.client.enums.ELoginStatus;
+import com.mdev.chatcord.client.implementation.UIErrorHandler;
+import com.mdev.chatcord.client.implementation.UIHandler;
 import com.mdev.chatcord.client.service.UserService;
 import javafx.application.Platform;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -20,22 +20,16 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Component
-public class LoginController implements LoadingHandler, UIErrorHandler {
+public class LoginController implements LoadingHandler, UIHandler {
 
     @FXML private StackPane stackPane;
 
@@ -76,20 +70,20 @@ public class LoginController implements LoadingHandler, UIErrorHandler {
     String username = null;
     String confirmPassword = null;
 
-    Map<Label, TextField> formData = new HashMap<>();
+    Map<Label, TextField> formData = new LinkedHashMap<>();
 
-
-    private Image loginImageURL = new Image(getClass().getResource("/images/login-page-illustration.png").toExternalForm());
+    private Image loginImageURL = createImage("/images/login-page-illustration.png");
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
     @FXML
     public void initialize() {
-        appNameLabel.setFont(Font.loadFont(getClass().getResourceAsStream("/fonts/CarterOne-Regular.ttf"), 23));
+        changeFont(appNameLabel, "/fonts/CarterOne-Regular.ttf", 23);
+        formData = new LinkedHashMap<>();
         formData.put(emailLabel, emailField);
-        formData.put(usernameLabel, usernameField);
         formData.put(passwordLabel, passwordField);
         formData.put(confirmPasswordLabel, confirmPasswordField);
+        formData.put(usernameLabel, usernameField);
         updateMode();
     }
 
@@ -124,7 +118,7 @@ public class LoginController implements LoadingHandler, UIErrorHandler {
             switchModeLink.setText("Register");
             titleSlogan.setText("We're so excited to see you again!");
 
-            hideFields(false);
+            hideFields(false, usernameField, confirmPasswordField, usernameVBox, confirmPasswordVBox);
 
             loginImageURL = new Image(getClass().getResource("/images/login-page-illustration.png").toExternalForm());
             loginImage.setImage(loginImageURL);
@@ -194,13 +188,9 @@ public class LoginController implements LoadingHandler, UIErrorHandler {
 
             changeLoginStatus(ELoginStatus.SUCCESS);
 
-            try {
-                stageInitializer.switchScenes("/view/chat-view.fxml", "Chatcord", 1350, 720);
-            } catch (Exception e) {
-                logger.error("Cannot load chat-view.fxml due to NullPointerException.");
-            }
         }
     }
+
 
     private void loadOtpWindow(String email) throws IOException {
         FXMLLoader otpLoader = springFXMLLoader.getLoader("/view/verification-otp.fxml");
@@ -258,7 +248,6 @@ public class LoginController implements LoadingHandler, UIErrorHandler {
     @Override
     public ThrowingRunnable loadOnCall() {
         return () -> {
-            Platform.runLater(() -> submitButton.setText(""));
             try {
                 userService.login(email, password);
             } catch (RuntimeException e) {
@@ -284,6 +273,11 @@ public class LoginController implements LoadingHandler, UIErrorHandler {
     public ThrowingRunnable loadOnSuccess() {
         return () -> {
             Platform.runLater(() -> submitButton.setText("Login"));
+            try {
+                stageInitializer.switchScenes("/view/main-view.fxml", "Chatcord", 1350, 720);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
         };
     }
 

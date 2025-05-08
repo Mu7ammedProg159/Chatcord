@@ -2,19 +2,18 @@ package com.mdev.chatcord.client.controller.ui;
 
 import com.mdev.chatcord.client.annotation.DraggableWindow;
 import com.mdev.chatcord.client.component.DragWindow;
+import com.mdev.chatcord.client.implementation.EventStageHandler;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
-import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
 
 @Component
 @DraggableWindow
-public class WindowController extends DragWindow implements EventStageHandler{
+public class WindowController extends DragWindow implements EventStageHandler {
 
     @FXML
     private HBox dragRegion;

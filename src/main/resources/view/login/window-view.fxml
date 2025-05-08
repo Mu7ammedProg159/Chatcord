@@ -7,7 +7,7 @@
 
 <HBox fx:id="dragRegion" alignment="TOP_RIGHT" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mdev.chatcord.client.controller.ui.WindowController">
    <children>
-      <Button fx:id="minimizeButton" mnemonicParsing="false" onAction="#onMinimizeClicked" styleClass="windowBtn" text="─" textFill="#e4e4e4">
+      <Button fx:id="minimizeButton" alignment="TOP_RIGHT" mnemonicParsing="false" onAction="#onMinimizeClicked" styleClass="windowBtn" text="─" textFill="#e4e4e4">
          <font>
             <Font name="Open Sans Regular" size="18.0" />
          </font>
@@ -15,15 +15,21 @@
             <Insets />
          </HBox.margin>
       </Button>
-      <Button fx:id="maximizeButton" layoutX="1345.0" layoutY="20.0" mnemonicParsing="false" onAction="#onMaximizeClicked" styleClass="windowBtn" text="☐" textFill="#e4e4e4">
+      <Button fx:id="maximizeButton" alignment="TOP_RIGHT" mnemonicParsing="false" onAction="#onMaximizeClicked" styleClass="windowBtn" text="☐" textFill="#e4e4e4">
          <font>
             <Font name="Open Sans Regular" size="18.0" />
          </font>
+         <HBox.margin>
+            <Insets />
+         </HBox.margin>
       </Button>
-      <Button fx:id="cancelButton" layoutX="1345.0" layoutY="20.0" mnemonicParsing="false" onAction="#onCancelClicked" styleClass="onCancel" text="⨉" textFill="#e4e4e4">
+      <Button fx:id="cancelButton" alignment="TOP_RIGHT" mnemonicParsing="false" onAction="#onCancelClicked" styleClass="onCancel" text="⨉" textFill="#e4e4e4">
          <font>
             <Font name="Open Sans Regular" size="18.0" />
          </font>
+         <HBox.margin>
+            <Insets />
+         </HBox.margin>
       </Button>
    </children>
 </HBox>

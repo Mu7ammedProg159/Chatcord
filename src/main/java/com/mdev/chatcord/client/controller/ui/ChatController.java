@@ -21,6 +21,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +33,7 @@ import java.net.*;
 import java.util.List;
 
 @Component
+@RequiredArgsConstructor
 public class ChatController {
     @FXML
     private Label chatTitle;
@@ -63,8 +65,7 @@ public class ChatController {
     @Autowired
     private StageInitializer stageInitializer;
 
-    @Autowired
-    private JwtRequest jwtRequest;
+    private final JwtRequest jwtRequest;
 
     @Autowired
     private SpringFXMLLoader springFXMLLoader;
@@ -92,6 +93,8 @@ public class ChatController {
 
     @FXML
     public void initialize() {
+
+
 
         profileImageURL = "/images/pfp3.png";
         pfpImage = new Image(getClass().getResource(profileImageURL).toExternalForm());
