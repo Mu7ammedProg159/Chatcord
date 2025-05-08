@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.String?>
+<?import java.net.URL?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.effect.ColorAdjust?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+
+<VBox alignment="CENTER" style="-fx-background-color: transparent; -fx-background-radius: 15;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.ContactListView">
+   <children>
+      <AnchorPane minWidth="250.0" style="-fx-background-color: transparent;" VBox.vgrow="ALWAYS">
+         <children>
+            <VBox alignment="CENTER" style="-fx-background-color: #220225D5; -fx-background-radius: 15;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <children>
+                  <HBox style="-fx-background-color: transparent;">
+                     <children>
+                        <Label style="-fx-text-fill: #ffffffb1; -fx-font-size: 18px; -fx-font-weight: bold;" text="Friends" HBox.hgrow="ALWAYS">
+                           <padding>
+                              <Insets left="5.0" />
+                           </padding>
+                        </Label>
+                        <HBox alignment="CENTER_RIGHT" HBox.hgrow="ALWAYS">
+                           <children>
+                              <Button mnemonicParsing="false" styleClass="navigationBtn" textAlignment="CENTER">
+                                 <graphic>
+                                    <ImageView fx:id="addContactButton" fitHeight="25.0" fitWidth="25.0" nodeOrientation="RIGHT_TO_LEFT" onMouseClicked="#onAddContactClick" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@../images/icons/add_user_icon.png" />
+                                       </image>
+                                       <cursor>
+                                          <Cursor fx:constant="HAND" />
+                                       </cursor>
+                                       <effect>
+                                          <ColorAdjust brightness="0.33" />
+                                       </effect>
+                                    </ImageView>
+                                 </graphic>
+                              </Button>
+                           </children>
+                        </HBox>
+                     </children>
+                     <padding>
+                        <Insets bottom="5.0" left="20.0" right="20.0" top="20.0" />
+                     </padding>
+                  </HBox>
+                  <HBox alignment="CENTER" styleClass="searchBar">
+                     <children>
+                        <ImageView fitHeight="18.0" fitWidth="18.0" pickOnBounds="true" preserveRatio="true" HBox.hgrow="ALWAYS">
+                           <image>
+                              <Image url="@../images/icons/Search.png" />
+                           </image>
+                           <HBox.margin>
+                              <Insets left="5.0" />
+                           </HBox.margin>
+                           <effect>
+                              <ColorAdjust brightness="1.0" />
+                           </effect>
+                        </ImageView>
+                        <TextField promptText="Search Friend" style="-fx-background-color: transparent;" styleClass="navigationBtn" HBox.hgrow="ALWAYS">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </TextField>
+                     </children>
+                     <VBox.margin>
+                        <Insets bottom="20.0" left="20.0" right="20.0" top="5.0" />
+                     </VBox.margin>
+                  </HBox>
+                  <ScrollPane fx:id="contactScrollPane" fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" stylesheets="@css/ScrollPanel.css" VBox.vgrow="ALWAYS">
+                     <content>
+                        <VBox fx:id="contactsListView" spacing="10.0">
+                           <styleClass>
+                              <String fx:value="backgroundImage" />
+                              <String fx:value="content" />
+                           </styleClass>
+                        </VBox>
+                     </content>
+                  </ScrollPane>
+               </children>
+            </VBox>
+         </children>
+      </AnchorPane>
+   </children>
+   <stylesheets>
+      <URL value="@css/NavigationBar.css" />
+      <URL value="@css/main-layout.css" />
+   </stylesheets>
+</VBox>

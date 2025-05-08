@@ -1,0 +1,40 @@
+
+.navigationBtn{
+    -fx-background-color: transparent;
+    -fx-background-radius: 10px;
+}
+
+.navigationBtn:hover{
+    -fx-background-color: #6884fe;
+    -fx-background-radius: 10px;
+}
+
+.navigationBtn:pressed{
+    -fx-background-color: #5569cc;
+    -fx-background-radius: 10px;
+}
+
+.navigationBtn:focused{
+    -fx-background-color: #6884fe;
+    -fx-background-radius: 10px;
+}
+
+.searchBar:focused{
+    -fx-background-color:  #430c4b;
+    -fx-padding: 5px;
+    -fx-text-fill:  #f2f2f2;
+    -fx-background-radius: 10px;
+    -fx-border-color:  #6884fe;
+    -fx-border-radius: 10px;
+    -fx-border-width: 3px;
+}
+
+.searchBar{
+    -fx-background-color: transparent;
+    -fx-background-radius: 10px;
+    -fx-padding: 5px;
+    -fx-text-fill:  #f2f2f2;
+    -fx-border-color:  #651271B5;
+    -fx-border-radius: 10px;
+    -fx-border-width: 2px;
+}

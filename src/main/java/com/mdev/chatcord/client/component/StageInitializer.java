@@ -80,7 +80,7 @@ public class StageInitializer implements ApplicationListener<StageReadyEvent> {
     }
 
 
-    public void switchScenes(String fxmlPath, String title, int width, int height) {
+    public void switchScenes(Stage currentStage, String fxmlPath, String title, int width, int height) {
         try {
             Resource fxmlResource = applicationContext.getResource("classpath:" + fxmlPath);
             FXMLLoader fxmlLoader = new FXMLLoader(fxmlResource.getURL());
@@ -108,7 +108,7 @@ public class StageInitializer implements ApplicationListener<StageReadyEvent> {
             newStage.setTitle(title);
 
             // Optional: close the old stage if you want to replace it
-            primaryStage.close();
+            currentStage.close();
 
             newStage.show();
 

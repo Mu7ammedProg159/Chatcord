@@ -1,7 +1,7 @@
 package com.mdev.chatcord.client.controller.ui;
 
-import com.mdev.chatcord.client.component.ThrowingRunnable;
-import io.netty.util.Timeout;
+import com.mdev.chatcord.client.implementation.ThrowingRunnable;
+import com.mdev.chatcord.client.implementation.UIErrorHandler;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
@@ -13,6 +13,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.shape.Circle;
 import javafx.util.Duration;
 import lombok.NoArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -23,6 +25,9 @@ public class LoadingController implements UIErrorHandler {
     @FXML private Circle dot1, dot2, dot3;
 
     private Timeline loadingAnimation;
+
+    private final Logger logger = LoggerFactory.getLogger(getClass());
+
 
     @FXML
     public void initialize() {
@@ -41,37 +46,31 @@ public class LoadingController implements UIErrorHandler {
         setLoadingVisibility(true);
 
         // Simulate or call actual login
+        loadingAnimation.play();
         Task<Void> loginTask = new Task<>() {
             @Override
             protected Void call() throws InterruptedException {
                 if (onLoad != null){
                     try {
                         onLoad.run();
-                        loadingAnimation.play();
                     } catch (Exception e) {
                         throw new RuntimeException(e);
                     }
-                } else {
-                    loadingAnimation.play();
                 }
                 return null;
             }
 
             @Override
             protected void succeeded() {
-                if (onSucceeded == null)
-                    return;
-                else {
                     try {
                         onSucceeded.run();
                     } catch (Exception e) {
                         throw new RuntimeException(e);
                     }
+                    loadingAnimation.stop();
+                    setLoadingVisibility(false);
+                    // proceed to next page
                 }
-                loadingAnimation.stop();
-                setLoadingVisibility(false);
-                // proceed to next page
-            }
 
             @Override
             protected void failed() {
@@ -80,7 +79,7 @@ public class LoadingController implements UIErrorHandler {
                     throw new RuntimeException(ex.getMessage());
                 });
                 loadingAnimation.stop();
-                    setLoadingVisibility(false);
+                setLoadingVisibility(false);
             // show error
             }
         };

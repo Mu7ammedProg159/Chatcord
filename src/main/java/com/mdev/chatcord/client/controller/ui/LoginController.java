@@ -65,6 +65,8 @@ public class LoginController implements LoadingHandler, UIHandler {
     @Autowired
     SpringFXMLLoader springFXMLLoader;
 
+    private Stage stage;
+
     private boolean isRegisterMode;
 
     private final String [] labelString = {"EMAIL ADDRESS *", "PASSWORD *", "CONFIRM PASSWORD *", "USERNAME *"};
@@ -142,6 +144,8 @@ public class LoginController implements LoadingHandler, UIHandler {
     }
 
     public void onSubmitClicked() throws IOException {
+
+        stage = (Stage) submitButton.getScene().getWindow();
 
         email = emailField.getText();
         username = usernameField.getText();
@@ -265,7 +269,7 @@ public class LoginController implements LoadingHandler, UIHandler {
                         try {
                             loadOtpWindow(email);
                         } catch (IOException ex) {
-                            throw new RuntimeException(ex);
+                            logger.error(ex.getMessage());
                         }
                     }
                 });
@@ -278,9 +282,9 @@ public class LoginController implements LoadingHandler, UIHandler {
         return () -> {
             Platform.runLater(() -> submitButton.setText("Login"));
             try {
-                stageInitializer.switchScenes("/view/main-view.fxml", "Chatcord", 1350, 720);
+                stageInitializer.switchScenes(stage, "/view/main-view.fxml", "Chatcord", 1350, 720);
             } catch (Exception e) {
-                throw new RuntimeException(e);
+                logger.error(e.getMessage());
             }
         };
     }

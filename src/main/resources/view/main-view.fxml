@@ -1,21 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
 <?import java.net.URL?>
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
-
 
 <AnchorPane style="-fx-background-color: transparent;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mdev.chatcord.client.controller.ui.ChatController">
    <children>
@@ -27,14 +19,14 @@
                      <children>
                         <AnchorPane style="-fx-background-radius: 10; -fx-background-color: #430c4bD5; -fx-border-radius: 10;">
                            <children>
-                              <HBox fx:id="windowBar" alignment="CENTER_LEFT" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                              <HBox fx:id="windowBar" alignment="CENTER_LEFT" styleClass="layoutHeader" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                  <children>
-                                    <Label styleClass="chatcord-label" text="CHATCORD">
+                                    <Label fx:id="appName" styleClass="chatcord-label" text="CHATCORD">
                                        <padding>
                                           <Insets left="20.0" />
                                        </padding>
                                     </Label>
-                                     <fx:include source="login/window-view.fxml" HBox.hgrow="ALWAYS" />
+                                     <fx:include fx:id="windowBarBtns" source="login/window-view.fxml" HBox.hgrow="ALWAYS" />
                                  </children>
                               </HBox>
                            </children>
@@ -47,139 +39,35 @@
                            </VBox.margin>
                         </AnchorPane>
                         <BorderPane VBox.vgrow="ALWAYS">
-                        
+
                             <!-- Left Sidebar -->
                             <left>
-                                <VBox spacing="10.0" style="-fx-background-color: #430c4bD5; -fx-background-radius: 15;">
-                                    <padding>
-                                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                                    </padding>
-                                 <AnchorPane>
-                                    <children>
-                                          <Label style="-fx-text-fill: #ffffffb1; -fx-font-size: 18px; -fx-font-weight: bold;" text="Friends">
-                                          <padding>
-                                             <Insets left="5.0" />
-                                          </padding>
-                                       </Label>
-                                       <StackPane alignment="CENTER_RIGHT" layoutX="204.0" layoutY="1.0">
-                                          <children>
-                                             <ImageView fx:id="addContactButton" fitHeight="25.0" fitWidth="25.0" nodeOrientation="RIGHT_TO_LEFT" onMouseClicked="#onAddContactClick" pickOnBounds="true" preserveRatio="true">
-                                                <image>
-                                                   <Image url="@../images/9324103.png" />
-                                                </image>
-                                             </ImageView>
-                                          </children>
-                                       </StackPane>
-                                    </children>
-                                    <VBox.margin>
-                                       <Insets />
-                                    </VBox.margin>
-                                 </AnchorPane>
-                                 <AnchorPane style="-fx-background-color: transparent;" VBox.vgrow="ALWAYS">
-                                    <children>
-                                       <ScrollPane fx:id="contactScrollPane" fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" stylesheets="@css/ScrollPanel.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                          <content>
-                                             <VBox fx:id="contactsListView" spacing="10.0" style="-fx-padding: 10; -fx-background-color: #220225D5; -fx-background-radius: 15;" styleClass="backgroundImage" />
-                                          </content>
-                                       </ScrollPane>
-                                    </children>
-                                 </AnchorPane>
-                                 <HBox spacing="10.0">
-                                    <children>
-                                          <Button fx:id="logoutButton" onAction="#onLogoutClick" style="-fx-background-color: #ff5555; -fx-text-fill: white;" text="Logout">
-                                          <HBox.margin>
-                                             <Insets />
-                                          </HBox.margin>
-                                       </Button>
-                                       <Button fx:id="debugger" mnemonicParsing="false" onAction="#onDebugBtn" style="-fx-background-color: #ff5555; -fx-text-fill: white;" text="DEBUG ONLY" />
-                                       <Button fx:id="settingsBtn" alignment="CENTER" mnemonicParsing="false" onAction="#onSettingsClicked" styleClass="settingsBtn" stylesheets="@css/chat-left-view.css" textFill="#37393e">
-                                          <graphic>
-                                             <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
-                                                <image>
-                                                   <Image url="@../images/setting.png" />
-                                                </image>
-                                             </ImageView>
-                                          </graphic>
-                                       </Button>
-                                    </children>
-                                 </HBox>
+                              <AnchorPane>
                                  <BorderPane.margin>
-                                    <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                    <Insets bottom="10.0" left="10.0" right="10.0" top="25.0" />
                                  </BorderPane.margin>
-                                </VBox>
+                                 <children>
+                                    <HBox fx:id="ddd" spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                       <children>
+                                           <fx:include source="navigation-bar-view.fxml" HBox.hgrow="ALWAYS" />
+                                           <fx:include source="contact-list-view.fxml" HBox.hgrow="ALWAYS" />
+                                       </children>
+                                    </HBox>
+                                 </children>
+                              </AnchorPane>
                             </left>
                         
                             <!-- Main Chat Area -->
                             <center>
-                                <VBox spacing="10.0" style="-fx-background-color: #430c4bD5; -fx-background-radius: 15;">
+                                <VBox spacing="10.0" style="-fx-background-color: transparent; -fx-background-radius: 15;">
                                     <padding>
-                                        <Insets bottom="10.0" left="15.0" right="15.0" top="10.0" />
+                                        <Insets bottom="10.0" left="5.0" right="15.0" top="5.0" />
                                     </padding>
-                        
-                                    <!-- Header -->
-                                    <HBox alignment="CENTER_LEFT" spacing="10.0">
-                                    <VBox HBox.hgrow="ALWAYS">
-                                       <HBox.margin>
-                                          <Insets left="5.0" />
-                                       </HBox.margin>
-                                       <children>
-                                              <Label fx:id="chatTitle" style="-fx-text-fill: #ffffffb1; -fx-font-weight: bold; -fx-font-size: 18px;" text="Chat with ...">
-                                             <font>
-                                                <Font size="18.0" />
-                                             </font>
-                                          </Label>
-                                       </children>
-                                    </VBox>
-                                    </HBox>
-                                 <AnchorPane style="-fx-background-color: transparent;" VBox.vgrow="ALWAYS">
                                     <children>
-                              
-                                                <!-- Chat Messages -->
-                                          <ScrollPane fx:id="chatScrollPane" fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" stylesheets="@css/ScrollPanel.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                              <content>
-                                                  <VBox fx:id="messagesContainer" spacing="10.0" style="-fx-padding: 10; -fx-background-color: #220225D5; -fx-background-radius: 15;" styleClass="backgroundImage">
-                                                <padding>
-                                                   <Insets left="10.0" />
-                                                </padding>
-                                             </VBox>
-                                              </content>
-                                          </ScrollPane>
-                                       <VBox alignment="BOTTOM_CENTER" layoutY="-2.1316282072803006E-14" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                          <children>
-                                    
-                                                            <!-- Message Input -->
-                                                <HBox alignment="CENTER" spacing="10">
-                                                <Button fx:id="sendButton1" alignment="CENTER" defaultButton="true" minHeight="38.4" minWidth="38.4" styleClass="sendButton" stylesheets="@css/chat-left-view.css" textFill="#0269c9">
-                                                   <graphic>
-                                                      <FontAwesomeIconView fill="WHITE" glyphName="PAPERCLIP" selectionEnd="1" selectionStart="1" size="20" stroke="#ffffff00" text="" />
-                                                   </graphic>
-                                                </Button>
-                                                    <TextField fx:id="messageField" minHeight="40.0" promptText="Type a message..." style="-fx-padding: 10; -fx-background-color: #430c4b; -fx-text-fill: #f2f2f2; -fx-background-radius: 10;" HBox.hgrow="ALWAYS">
-                                                   <font>
-                                                      <Font size="14.0" />
-                                                   </font>
-                                                </TextField>
-                                                    <Button fx:id="sendButton" alignment="CENTER" defaultButton="true" minHeight="35.0" minWidth="35.0" styleClass="sendButton" stylesheets="@css/chat-left-view.css" textFill="#0269c9">
-                                                   <graphic>
-                                                      <FontAwesomeIconView fill="WHITE" glyphName="SEND" selectionEnd="1" selectionStart="1" size="17" stroke="#ffffff00" />
-                                                   </graphic>
-                                                   <HBox.margin>
-                                                      <Insets right="2.0" />
-                                                   </HBox.margin>
-                                                    </Button>
-                                                <VBox.margin>
-                                                   <Insets />
-                                                </VBox.margin>
-                                                </HBox>
-                                          </children>
-                                          <padding>
-                                             <Insets bottom="30.0" left="20.0" right="20.0" top="20.0" />
-                                          </padding>
-                                       </VBox>
+                                        <fx:include source="chat-view.fxml" VBox.vgrow="ALWAYS" />
                                     </children>
-                                 </AnchorPane>
                                  <BorderPane.margin>
-                                    <Insets bottom="10.0" left="10.0" right="10.0" top="15.0" />
+                                    <Insets left="10.0" right="10.0" top="30.0" />
                                  </BorderPane.margin>
                                 </VBox>
                             </center>

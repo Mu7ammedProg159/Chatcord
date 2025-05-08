@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.effect.ColorAdjust?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.VBox?>
+
+
+<VBox alignment="TOP_CENTER" minWidth="80.0" stylesheets="@css/NavigationBar.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="$CONTROLLER_NAME$">
+   <children>
+      <VBox spacing="20.0" styleClass="layout" VBox.vgrow="ALWAYS">
+         <children>
+            <VBox alignment="TOP_CENTER" spacing="25.0" VBox.vgrow="ALWAYS">
+               <children>
+                  <Button alignment="CENTER" minHeight="30.0" minWidth="25.0" mnemonicParsing="false" styleClass="navigationBtn">
+                     <graphic>
+                        <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../images/icons/Home.png" />
+                           </image>
+                           <effect>
+                              <ColorAdjust brightness="0.4" contrast="-1.0" hue="-0.5" saturation="0.36" />
+                           </effect>
+                        </ImageView>
+                     </graphic>
+                  </Button>
+                  <Button alignment="CENTER" minHeight="30.0" minWidth="25.0" mnemonicParsing="false" styleClass="navigationBtn">
+                     <graphic>
+                        <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../images/icons/Topic.png" />
+                           </image>
+                           <effect>
+                              <ColorAdjust brightness="0.4" contrast="-1.0" hue="-0.5" saturation="0.36" />
+                           </effect>
+                        </ImageView>
+                     </graphic>
+                  </Button>
+                  <Button alignment="CENTER" minHeight="30.0" minWidth="25.0" mnemonicParsing="false" styleClass="navigationBtn">
+                     <graphic>
+                        <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../images/icons/Star.png" />
+                           </image>
+                           <effect>
+                              <ColorAdjust brightness="0.4" contrast="-1.0" hue="-0.5" saturation="0.36" />
+                           </effect>
+                        </ImageView>
+                     </graphic>
+                  </Button>
+                  <Button fx:id="settingsBtn" alignment="CENTER" minHeight="30.0" minWidth="25.0" mnemonicParsing="false" onAction="#onSettingsClicked" styleClass="navigationBtn">
+                     <graphic>
+                        <ImageView fx:id="settingsBtnIcon" fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../images/icons/Settings.png" />
+                           </image>
+                           <effect>
+                              <ColorAdjust brightness="0.4" contrast="-1.0" hue="-0.5" saturation="0.36" />
+                           </effect>
+                        </ImageView>
+                     </graphic>
+                  </Button>
+               </children>
+               <VBox.margin>
+                  <Insets bottom="15.0" left="10.0" right="10.0" top="30.0" />
+               </VBox.margin>
+            </VBox>
+            <VBox alignment="BOTTOM_CENTER" spacing="20.0" VBox.vgrow="ALWAYS">
+               <children>
+                  <Button fx:id="logoutButton" alignment="CENTER" mnemonicParsing="false" onAction="#onLogoutClick" styleClass="navigationBtn">
+                     <graphic>
+                        <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../images/icons/Open%20Pane.png" />
+                           </image>
+                           <effect>
+                              <ColorAdjust brightness="0.26" contrast="-1.0" hue="-0.01" saturation="1.0" />
+                           </effect>
+                        </ImageView>
+                     </graphic>
+                  </Button>
+                  <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../images/default_pfp.png" />
+                     </image>
+                  </ImageView>
+               </children>
+               <padding>
+                  <Insets bottom="15.0" />
+               </padding>
+            </VBox>
+         </children>
+      </VBox>
+   </children>
+</VBox>

@@ -6,6 +6,7 @@ import com.mdev.chatcord.client.connection.ClientThread;
 import com.mdev.chatcord.client.enums.EMessageStatus;
 import com.mdev.chatcord.client.dto.JwtRequest;
 import com.mdev.chatcord.client.dto.MessageDTO;
+import com.mdev.chatcord.client.implementation.UIHandler;
 import jakarta.annotation.PostConstruct;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -17,6 +18,8 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -34,9 +37,13 @@ import java.util.List;
 
 @Component
 @RequiredArgsConstructor
-public class ChatController {
+public class ChatController implements UIHandler {
+
     @FXML
-    private Label chatTitle;
+    private HBox windowBarBtns;
+
+    @FXML
+    private Label chatTitle, appName;
 
     @FXML
     private VBox contactsListView;
@@ -51,16 +58,10 @@ public class ChatController {
     private TextField messageField;
 
     @FXML
-    private Button sendButton;
-
-    @FXML
     private ImageView addContactButton;
 
     @FXML
-    private Button debugger;
-
-    @FXML
-    private Button settingsBtn;
+    private Button logoutButton, debugger, settingsBtn, sendButton;
 
     @Autowired
     private StageInitializer stageInitializer;
@@ -94,13 +95,14 @@ public class ChatController {
     @FXML
     public void initialize() {
 
-
-
         profileImageURL = "/images/pfp3.png";
-        pfpImage = new Image(getClass().getResource(profileImageURL).toExternalForm());
+        pfpImage = createImage(profileImageURL);
 
         username = jwtRequest.getUserDTO().getUsername();
         tag = jwtRequest.getUserDTO().getTag();
+
+        windowBarBtns.getChildren().get(2).getStyleClass().add("onCancelRound");
+        changeFont(appName, "/fonts/CarterOne-Regular.ttf", 20);
 
         chatTitle.setText("Welcome, " + username);
         List<Label> contactLabel;
@@ -148,7 +150,7 @@ public class ChatController {
 
     private void sentMessage(MessageDTO dto) {
         //System.out.println("DTO received: " + dto.getMessage());
-        Image profilePicture = new Image(getClass().getResource(dto.getProfileImageURL()).toExternalForm());
+        Image profilePicture = createImage(dto.getProfileImageURL());
         //Node messageNode = createMessageNode(dto.getUsername(), dto.getMessage(), profilePicture);
         try {
             FXMLLoader loader = springFXMLLoader.getLoader("/view/message-view.fxml");
@@ -171,7 +173,8 @@ public class ChatController {
 
         if (!message.isEmpty()){
 
-            MessageDTO messageDTO = new MessageDTO(username, message, profileImageURL, System.currentTimeMillis(), EMessageStatus.SENT);//Node messageNode = createMessageNode(username, message, pfpImage);
+            MessageDTO messageDTO = new MessageDTO(username, message, profileImageURL, System.currentTimeMillis(),
+                    EMessageStatus.SENT); //Node messageNode = createMessageNode(username, message, pfpImage);
 
             clientThread.sendMessage(messageDTO);
             messageField.clear();
@@ -186,8 +189,9 @@ public class ChatController {
     @FXML
     public void onLogoutClick() {
         //userService.logoutUser(username, tag);
+        Stage stage = (Stage) logoutButton.getScene().getWindow();
         clientThread.close();
-        stageInitializer.switchScenes("/view/login/sign-view.fxml", "Login", 1380, 750);
+        stageInitializer.switchScenes(stage, "/view/login/sign-view.fxml", "Login", 1380, 750);
     }
 
     @FXML
