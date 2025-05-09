@@ -1,4 +1,4 @@
-package com.mdev.chatcord.client.controller.ui;
+package com.mdev.chatcord.client.controller.ui.settings;
 
 import com.mdev.chatcord.client.component.SpringFXMLLoader;
 import com.mdev.chatcord.client.enums.ESettingStage;

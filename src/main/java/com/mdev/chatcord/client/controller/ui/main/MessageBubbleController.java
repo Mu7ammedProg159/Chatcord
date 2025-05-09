@@ -1,4 +1,4 @@
-package com.mdev.chatcord.client.controller.ui;
+package com.mdev.chatcord.client.controller.ui.main;
 
 import com.mdev.chatcord.client.dto.MessageDTO;
 import javafx.fxml.FXML;

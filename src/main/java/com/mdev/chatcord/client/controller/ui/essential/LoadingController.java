@@ -1,4 +1,4 @@
-package com.mdev.chatcord.client.controller.ui;
+package com.mdev.chatcord.client.controller.ui.essential;
 
 import com.mdev.chatcord.client.implementation.ThrowingRunnable;
 import com.mdev.chatcord.client.implementation.UIErrorHandler;

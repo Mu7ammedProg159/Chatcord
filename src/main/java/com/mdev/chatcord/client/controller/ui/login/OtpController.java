@@ -1,4 +1,4 @@
-package com.mdev.chatcord.client.controller.ui;
+package com.mdev.chatcord.client.controller.ui.login;
 
 import com.mdev.chatcord.client.component.DragWindow;
 import com.mdev.chatcord.client.implementation.EventStageHandler;

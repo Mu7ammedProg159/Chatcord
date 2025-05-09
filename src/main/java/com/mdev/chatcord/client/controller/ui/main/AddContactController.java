@@ -1,4 +1,4 @@
-package com.mdev.chatcord.client.controller.ui;
+package com.mdev.chatcord.client.controller.ui.main;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;

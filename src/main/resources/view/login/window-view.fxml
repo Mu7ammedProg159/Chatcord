@@ -5,7 +5,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.text.Font?>
 
-<HBox fx:id="dragRegion" alignment="TOP_RIGHT" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mdev.chatcord.client.controller.ui.WindowController">
+<HBox fx:id="dragRegion" alignment="TOP_RIGHT" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mdev.chatcord.client.controller.ui.essential.WindowController">
    <children>
       <Button fx:id="minimizeButton" alignment="TOP_RIGHT" mnemonicParsing="false" onAction="#onMinimizeClicked" styleClass="windowBtn" text="─" textFill="#e4e4e4">
          <font>

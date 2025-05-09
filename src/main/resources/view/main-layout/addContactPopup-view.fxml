@@ -10,7 +10,7 @@
 <?import javafx.scene.text.Font?>
 
 
-<Pane prefHeight="200.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mdev.chatcord.client.controller.ui.AddContactController">
+<Pane prefHeight="200.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mdev.chatcord.client.controller.ui.main.AddContactController">
     <children>
         <VBox alignment="CENTER" prefHeight="200.0" prefWidth="300.0" spacing="20.0">
             <padding>

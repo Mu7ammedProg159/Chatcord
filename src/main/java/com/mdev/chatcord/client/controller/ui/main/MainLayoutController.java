@@ -1,8 +1,9 @@
-package com.mdev.chatcord.client.controller.ui;
+package com.mdev.chatcord.client.controller.ui.main;
 
 import com.mdev.chatcord.client.component.SpringFXMLLoader;
 import com.mdev.chatcord.client.component.StageInitializer;
 import com.mdev.chatcord.client.connection.ClientThread;
+import com.mdev.chatcord.client.controller.ui.settings.SettingsController;
 import com.mdev.chatcord.client.enums.EMessageStatus;
 import com.mdev.chatcord.client.dto.JwtRequest;
 import com.mdev.chatcord.client.dto.MessageDTO;
@@ -16,9 +17,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
@@ -37,7 +36,7 @@ import java.util.List;
 
 @Component
 @RequiredArgsConstructor
-public class ChatController implements UIHandler {
+public class MainLayoutController implements UIHandler {
 
     @FXML
     private HBox windowBarBtns;
@@ -58,10 +57,7 @@ public class ChatController implements UIHandler {
     private TextField messageField;
 
     @FXML
-    private ImageView addContactButton;
-
-    @FXML
-    private Button logoutButton, debugger, settingsBtn, sendButton;
+    private Button logoutButton, debugger, sendButton;
 
     @Autowired
     private StageInitializer stageInitializer;
@@ -81,7 +77,7 @@ public class ChatController implements UIHandler {
 
     private String debugString;
 
-    private final Logger logger = LoggerFactory.getLogger(ChatController.class);
+    private final Logger logger = LoggerFactory.getLogger(MainLayoutController.class);
 
     private ClientThread clientThread;
 
@@ -153,7 +149,7 @@ public class ChatController implements UIHandler {
         Image profilePicture = createImage(dto.getProfileImageURL());
         //Node messageNode = createMessageNode(dto.getUsername(), dto.getMessage(), profilePicture);
         try {
-            FXMLLoader loader = springFXMLLoader.getLoader("/view/message-view.fxml");
+            FXMLLoader loader = springFXMLLoader.getLoader("/view/main-layout/message-view.fxml");
             Node messageNode = loader.load();
             MessageBubbleController controller = loader.getController();
             controller.setData(dto);
@@ -197,7 +193,7 @@ public class ChatController implements UIHandler {
     @FXML
     public void onAddContactClick(MouseEvent mouseEvent) {
         try {
-            FXMLLoader loader = springFXMLLoader.getLoader("/view/addContactPopup-view.fxml");
+            FXMLLoader loader = springFXMLLoader.getLoader("/view/main-layout/addContactPopup-view.fxml");
             Parent root = loader.load();
             AddContactController controller = loader.getController();
 

@@ -1,29 +1,25 @@
-package com.mdev.chatcord.client.controller.ui;
+package com.mdev.chatcord.client.controller.ui.login;
 
 import com.mdev.chatcord.client.component.SpringFXMLLoader;
 import com.mdev.chatcord.client.component.StageInitializer;
+import com.mdev.chatcord.client.controller.ui.essential.LoadingController;
 import com.mdev.chatcord.client.implementation.LoadingHandler;
-import com.mdev.chatcord.client.implementation.ThrowingRunnable;import com.mdev.chatcord.client.dto.UserDTO;
+import com.mdev.chatcord.client.implementation.ThrowingRunnable;
 import com.mdev.chatcord.client.enums.ELoginStatus;
 import com.mdev.chatcord.client.implementation.UIHandler;
 import com.mdev.chatcord.client.service.UserService;
 import javafx.application.Platform;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Font;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -282,9 +278,9 @@ public class LoginController implements LoadingHandler, UIHandler {
         return () -> {
             Platform.runLater(() -> submitButton.setText("Login"));
             try {
-                stageInitializer.switchScenes(stage, "/view/main-view.fxml", "Chatcord", 1350, 720);
+                stageInitializer.switchScenes(stage, "/view/main-layout/main-view.fxml", "Chatcord", 1350, 720);
             } catch (Exception e) {
-                logger.error(e.getMessage());
+                throw new RuntimeException(e);
             }
         };
     }

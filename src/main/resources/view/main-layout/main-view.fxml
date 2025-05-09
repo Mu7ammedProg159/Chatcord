@@ -9,11 +9,11 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane style="-fx-background-color: transparent;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mdev.chatcord.client.controller.ui.ChatController">
+<AnchorPane style="-fx-background-color: transparent;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mdev.chatcord.client.controller.ui.main.MainLayoutController">
    <children>
       <StackPane style="-fx-background-color: transparent;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <AnchorPane prefHeight="750.0" prefWidth="1380.0" styleClass="backgroundImage" stylesheets="@css/main-layout.css">
+            <AnchorPane prefHeight="750.0" prefWidth="1380.0" styleClass="backgroundImage" stylesheets="@../css/main-layout.css">
                <children>
                   <VBox alignment="CENTER" style="-fx-background-color: transparent;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <children>
@@ -26,13 +26,13 @@
                                           <Insets left="20.0" />
                                        </padding>
                                     </Label>
-                                     <fx:include fx:id="windowBarBtns" source="login/window-view.fxml" HBox.hgrow="ALWAYS" />
+                                     <fx:include fx:id="windowBarBtns" source="../login/window-view.fxml" HBox.hgrow="ALWAYS" />
                                  </children>
                               </HBox>
                            </children>
                            <stylesheets>
-                              <URL value="@css/AppLabel.css" />
-                              <URL value="@css/WindowStyle.css" />
+                              <URL value="@../css/AppLabel.css" />
+                              <URL value="@../css/WindowStyle.css" />
                            </stylesheets>
                            <VBox.margin>
                               <Insets left="10.0" right="10.0" top="10.0" />

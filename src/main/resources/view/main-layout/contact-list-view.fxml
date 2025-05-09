@@ -16,12 +16,11 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
-<VBox alignment="CENTER" style="-fx-background-color: transparent; -fx-background-radius: 15;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.ContactListView">
+<VBox alignment="CENTER" style="-fx-background-color: transparent; -fx-background-radius: 15;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mdev.chatcord.client.controller.ui.main.FriendsController">
    <children>
       <AnchorPane minWidth="250.0" style="-fx-background-color: transparent;" VBox.vgrow="ALWAYS">
          <children>
-            <VBox alignment="CENTER" style="-fx-background-color: #220225D5; -fx-background-radius: 15;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <VBox alignment="CENTER" styleClass="contentNoPadding" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <children>
                   <HBox style="-fx-background-color: transparent;">
                      <children>
@@ -36,7 +35,7 @@
                                  <graphic>
                                     <ImageView fx:id="addContactButton" fitHeight="25.0" fitWidth="25.0" nodeOrientation="RIGHT_TO_LEFT" onMouseClicked="#onAddContactClick" pickOnBounds="true" preserveRatio="true">
                                        <image>
-                                          <Image url="@../images/icons/add_user_icon.png" />
+                                          <Image url="@../../images/icons/add_user_icon.png" />
                                        </image>
                                        <cursor>
                                           <Cursor fx:constant="HAND" />
@@ -58,7 +57,7 @@
                      <children>
                         <ImageView fitHeight="18.0" fitWidth="18.0" pickOnBounds="true" preserveRatio="true" HBox.hgrow="ALWAYS">
                            <image>
-                              <Image url="@../images/icons/Search.png" />
+                              <Image url="@../../images/icons/Search.png" />
                            </image>
                            <HBox.margin>
                               <Insets left="5.0" />
@@ -67,7 +66,7 @@
                               <ColorAdjust brightness="1.0" />
                            </effect>
                         </ImageView>
-                        <TextField promptText="Search Friend" style="-fx-background-color: transparent;" styleClass="navigationBtn" HBox.hgrow="ALWAYS">
+                        <TextField fx:id="searchField" promptText="Search Friend" style="-fx-background-color: transparent;" styleClass="navigationBtn" HBox.hgrow="ALWAYS">
                            <font>
                               <Font size="14.0" />
                            </font>
@@ -77,7 +76,7 @@
                         <Insets bottom="20.0" left="20.0" right="20.0" top="5.0" />
                      </VBox.margin>
                   </HBox>
-                  <ScrollPane fx:id="contactScrollPane" fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" stylesheets="@css/ScrollPanel.css" VBox.vgrow="ALWAYS">
+                  <ScrollPane fx:id="contactScrollPane" fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" stylesheets="@../css/ScrollPanel.css" VBox.vgrow="ALWAYS">
                      <content>
                         <VBox fx:id="contactsListView" spacing="10.0">
                            <styleClass>
@@ -93,7 +92,7 @@
       </AnchorPane>
    </children>
    <stylesheets>
-      <URL value="@css/NavigationBar.css" />
-      <URL value="@css/main-layout.css" />
+      <URL value="@../css/NavigationBar.css" />
+      <URL value="@../css/main-layout.css" />
    </stylesheets>
 </VBox>

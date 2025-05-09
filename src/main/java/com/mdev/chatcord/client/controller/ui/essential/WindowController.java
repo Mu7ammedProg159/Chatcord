@@ -1,4 +1,4 @@
-package com.mdev.chatcord.client.controller.ui;
+package com.mdev.chatcord.client.controller.ui.essential;
 
 import com.mdev.chatcord.client.annotation.DraggableWindow;
 import com.mdev.chatcord.client.component.DragWindow;
