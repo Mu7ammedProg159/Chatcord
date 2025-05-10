@@ -88,7 +88,7 @@
                                                                </font>
                                                            </Label>
                      
-                                                                                            <!-- Password -->
+                                                                                                  <!-- Password -->
                                                            <PasswordField fx:id="passwordField" minHeight="35.0" minWidth="400.0" prefHeight="30.0" prefWidth="277.0" promptText="Password" styleClass="textField" stylesheets="@login-view.css" />
                                                        </children>
                                                    </VBox>

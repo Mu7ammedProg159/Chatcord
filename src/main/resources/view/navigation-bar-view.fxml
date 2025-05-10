@@ -7,7 +7,7 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox alignment="TOP_CENTER" minWidth="80.0" stylesheets="@../css/NavigationBar.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mdev.chatcord.client.controller.ui.main.NavigationBarController">
+<VBox alignment="TOP_CENTER" minWidth="80.0" stylesheets="@css/NavigationBar.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mdev.chatcord.client.controller.ui.main.NavigationBarController">
    <children>
       <VBox spacing="20.0" styleClass="layout" VBox.vgrow="ALWAYS">
          <children>
@@ -17,7 +17,7 @@
                      <graphic>
                         <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../../images/icons/Home.png" />
+                              <Image url="@../images/icons/Home.png" />
                            </image>
                            <effect>
                               <ColorAdjust brightness="0.4" contrast="-1.0" hue="-0.5" saturation="0.36" />
@@ -29,7 +29,7 @@
                      <graphic>
                         <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../../images/icons/Topic.png" />
+                              <Image url="@../images/icons/Topic.png" />
                            </image>
                            <effect>
                               <ColorAdjust brightness="0.4" contrast="-1.0" hue="-0.5" saturation="0.36" />
@@ -41,7 +41,7 @@
                      <graphic>
                         <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../../images/icons/Star.png" />
+                              <Image url="@../images/icons/Star.png" />
                            </image>
                            <effect>
                               <ColorAdjust brightness="0.4" contrast="-1.0" hue="-0.5" saturation="0.36" />
@@ -53,7 +53,7 @@
                      <graphic>
                         <ImageView fx:id="settingsBtnIcon" fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../../images/icons/Settings.png" />
+                              <Image url="@../images/icons/Settings.png" />
                            </image>
                            <effect>
                               <ColorAdjust brightness="0.4" contrast="-1.0" hue="-0.5" saturation="0.36" />
@@ -72,7 +72,7 @@
                      <graphic>
                         <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../../images/icons/logout.png" />
+                              <Image url="@../images/icons/Open%20Pane.png" />
                            </image>
                            <effect>
                               <ColorAdjust brightness="0.26" contrast="-1.0" hue="-0.01" saturation="1.0" />
@@ -82,7 +82,7 @@
                   </Button>
                   <ImageView fx:id="avatarImage" fitHeight="55.0" fitWidth="55.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../../images/default_pfp.png" />
+                        <Image url="@../images/default_pfp.png" />
                      </image>
                   </ImageView>
                </children>
