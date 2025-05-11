@@ -4,7 +4,9 @@ import com.mdev.chatcord.client.component.SpringFXMLLoader;
 import com.mdev.chatcord.client.component.StageInitializer;
 import com.mdev.chatcord.client.connection.ClientThread;
 import com.mdev.chatcord.client.controller.ui.settings.SettingsController;
+import com.mdev.chatcord.client.implementation.EventStageHandler;
 import com.mdev.chatcord.client.implementation.ThrowingRunnable;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -16,6 +18,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import lombok.*;
+import org.onyxfx.graphics.layout.OFxSwitcher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +31,7 @@ import java.io.IOException;
 @NoArgsConstructor
 @Getter
 @Setter
-public class NavigationBarController {
+public class NavigationBarController implements EventStageHandler {
 
     @FXML private VBox navBarContainer, navBarUserContainer;
     @FXML private Button homeBtn, chatBtn, favBtn, settingsBtn, logoutBtn;
@@ -36,11 +39,15 @@ public class NavigationBarController {
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
+    private OFxSwitcher switcher;
     private Stage stage;
     private ClientThread clientThread;
 
     @Autowired
     private SpringFXMLLoader springFXMLLoader;
+
+    @Autowired
+    private StageInitializer stageInitializer;
 
     @Getter
     @Setter
@@ -56,17 +63,34 @@ public class NavigationBarController {
         this.clientThread = clientThread;
     }
 
-    public void switchNavBtn(Button button) throws Exception {
-        if (runnable != null){
-            runnable.run();
-            button.requestFocus();
-        }
+
+    @FXML
+    public void onHomeBtnClicked(ActionEvent event){
+        switcher.setIndex(0);
     }
 
-    public void onLogoutClick(Stage stage, ClientThread clientThread, StageInitializer stageInitializer) {
+    @FXML
+    public void onChatBtnClicked(ActionEvent event){
+        if (switcher.getChildren().size() > 0)
+            switcher.setIndex(1);
+    }
+
+    @FXML
+    public void onFavBtnClicked(ActionEvent event){
+        if (switcher.getChildren().size() > 1)
+            switcher.setIndex(2);
+    }
+
+
+
+
+
+    @FXML
+    public void onLogoutClick(ActionEvent event) {
         //userService.logoutUser(username, tag);
+
         clientThread.close();
-        stageInitializer.switchScenes(stage, "/view/login/sign-view.fxml", "Login", 1380, 750);
+        stageInitializer.switchScenes(getStageActionEvent(event), "/view/login/sign-view.fxml", "Login", 1380, 750);
     }
 
     @FXML

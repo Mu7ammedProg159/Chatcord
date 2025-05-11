@@ -64,6 +64,11 @@
 			<version>4.7.0-9.1.2</version>
 		</dependency>
 
+		<dependency>
+			<groupId>org.onyxfx</groupId>
+			<artifactId>ofx-graphics</artifactId>
+			<version>1.0-SNAPSHOT</version>
+		</dependency>
 
 		<dependency>
 			<groupId>org.apache.commons</groupId>

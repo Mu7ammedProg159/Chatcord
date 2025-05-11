@@ -1,6 +1,5 @@
 package com.mdev.chatcord.client.controller.ui.main;
 
-import com.mdev.chatcord.client.component.StageInitializer;
 import com.mdev.chatcord.client.connection.ClientThread;
 import com.mdev.chatcord.client.dto.MessageDTO;
 import com.mdev.chatcord.client.enums.EMessageStatus;
@@ -12,6 +11,7 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import lombok.*;
+import org.onyxfx.graphics.layout.OFxSwitcher;
 import org.springframework.stereotype.Component;
 
 @Component
