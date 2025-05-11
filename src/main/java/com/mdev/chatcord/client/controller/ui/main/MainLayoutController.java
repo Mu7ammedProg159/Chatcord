@@ -42,44 +42,30 @@ public class MainLayoutController implements UIHandler {
     private HBox windowBarBtns;
 
     @FXML
-    private Label chatTitle, appName;
-
-    @FXML
-    private VBox contactsListView;
-
-    @FXML
-    private VBox messagesContainer;
-
-    @FXML
-    private ScrollPane chatScrollPane;
-
-    @FXML
-    private TextField messageField;
-
-    @FXML
-    private Button logoutButton, debugger, sendButton;
-
-    @Autowired
-    private StageInitializer stageInitializer;
-
-    private final JwtRequest jwtRequest;
-
-    @Autowired
-    private SpringFXMLLoader springFXMLLoader;
-
-    private String lastMessageSender;
+    private Label appName;
 
     private String username;
     private String tag;
-
+    private String lastMessageSender;
     private String profileImageURL;
     private Image pfpImage;
 
     private String debugString;
+    private ClientThread clientThread;
 
     private final Logger logger = LoggerFactory.getLogger(MainLayoutController.class);
 
-    private ClientThread clientThread;
+    private final StageInitializer stageInitializer;
+
+    private final JwtRequest jwtRequest;
+
+    private final SpringFXMLLoader springFXMLLoader;
+
+    private final NavigationBarController navigationBarController;
+    private final FriendsController friendsController;
+
+    @Autowired
+    private ChatController chatController;
 
     @Value("${spring.application.udp.server.port}") int SERVER_PORT;
     @Value("${spring.application.udp.server.ip}") String SERVER_IP;
@@ -91,6 +77,7 @@ public class MainLayoutController implements UIHandler {
     @FXML
     public void initialize() {
 
+
         profileImageURL = "/images/pfp3.png";
         pfpImage = createImage(profileImageURL);
 
@@ -100,8 +87,10 @@ public class MainLayoutController implements UIHandler {
         windowBarBtns.getChildren().get(2).getStyleClass().add("onCancelRound");
         changeFont(appName, "/fonts/CarterOne-Regular.ttf", 20);
 
-        chatTitle.setText("Welcome, " + username);
         List<Label> contactLabel;
+
+        navigationBarController.setData(stageInitializer.getPrimaryStage(), clientThread);
+        chatController.setData(username, tag);
 
         /*try{
             //Label contactLabel = new Label("Friend A");
@@ -138,10 +127,13 @@ public class MainLayoutController implements UIHandler {
             throw new RuntimeException(e);
         }
 
-        sendButton.setOnAction(e -> sendMessage());
+        chatController.getSendBtn().setOnAction(e -> chatController.sendMessage(clientThread, username, profileImageURL));
 
         // Optional: scroll to bottom on new message
-        messagesContainer.heightProperty().addListener((obs, oldVal, newVal) -> chatScrollPane.setVvalue(chatScrollPane.getVmax()));
+        chatController.getMessagesContainer().heightProperty().addListener(
+                (obs, oldVal, newVal) ->
+                        chatController.getChatScrollPane().setVvalue(
+                                chatController.getChatScrollPane().getVmax()));
     }
 
     private void sentMessage(MessageDTO dto) {
@@ -157,23 +149,10 @@ public class MainLayoutController implements UIHandler {
 
             logger.info("Message Received as:  {}", dto.toString());
 
-            messagesContainer.getChildren().add(messageNode);
+            chatController.addMessage(messageNode);
 
         } catch (IOException e) {
             throw new RuntimeException(e);
-        }
-    }
-
-    private void sendMessage() {
-        String message = messageField.getText();
-
-        if (!message.isEmpty()){
-
-            MessageDTO messageDTO = new MessageDTO(username, message, profileImageURL, System.currentTimeMillis(),
-                    EMessageStatus.SENT); //Node messageNode = createMessageNode(username, message, pfpImage);
-
-            clientThread.sendMessage(messageDTO);
-            messageField.clear();
         }
     }
 
@@ -182,78 +161,4 @@ public class MainLayoutController implements UIHandler {
         System.out.println("DEBUG BUTTON: " + username);
     }
 
-    @FXML
-    public void onLogoutClick() {
-        //userService.logoutUser(username, tag);
-        Stage stage = (Stage) logoutButton.getScene().getWindow();
-        clientThread.close();
-        stageInitializer.switchScenes(stage, "/view/login/sign-view.fxml", "Login", 1380, 750);
-    }
-
-    @FXML
-    public void onAddContactClick(MouseEvent mouseEvent) {
-        try {
-            FXMLLoader loader = springFXMLLoader.getLoader("/view/main-layout/addContactPopup-view.fxml");
-            Parent root = loader.load();
-            AddContactController controller = loader.getController();
-
-            /*FXMLLoader contactLoader = springFXMLLoader.getLoader("/view/contact-view.fxml");
-            Node contactNode = contactLoader.load();
-            ContactController contactController = contactLoader.getController();
-            //contactController.setData();*/
-
-            Stage popup = new Stage();
-            controller.setStage(popup);
-            controller.setOnContactAdded(contactStr -> {
-                Label newContact = new Label(contactStr);
-                newContact.setStyle("-fx-text-fill: #202225; -fx-background-color: #1e2023");
-                newContact.setOnMouseClicked(e -> loadChat(contactStr));
-                contactsListView.getChildren().add(newContact);
-            });
-
-            popup.setScene(new Scene(root));
-            popup.setTitle("Add Contact");
-            popup.initModality(Modality.APPLICATION_MODAL);
-            popup.show();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void loadChat(String contactId) {
-        messagesContainer.getChildren().clear();
-        chatTitle.setText("Chat with " + contactId);
-
-        // TODO: Load the chat history for this contact
-        // You'll probably want a `Map<String, List<MessageDTO>>` to simulate storage
-    }
-
-    @FXML
-    public void onSettingsClicked(){
-        try {
-        FXMLLoader loader = springFXMLLoader.getLoader("/view/settings-view.fxml");
-        Parent root = loader.load();
-        SettingsController controller = loader.getController();
-
-            /*FXMLLoader contactLoader = springFXMLLoader.getLoader("/view/contact-view.fxml");
-            Node contactNode = contactLoader.load();
-            ContactController contactController = contactLoader.getController();
-            //contactController.setData();*/
-
-        Stage popup = new Stage();
-        popup.initStyle(StageStyle.UNDECORATED);
-        controller.initialize();
-
-        popup.setScene(new Scene(root));
-        popup.initModality(Modality.APPLICATION_MODAL);
-        controller.setStage(popup);
-        popup.show();
-
-        logger.info("The Account Stage is " + controller.getStage());
-
-        } catch (IOException e) {
-        e.printStackTrace();
-    }
-    }
 }

@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox alignment="TOP_CENTER" spacing="15.0" stylesheets="@../css/main-layout.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mdev.chatcord.client.controller.ui.main.MainLayoutController">
+<VBox alignment="TOP_CENTER" spacing="15.0" stylesheets="@../css/main-layout.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mdev.chatcord.client.controller.ui.main.ChatController">
    <children>
       <HBox alignment="CENTER_LEFT" spacing="10.0">
          <children>
@@ -55,7 +55,7 @@
                               <Insets />
                            </VBox.margin>
                            <children>
-                              <Button fx:id="sendButton1" alignment="CENTER" defaultButton="true" minHeight="38.4" minWidth="38.4" styleClass="sendButton" stylesheets="@../css/chat-left-view.css" textFill="#0269c9">
+                              <Button fx:id="attachmentBtn" alignment="CENTER" defaultButton="true" minHeight="38.4" minWidth="38.4" styleClass="sendButton" stylesheets="@../css/chat-left-view.css" textFill="#0269c9">
                                  <graphic>
                                     <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
@@ -69,7 +69,7 @@
                                     <Font size="14.0" />
                                  </font>
                               </TextField>
-                              <Button fx:id="sendButton" alignment="CENTER" defaultButton="true" minHeight="35.0" minWidth="35.0" styleClass="sendButton" stylesheets="@../css/chat-left-view.css" textFill="#0269c9">
+                              <Button fx:id="sendBtn" alignment="CENTER" defaultButton="true" minHeight="35.0" minWidth="35.0" styleClass="sendButton" stylesheets="@../css/chat-left-view.css" textFill="#0269c9">
                                  <HBox.margin>
                                     <Insets right="2.0" />
                                  </HBox.margin>

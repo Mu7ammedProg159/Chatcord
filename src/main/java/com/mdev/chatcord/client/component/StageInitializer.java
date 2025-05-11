@@ -110,7 +110,9 @@ public class StageInitializer implements ApplicationListener<StageReadyEvent> {
             // Optional: close the old stage if you want to replace it
             currentStage.close();
 
-            newStage.show();
+            primaryStage = newStage;
+
+            primaryStage.show();
 
         } catch (IOException e) {
             throw new RuntimeException("Failed to load: " + fxmlPath, e);

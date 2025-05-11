@@ -31,9 +31,9 @@
                         </Label>
                         <HBox alignment="CENTER_RIGHT" HBox.hgrow="ALWAYS">
                            <children>
-                              <Button mnemonicParsing="false" styleClass="navigationBtn" textAlignment="CENTER">
+                              <Button fx:id="addContactButton" mnemonicParsing="false" onAction="#onAddContactClick" styleClass="navigationBtn" textAlignment="CENTER">
                                  <graphic>
-                                    <ImageView fx:id="addContactButton" fitHeight="25.0" fitWidth="25.0" nodeOrientation="RIGHT_TO_LEFT" onMouseClicked="#onAddContactClick" pickOnBounds="true" preserveRatio="true">
+                                    <ImageView fitHeight="25.0" fitWidth="25.0" nodeOrientation="RIGHT_TO_LEFT" pickOnBounds="true" preserveRatio="true">
                                        <image>
                                           <Image url="@../../images/icons/add_user_icon.png" />
                                        </image>
@@ -66,7 +66,7 @@
                               <ColorAdjust brightness="1.0" />
                            </effect>
                         </ImageView>
-                        <TextField fx:id="searchField" promptText="Search Friend" style="-fx-background-color: transparent;" styleClass="navigationBtn" HBox.hgrow="ALWAYS">
+                        <TextField fx:id="searchField" promptText="Search Friend" style="-fx-background-color: transparent; -fx-text-fill: #f2f2f2;" HBox.hgrow="ALWAYS">
                            <font>
                               <Font size="14.0" />
                            </font>
