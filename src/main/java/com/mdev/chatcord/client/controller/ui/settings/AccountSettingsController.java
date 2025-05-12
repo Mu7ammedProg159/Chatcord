@@ -38,11 +38,16 @@ public class AccountSettingsController {
     private JwtRequest jwtRequest;
 
     @FXML
-    public void onChangePhoto(ActionEvent event) {
-
+    public void initialize(){
         emailLabel.setText(jwtRequest.getUserDTO().getEmail());
         usernameLabel.setText(jwtRequest.getUserDTO().getUsername());
         tagLabel.setText(jwtRequest.getUserDTO().getTag());
+    }
+
+    @FXML
+    public void onChangePhoto(ActionEvent event) {
+
+
 
         FileChooser fileChooser = new FileChooser();
 

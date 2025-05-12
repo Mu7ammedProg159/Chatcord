@@ -9,9 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.mdev</groupId>
-	<artifactId>messanger</artifactId>
+	<artifactId>chatcord</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>messanger</name>
+	<name>chatcord</name>
 	<description>A desktop chat app that deals with UDP connections.</description>
 	<url/>
 	<licenses>

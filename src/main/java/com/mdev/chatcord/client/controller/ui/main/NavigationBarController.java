@@ -13,6 +13,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -42,6 +43,7 @@ public class NavigationBarController implements EventStageHandler {
     private OFxSwitcher switcher;
     private Stage stage;
     private ClientThread clientThread;
+    private StackPane mainOverlayPane;
 
     @Autowired
     private SpringFXMLLoader springFXMLLoader;
@@ -82,9 +84,6 @@ public class NavigationBarController implements EventStageHandler {
     }
 
 
-
-
-
     @FXML
     public void onLogoutClick(ActionEvent event) {
         //userService.logoutUser(username, tag);
@@ -100,19 +99,16 @@ public class NavigationBarController implements EventStageHandler {
             Parent root = loader.load();
             SettingsController controller = loader.getController();
 
-            /*FXMLLoader contactLoader = springFXMLLoader.getLoader("/view/contact-view.fxml");
-            Node contactNode = contactLoader.load();
-            ContactController contactController = contactLoader.getController();
-            //contactController.setData();*/
-
-            Stage popup = new Stage();
-            popup.initStyle(StageStyle.UNDECORATED);
             controller.initialize();
 
-            popup.setScene(new Scene(root));
-            popup.initModality(Modality.APPLICATION_MODAL);
-            controller.setStage(popup);
-            popup.show();
+            mainOverlayPane.getChildren().add(root);
+
+
+            controller.setOnClose(() -> {
+                mainOverlayPane.getChildren().remove(root);
+                homeBtn.requestFocus();
+                switcher.setIndex(0);
+            });
 
             logger.info("The Account Stage is " + controller.getStage());
 

@@ -12,9 +12,10 @@
 <?import javafx.scene.text.Font?>
 <?import org.onyxfx.graphics.layout.OFxSwitcher?>
 
+
 <AnchorPane style="-fx-background-color: transparent;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mdev.chatcord.client.controller.ui.main.MainLayoutController">
    <children>
-      <StackPane style="-fx-background-color: transparent;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <StackPane fx:id="overlayPane" stylesheets="@../css/verification-view.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <AnchorPane prefHeight="750.0" prefWidth="1380.0" styleClass="backgroundImage" stylesheets="@../css/main-layout.css">
                <children>
@@ -29,7 +30,7 @@
                                           <Insets left="20.0" />
                                        </padding>
                                     </Label>
-                                     <fx:include fx:id="windowBarBtns" source="../login/window-view.fxml" HBox.hgrow="ALWAYS" />
+                                     <fx:include fx:id="windowBarBtns" source="../essential/window-view.fxml" HBox.hgrow="ALWAYS" />
                                  </children>
                               </HBox>
                            </children>
@@ -42,8 +43,8 @@
                            </VBox.margin>
                         </AnchorPane>
                         <BorderPane VBox.vgrow="ALWAYS">
-
-                            <!-- Left Sidebar -->
+      
+                                  <!-- Left Sidebar -->
                             <left>
                               <AnchorPane>
                                  <BorderPane.margin>
@@ -91,7 +92,7 @@
                               </OFxSwitcher>
                            </center>
                         
-                        </BorderPane>
+                                    </BorderPane>
                      </children>
                   </VBox>
                </children>

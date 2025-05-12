@@ -33,6 +33,9 @@ public class StageInitializer implements ApplicationListener<StageReadyEvent> {
     @Getter
     private Stage primaryStage;
 
+    @Getter
+    Image APP_LOGO = new Image(getClass().getResource("/images/app_logo.png").toExternalForm());
+
     private final String applicationTitle;
     private final AnnotationConfigApplicationContext applicationContext;
 
@@ -57,8 +60,6 @@ public class StageInitializer implements ApplicationListener<StageReadyEvent> {
             clip.setArcWidth(20);
             clip.setArcHeight(20);
             parent.setClip(clip);
-
-            Image APP_LOGO = new Image(getClass().getResource("/images/app_logo.png").toExternalForm());
 
             primaryStage.getIcons().add(APP_LOGO);
 
@@ -101,8 +102,7 @@ public class StageInitializer implements ApplicationListener<StageReadyEvent> {
             newStage.initStyle(StageStyle.UNDECORATED);
             newStage.initStyle(StageStyle.TRANSPARENT);
 
-            Image APP_LOGO = new Image(getClass().getResource("/images/app_logo.png").toExternalForm());
-            primaryStage.getIcons().add(APP_LOGO);
+            newStage.getIcons().add(APP_LOGO);
 
             newStage.setScene(scene);
             newStage.setTitle(title);

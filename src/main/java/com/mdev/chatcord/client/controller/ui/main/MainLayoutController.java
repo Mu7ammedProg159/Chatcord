@@ -3,6 +3,7 @@ package com.mdev.chatcord.client.controller.ui.main;
 import com.mdev.chatcord.client.component.SpringFXMLLoader;
 import com.mdev.chatcord.client.component.StageInitializer;
 import com.mdev.chatcord.client.connection.ClientThread;
+import com.mdev.chatcord.client.controller.ui.settings.SettingsController;
 import com.mdev.chatcord.client.enums.EMessageStatus;
 import com.mdev.chatcord.client.dto.JwtRequest;
 import com.mdev.chatcord.client.dto.MessageDTO;
@@ -16,6 +17,7 @@ import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import lombok.RequiredArgsConstructor;
 import org.onyxfx.graphics.layout.OFxSwitcher;
 import org.slf4j.Logger;
@@ -34,6 +36,9 @@ public class MainLayoutController implements UIHandler {
 
     @FXML
     private HBox windowBarBtns;
+
+    @FXML
+    private StackPane overlayPane;
 
     @FXML
     private Label appName;
@@ -60,6 +65,7 @@ public class MainLayoutController implements UIHandler {
 
     private final NavigationBarController navigationBarController;
     private final FriendsController friendsController;
+    private final SettingsController settingsController;
 
     @Autowired
     private ChatController chatController;
@@ -88,7 +94,7 @@ public class MainLayoutController implements UIHandler {
 
         chatController.setData(username, tag);
         navigationBarController.setSwitcher(switcher);
-
+        navigationBarController.setMainOverlayPane(overlayPane);
         /*try{
             //Label contactLabel = new Label("Friend A");
             FXMLLoader loader = springFXMLLoader.getLoader("/view/contact-view.fxml");
