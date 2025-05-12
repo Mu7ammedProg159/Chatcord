@@ -1,5 +1,6 @@
 package com.mdev.chatcord.client.controller.ui.settings;
 
+import com.mdev.chatcord.client.component.DragWindow;
 import com.mdev.chatcord.client.component.SpringFXMLLoader;
 import com.mdev.chatcord.client.enums.ESettingStage;
 import javafx.event.ActionEvent;
@@ -10,11 +11,10 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.onyxfx.graphics.layout.OFxSwitcher;
 import org.slf4j.Logger;
@@ -23,7 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-public class SettingsController {
+public class SettingsController extends DragWindow {
 
     @FXML private StackPane overlayPane;
 
@@ -38,6 +38,8 @@ public class SettingsController {
 
     @FXML
     private Label emptySetting;
+
+    @FXML private HBox dragRegion;
 
     private Node settingNode;
 
@@ -58,7 +60,16 @@ public class SettingsController {
 
     int navIndex = 0;
 
+
+    @FXML
     public void initialize(){
+
+        dragRegion.setOnMousePressed(this::handleMousePressed);
+        dragRegion.setOnMouseDragged(this::handleMouseDragged);
+
+    }
+
+    public void setData(){
         logger.info("The Account Stage is " + stage);
         contentArea.setIndex(0);
     }
@@ -94,18 +105,16 @@ public class SettingsController {
     }
 
     @FXML
-    public void onCancel(ActionEvent e){
-        close(e);
-    }
-
-    private void close(Event event) {
-        if (event.getTarget() == overlayPane && onClose != null) {
+    public void onCancel(ActionEvent event){
+        if (onClose != null) {
             onClose.run();
         }
     }
 
     @FXML
     public void onClose(MouseEvent event){
-       close(event);
+        if (event.getTarget() == overlayPane && onClose != null) {
+            onClose.run();
+        }
     }
 }

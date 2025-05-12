@@ -1,40 +1,60 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.net.URL?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
 
-<Pane prefHeight="200.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mdev.chatcord.client.controller.ui.main.AddContactController">
-    <children>
-        <VBox alignment="CENTER" prefHeight="200.0" prefWidth="300.0" spacing="20.0">
-            <padding>
-                <Insets bottom="10" left="10" right="10" top="10" />
-            </padding>
-            <children>
-                <Pane>
-                    <children>
-                        <Label alignment="CENTER" prefHeight="17.0" prefWidth="279.0" style="-fx-font-weight: bold;" text="Add a Friend" textAlignment="CENTER">
-                            <font>
-                                <Font name="System Bold" size="18.0" />
-                            </font>
-                        </Label>
-                    </children>
-                </Pane>
-                <TextField fx:id="usernameField" promptText="Username" />
-                <TextField fx:id="tagField" promptText="#Tag (e.g. #1234)" />
-                <HBox alignment="CENTER" spacing="10">
-                    <children>
-                        <Button onAction="#onCancel" text="Cancel" />
-                        <Button onAction="#onAddContact" text="Add" />
-                    </children>
-                </HBox>
-            </children>
-        </VBox>
-    </children>
-</Pane>
+<StackPane fx:id="overlayPane" onMousePressed="#onClose" prefHeight="750.0" prefWidth="1380.0" style="-fx-background-color: #220225B5;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mdev.chatcord.client.controller.ui.main.contact.AddContactController">
+   <stylesheets>
+      <URL value="@../css/main-layout.css" />
+      <URL value="@../css/Forms.css" />
+   </stylesheets>
+   <children>
+      <VBox alignment="CENTER" maxHeight="275.0" maxWidth="355.0" StackPane.alignment="CENTER">
+         <children>
+            <HBox alignment="CENTER">
+               <children>
+                    <VBox alignment="CENTER" spacing="20.0" style="-fx-background-radius: 10;" styleClass="backgroundImage" stylesheets="@../css/NavigationBar.css">
+                        <padding>
+                            <Insets bottom="30.0" left="30.0" right="30.0" top="30.0" />
+                        </padding>
+                        <children>
+                        <VBox alignment="TOP_CENTER" spacing="5.0">
+                           <children>
+                                    <Label alignment="CENTER" prefHeight="17.0" prefWidth="279.0" text="Add a Friend" textAlignment="CENTER" textFill="#c3c3c3">
+                                        <font>
+                                            <Font name="Open Sans Semibold" size="24.0" />
+                                        </font>
+                                    </Label>
+                              <Label alignment="CENTER" disable="true" prefHeight="17.0" prefWidth="279.0" text="Want to add a friend ? Say no more !" textAlignment="CENTER" textFill="WHITE">
+                                 <font>
+                                    <Font name="Open Sans Semibold" size="14.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </VBox>
+                            <TextField fx:id="usernameField" prefHeight="35.0" prefWidth="295.0" promptText="Username" styleClass="textField" />
+                            <TextField fx:id="tagField" prefHeight="35.0" prefWidth="295.0" promptText="#Tag (e.g. #1234)" styleClass="textField" />
+                        <Label managed="false" styleClass="credentialLabelError" text="Error:" visible="false" />
+                            <HBox alignment="CENTER" spacing="10">
+                                <children>
+                                    <Button onAction="#onAddContact" prefHeight="25.0" prefWidth="90.0" styleClass="submitBtn" text="Add Friend" textFill="#ebebeb" />
+                                    <Button onAction="#onCancel" prefHeight="25.0" prefWidth="55.0" styleClass="cancelBtn" text="Cancel" textFill="#fcfcfc" />
+                                </children>
+                            </HBox>
+                        </children>
+                    </VBox>
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+      <HBox fx:id="dragRegion" alignment="TOP_CENTER" maxHeight="50.0" prefHeight="50.0" StackPane.alignment="TOP_CENTER" />
+   </children>
+</StackPane>

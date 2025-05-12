@@ -10,8 +10,8 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 <?import org.onyxfx.graphics.layout.OFxSwitcher?>
-
 
 <StackPane fx:id="overlayPane" onMouseClicked="#onClose" prefHeight="750.0" prefWidth="1380.0" styleClass="backgroundImage" stylesheets="@css/verification-view.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mdev.chatcord.client.controller.ui.settings.SettingsController">
    <children>
@@ -30,9 +30,13 @@
                                     <Label alignment="CENTER" style="-fx-text-fill: white; -fx-font-size: 16px; -fx-font-weight: bold;" text="Settings" />
                               </children>
                            </HBox>
-                           <HBox alignment="CENTER_RIGHT" stylesheets="@css/WindowStyle.css" HBox.hgrow="ALWAYS">
+                           <HBox fx:id="dragRegion" alignment="CENTER_RIGHT" stylesheets="@css/WindowStyle.css" HBox.hgrow="ALWAYS">
                               <children>
-                                  <fx:include source="essential/window-view.fxml" HBox.hgrow="ALWAYS" />
+                                  <Button id="button" fx:id="cancelButton" alignment="CENTER_RIGHT" cancelButton="true" contentDisplay="CENTER" mnemonicParsing="false" onAction="#onCancel" styleClass="cancelButton" stylesheets="@css/settings-view.css" text="X" textAlignment="CENTER" textFill="#461813">
+                                      <font>
+                                          <Font name="System Bold" size="13.0" />
+                                      </font>
+                                  </Button>
                               </children>
                            </HBox>
                         </children>

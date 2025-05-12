@@ -1,6 +1,7 @@
-package com.mdev.chatcord.client.controller.ui.main;
+package com.mdev.chatcord.client.controller.ui.main.contact;
 
 import com.mdev.chatcord.client.component.SpringFXMLLoader;
+import com.mdev.chatcord.client.controller.ui.main.ChatController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -9,7 +10,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -37,6 +38,8 @@ public class FriendsController {
     @Autowired
     private SpringFXMLLoader springFXMLLoader;
 
+    private StackPane mainOverlayPane;
+
     @FXML
     public void initialize(){
 
@@ -49,13 +52,8 @@ public class FriendsController {
             Parent root = loader.load();
             AddContactController controller = loader.getController();
 
-            /*FXMLLoader contactLoader = springFXMLLoader.getLoader("/view/contact-view.fxml");
-            Node contactNode = contactLoader.load();
-            ContactController contactController = contactLoader.getController();
-            //contactController.setData();*/
+            mainOverlayPane.getChildren().add(root);
 
-            Stage popup = new Stage();
-            controller.setStage(popup);
             controller.setOnContactAdded(contactStr -> {
                 Label newContact = new Label(contactStr);
                 newContact.setStyle("-fx-text-fill: #202225; -fx-background-color: #1e2023");
@@ -63,10 +61,10 @@ public class FriendsController {
                 contactsListView.getChildren().add(newContact);
             });
 
-            popup.setScene(new Scene(root));
-            popup.setTitle("Add Contact");
-            popup.initModality(Modality.APPLICATION_MODAL);
-            popup.show();
+
+            controller.setOnClose(() -> {
+                mainOverlayPane.getChildren().remove(root);
+            });
 
         } catch (IOException e) {
             e.printStackTrace();

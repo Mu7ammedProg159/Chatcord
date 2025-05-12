@@ -3,6 +3,7 @@ package com.mdev.chatcord.client.controller.ui.main;
 import com.mdev.chatcord.client.component.SpringFXMLLoader;
 import com.mdev.chatcord.client.component.StageInitializer;
 import com.mdev.chatcord.client.connection.ClientThread;
+import com.mdev.chatcord.client.controller.ui.main.contact.FriendsController;
 import com.mdev.chatcord.client.controller.ui.settings.SettingsController;
 import com.mdev.chatcord.client.enums.EMessageStatus;
 import com.mdev.chatcord.client.dto.JwtRequest;
@@ -95,6 +96,7 @@ public class MainLayoutController implements UIHandler {
         chatController.setData(username, tag);
         navigationBarController.setSwitcher(switcher);
         navigationBarController.setMainOverlayPane(overlayPane);
+        friendsController.setMainOverlayPane(overlayPane);
         /*try{
             //Label contactLabel = new Label("Friend A");
             FXMLLoader loader = springFXMLLoader.getLoader("/view/contact-view.fxml");

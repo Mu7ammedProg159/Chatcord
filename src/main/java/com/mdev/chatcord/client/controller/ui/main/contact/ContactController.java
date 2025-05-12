@@ -1,4 +1,4 @@
-package com.mdev.chatcord.client.controller.ui.main;
+package com.mdev.chatcord.client.controller.ui.main.contact;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;

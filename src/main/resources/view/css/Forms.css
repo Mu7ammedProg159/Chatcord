@@ -34,6 +34,20 @@
     -fx-background-color: #3a48a3;
 }
 
+.cancelBtn{
+    -fx-background-color: #ED4B51;
+    -fx-text-fill: #fefefe;
+    -fx-background-radius: 7px;
+}
+
+.cancelBtn:hover{
+    -fx-background-color: #da3e44;
+}
+
+.cancelBtn:pressed{
+    -fx-background-color: #BC2C31;
+}
+
 .textField:focused{
     -fx-border-color: #6fabf2;
 }

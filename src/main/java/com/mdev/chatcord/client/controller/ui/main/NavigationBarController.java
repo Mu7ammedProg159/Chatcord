@@ -99,15 +99,12 @@ public class NavigationBarController implements EventStageHandler {
             Parent root = loader.load();
             SettingsController controller = loader.getController();
 
-            controller.initialize();
+            controller.setData();
 
             mainOverlayPane.getChildren().add(root);
 
-
             controller.setOnClose(() -> {
                 mainOverlayPane.getChildren().remove(root);
-                homeBtn.requestFocus();
-                switcher.setIndex(0);
             });
 
             logger.info("The Account Stage is " + controller.getStage());
