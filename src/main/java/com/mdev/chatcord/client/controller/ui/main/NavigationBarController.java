@@ -6,6 +6,7 @@ import com.mdev.chatcord.client.connection.ClientThread;
 import com.mdev.chatcord.client.controller.ui.settings.SettingsController;
 import com.mdev.chatcord.client.implementation.EventStageHandler;
 import com.mdev.chatcord.client.implementation.ThrowingRunnable;
+import com.mdev.chatcord.client.implementation.UIHandler;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -13,8 +14,10 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -32,7 +35,7 @@ import java.io.IOException;
 @NoArgsConstructor
 @Getter
 @Setter
-public class NavigationBarController implements EventStageHandler {
+public class NavigationBarController implements EventStageHandler, UIHandler {
 
     @FXML private VBox navBarContainer, navBarUserContainer;
     @FXML private Button homeBtn, chatBtn, favBtn, settingsBtn, logoutBtn;
@@ -65,6 +68,33 @@ public class NavigationBarController implements EventStageHandler {
         this.clientThread = clientThread;
     }
 
+    @FXML
+    public void onNavBarButtonEntered(MouseEvent event){
+        Button btn = (Button) event.getTarget();
+        ImageView imageView = (ImageView) btn.getChildrenUnmodifiable().get(0);
+        applyTint(imageView, Color.web("#E2D7EC"));
+    }
+
+    @FXML
+    public void onNavBarButtonExited(MouseEvent event){
+        Button btn = (Button) event.getTarget();
+        ImageView imageView = (ImageView) btn.getChildrenUnmodifiable().get(0);
+        applyTint(imageView, Color.web("#9F8CB2"));
+    }
+
+    @FXML
+    public void onNavBarButtonPressed(MouseEvent event){
+        Button btn = (Button) event.getTarget();
+        ImageView imageView = (ImageView) btn.getChildrenUnmodifiable().get(0);
+        applyTint(imageView, Color.web("#E2D7EC"));
+    }
+
+    @FXML
+    public void onNavBarButtonFocused(MouseEvent event){
+        Button btn = (Button) event.getTarget();
+        ImageView imageView = (ImageView) btn.getChildrenUnmodifiable().get(0);
+        applyTint(imageView, Color.web("#E2E2E2"));
+    }
 
     @FXML
     public void onHomeBtnClicked(ActionEvent event){

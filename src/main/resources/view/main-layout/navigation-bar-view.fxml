@@ -13,7 +13,7 @@
          <children>
             <VBox fx:id="navBarContainer" alignment="TOP_CENTER" spacing="25.0" VBox.vgrow="ALWAYS">
                <children>
-                  <Button fx:id="homeBtn" alignment="CENTER" minHeight="30.0" minWidth="25.0" mnemonicParsing="false" onAction="#onHomeBtnClicked" styleClass="navigationBtn">
+                  <Button fx:id="homeBtn" alignment="CENTER" minHeight="30.0" minWidth="25.0" mnemonicParsing="false" onAction="#onHomeBtnClicked" onMouseEntered="#onNavBarButtonEntered" onMouseExited="#onNavBarButtonExited" onMousePressed="#onNavBarButtonPressed" onMouseReleased="#onNavBarButtonEntered" styleClass="navigationBtn">
                      <graphic>
                         <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                            <image>
@@ -25,7 +25,7 @@
                         </ImageView>
                      </graphic>
                   </Button>
-                  <Button fx:id="chatBtn" alignment="CENTER" minHeight="30.0" minWidth="25.0" mnemonicParsing="false" onAction="#onChatBtnClicked" styleClass="navigationBtn">
+                  <Button fx:id="chatBtn" alignment="CENTER" minHeight="30.0" minWidth="25.0" mnemonicParsing="false" onAction="#onChatBtnClicked" onMouseEntered="#onNavBarButtonEntered" onMouseExited="#onNavBarButtonExited" onMousePressed="#onNavBarButtonPressed" onMouseReleased="#onNavBarButtonEntered" styleClass="navigationBtn">
                      <graphic>
                         <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                            <image>
@@ -37,7 +37,7 @@
                         </ImageView>
                      </graphic>
                   </Button>
-                  <Button fx:id="favBtn" alignment="CENTER" minHeight="30.0" minWidth="25.0" mnemonicParsing="false" onAction="#onFavBtnClicked" styleClass="navigationBtn">
+                  <Button fx:id="favBtn" alignment="CENTER" minHeight="30.0" minWidth="25.0" mnemonicParsing="false" onAction="#onFavBtnClicked" onMouseEntered="#onNavBarButtonEntered" onMouseExited="#onNavBarButtonExited" onMousePressed="#onNavBarButtonPressed" onMouseReleased="#onNavBarButtonEntered" styleClass="navigationBtn">
                      <graphic>
                         <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                            <image>
@@ -49,7 +49,7 @@
                         </ImageView>
                      </graphic>
                   </Button>
-                  <Button fx:id="settingsBtn" alignment="CENTER" minHeight="30.0" minWidth="25.0" mnemonicParsing="false" onAction="#onSettingsClicked" styleClass="navigationBtn">
+                  <Button fx:id="settingsBtn" alignment="CENTER" minHeight="30.0" minWidth="25.0" mnemonicParsing="false" onAction="#onSettingsClicked" onMouseEntered="#onNavBarButtonEntered" onMouseExited="#onNavBarButtonExited" onMousePressed="#onNavBarButtonPressed" onMouseReleased="#onNavBarButtonEntered" styleClass="navigationBtn">
                      <graphic>
                         <ImageView fx:id="settingsBtnIcon" fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                            <image>

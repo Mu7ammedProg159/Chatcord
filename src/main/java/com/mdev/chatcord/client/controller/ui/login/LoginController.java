@@ -287,7 +287,9 @@ public class LoginController implements LoadingHandler, UIHandler {
 
     @Override
     public ThrowingRunnable loadOnFailure() {
-        return null;
+        return () -> {
+            Platform.runLater(() -> submitButton.setText("Login"));
+        };
     }
 }
 

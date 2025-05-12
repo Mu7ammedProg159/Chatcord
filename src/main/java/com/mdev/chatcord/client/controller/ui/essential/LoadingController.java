@@ -17,6 +17,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
+import java.util.concurrent.CompletableFuture;
+
 @Component
 @NoArgsConstructor
 public class LoadingController implements UIErrorHandler {
@@ -43,6 +45,7 @@ public class LoadingController implements UIErrorHandler {
 
     //@FXML
     public void onLoad(ThrowingRunnable onLoad, ThrowingRunnable onSucceeded, ThrowingRunnable onFailed) throws RuntimeException{
+
         setLoadingVisibility(true);
 
         // Simulate or call actual login
@@ -54,7 +57,7 @@ public class LoadingController implements UIErrorHandler {
                     try {
                         onLoad.run();
                     } catch (Exception e) {
-                        throw new RuntimeException(e);
+                        logger.error(e.getMessage());
                     }
                 }
                 return null;
@@ -65,7 +68,7 @@ public class LoadingController implements UIErrorHandler {
                     try {
                         onSucceeded.run();
                     } catch (Exception e) {
-                        throw new RuntimeException(e);
+                        logger.error(e.getMessage());
                     }
                     loadingAnimation.stop();
                     setLoadingVisibility(false);
@@ -76,7 +79,7 @@ public class LoadingController implements UIErrorHandler {
             protected void failed() {
                 Platform.runLater(() -> {
                     Throwable ex = getException();
-                    throw new RuntimeException(ex.getMessage());
+                    logger.error(ex.getMessage());
                 });
                 loadingAnimation.stop();
                 setLoadingVisibility(false);
