@@ -1,6 +1,7 @@
 package com.mdev.chatcord.client.controller.ui.main;
 
 import com.mdev.chatcord.client.dto.MessageDTO;
+import com.mdev.chatcord.client.implementation.TimeUtil;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -14,7 +15,7 @@ import java.time.*;
 import java.time.format.DateTimeFormatter;
 
 @Component
-public class MessageBubbleController {
+public class MessageBubbleController implements TimeUtil {
 
     @FXML @Getter
     private Label username;
@@ -72,10 +73,5 @@ public class MessageBubbleController {
         username.setVisible(visibility);
         username.setManaged(visibility);
 
-    }
-
-    private String convertToHourTime(long timestampMillis) {
-        ZonedDateTime zoned = Instant.ofEpochMilli(timestampMillis).atZone(ZoneId.systemDefault());
-        return zoned.format(DateTimeFormatter.ofPattern("hh:mm a"));
     }
 }

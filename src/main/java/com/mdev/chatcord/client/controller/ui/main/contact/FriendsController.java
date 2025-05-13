@@ -2,6 +2,7 @@ package com.mdev.chatcord.client.controller.ui.main.contact;
 
 import com.mdev.chatcord.client.component.SpringFXMLLoader;
 import com.mdev.chatcord.client.controller.ui.main.ChatController;
+import com.mdev.chatcord.client.implementation.TimeUtil;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -21,13 +22,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.util.Date;
 
 @Component
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
-public class FriendsController {
+public class FriendsController implements TimeUtil {
 
     @FXML private Button addContactButton;
     @FXML private TextField searchField;
@@ -55,12 +58,22 @@ public class FriendsController {
             mainOverlayPane.getChildren().add(root);
 
             controller.setOnContactAdded(contactStr -> {
-                Label newContact = new Label(contactStr);
-                newContact.setStyle("-fx-text-fill: #202225; -fx-background-color: #1e2023");
+
+                FXMLLoader contactLoader = springFXMLLoader.getLoader("/view/main-layout/contact-view.fxml");
+                Parent newContact;
+                try {
+                    newContact = loader.load();
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+                ContactController contactController = loader.getController();
+
+                contactController.setData(contactStr, null, convertToHourTime(System.currentTimeMillis()),
+                        0, "/images/default_pfp.png");
+
                 newContact.setOnMouseClicked(e -> loadChat(contactStr));
                 contactsListView.getChildren().add(newContact);
             });
-
 
             controller.setOnClose(() -> {
                 mainOverlayPane.getChildren().remove(root);

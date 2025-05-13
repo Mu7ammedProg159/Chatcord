@@ -74,13 +74,8 @@ public class MainLayoutController implements UIHandler {
     @Value("${spring.application.udp.server.port}") int SERVER_PORT;
     @Value("${spring.application.udp.server.ip}") String SERVER_IP;
 
-    @PostConstruct
-    public void init() {
-    }
-
     @FXML
     public void initialize() {
-
 
         profileImageURL = "/images/pfp3.png";
         pfpImage = createImage(profileImageURL);
@@ -91,32 +86,7 @@ public class MainLayoutController implements UIHandler {
         windowBarBtns.getChildren().get(2).getStyleClass().add("onCancelRound");
         changeFont(appName, "/fonts/CarterOne-Regular.ttf", 20);
 
-        List<Label> contactLabel;
-
-        chatController.setData(username, tag);
-        navigationBarController.setSwitcher(switcher);
-        navigationBarController.setMainOverlayPane(overlayPane);
-        friendsController.setMainOverlayPane(overlayPane);
-        /*try{
-            //Label contactLabel = new Label("Friend A");
-            FXMLLoader loader = springFXMLLoader.getLoader("/view/contact-view.fxml");
-            Node contactNode = loader.load();
-            ContactController controller = loader.getController();
-            controller.setData();
-
-            contactLabel = Arrays.asList(
-                    new Label("Friend A"),
-                    new Label("Friend B"),
-                    new Label("Friend C")
-                    );
-
-        } catch (IOException e){
-            throw new RuntimeException(e);
-        }
-
-        for (Label i : contactLabel){
-            contactsListView.getChildren().add(i);
-        }*/
+        initializeControllers();
 
         try {
             clientThread = new ClientThread(username, tag, SERVER_PORT, SERVER_IP);
@@ -143,6 +113,13 @@ public class MainLayoutController implements UIHandler {
                                 chatController.getChatScrollPane().getVmax()));
     }
 
+    private void initializeControllers() {
+        chatController.setData(username, tag);
+        navigationBarController.setSwitcher(switcher);
+        navigationBarController.setMainOverlayPane(overlayPane);
+        friendsController.setMainOverlayPane(overlayPane);
+    }
+
     private void sentMessage(MessageDTO dto) {
         //System.out.println("DTO received: " + dto.getMessage());
         Image profilePicture = createImage(dto.getProfileImageURL());
@@ -161,11 +138,6 @@ public class MainLayoutController implements UIHandler {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-    }
-
-    @FXML
-    public void showChat(ActionEvent event){
-        switcher.setIndex(0);
     }
 
     @FXML

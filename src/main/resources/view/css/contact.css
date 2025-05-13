@@ -1,0 +1,24 @@
+
+.backgroundImage{
+    -fx-background-color: #430c4bD5;
+    -fx-border-radius: 20px;
+    -fx-background-radius: 20px;
+}
+
+.backgroundImage:hover{
+    -fx-background-color: #60196bd5;
+    -fx-border-radius: 20px;
+    -fx-background-radius: 20px;
+}
+
+.backgroundImage:pressed{
+    -fx-background-color: #330a3ad5;
+    -fx-border-radius: 20px;
+    -fx-background-radius: 20px;
+}
+
+.backgroundImage:focused{
+    -fx-background-color: #240829d5;
+    -fx-border-radius: 20px;
+    -fx-background-radius: 20px;
+}

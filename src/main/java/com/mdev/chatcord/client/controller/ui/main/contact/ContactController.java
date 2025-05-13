@@ -16,7 +16,9 @@ public class ContactController {
 
     public void setData(String name, String lastMessage, String time, int unseenCount, String contactImageURL) {
         chatName.setText(name);
-        lastChatMessage.setText(lastMessage);
+        if (!lastMessage.isEmpty())
+            lastChatMessage.setText(lastMessage);
+
         timestamp.setText(time);
         Image img = new Image(getClass().getResource(contactImageURL).toExternalForm());
         contactImage.setImage(img);
@@ -24,10 +26,9 @@ public class ContactController {
         if (unseenCount > 0) {
             unseenMessagesCounter.setText(String.valueOf(unseenCount));
             unseenMessagesCounter.setVisible(true);
-            unseenMessagesCounter.setManaged(true);
         } else {
+            unseenMessagesCounter.setText(String.valueOf(0));
             unseenMessagesCounter.setVisible(false);
-            unseenMessagesCounter.setManaged(false);
         }
     }
 }
