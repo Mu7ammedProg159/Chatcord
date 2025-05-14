@@ -1,0 +1,4 @@
+- Once a user is registered (Verified actually) it will automatically create a private chat of a recieverid of the registered user. 
+- The socket of the private chat will only initialize ONCE.
+- When a user adds a friend the friend added MUST be registered to add it and hence, that account will automatically have privatechat of its id.
+- The id of any private chat is the key to open a 1-on-1 chat. 

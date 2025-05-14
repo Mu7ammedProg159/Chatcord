@@ -2,7 +2,12 @@ package com.mdev.chatcord.client.controller.ui.main.contact;
 
 import com.mdev.chatcord.client.component.SpringFXMLLoader;
 import com.mdev.chatcord.client.controller.ui.main.ChatController;
+import com.mdev.chatcord.client.dto.FriendDTO;
 import com.mdev.chatcord.client.implementation.TimeUtil;
+import com.mdev.chatcord.client.implementation.UIErrorHandler;
+import com.mdev.chatcord.client.implementation.UIHandler;
+import com.mdev.chatcord.client.service.FriendService;
+import com.mdev.chatcord.client.service.UserService;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -24,13 +29,14 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.List;
 
 @Component
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
-public class FriendsController implements TimeUtil {
+public class FriendsController implements TimeUtil, UIErrorHandler {
 
     @FXML private Button addContactButton;
     @FXML private TextField searchField;
@@ -41,11 +47,21 @@ public class FriendsController implements TimeUtil {
     @Autowired
     private SpringFXMLLoader springFXMLLoader;
 
+    @Autowired
+    private FriendService friendService;
+
     private StackPane mainOverlayPane;
 
     @FXML
     public void initialize(){
 
+    }
+
+    public void reloadContacts(){
+        List<FriendDTO> allFriends = friendService.getAllFriends();
+        for (int i=0; i > 0; i++){
+
+        }
     }
 
     @FXML
@@ -55,25 +71,9 @@ public class FriendsController implements TimeUtil {
             Parent root = loader.load();
             AddContactController controller = loader.getController();
 
+            controller.setContactList(contactsListView);
+
             mainOverlayPane.getChildren().add(root);
-
-            controller.setOnContactAdded(contactStr -> {
-
-                FXMLLoader contactLoader = springFXMLLoader.getLoader("/view/main-layout/contact-view.fxml");
-                Parent newContact;
-                try {
-                    newContact = loader.load();
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-                ContactController contactController = loader.getController();
-
-                contactController.setData(contactStr, null, convertToHourTime(System.currentTimeMillis()),
-                        0, "/images/default_pfp.png");
-
-                newContact.setOnMouseClicked(e -> loadChat(contactStr));
-                contactsListView.getChildren().add(newContact);
-            });
 
             controller.setOnClose(() -> {
                 mainOverlayPane.getChildren().remove(root);
@@ -82,23 +82,6 @@ public class FriendsController implements TimeUtil {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    private void loadChat(String contactId) {
-
-        FXMLLoader loader = springFXMLLoader.getLoader("/view/main-layout/chat-view.fxml");
-        try {
-            Parent root = loader.load();
-            ChatController controller = loader.getController();
-
-            controller.getMessagesContainer().getChildren().clear();
-            controller.getChatTitle().setText("Chat with " + contactId);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
-        // TODO: Load the chat history for this contact
-        // You'll probably want a `Map<String, List<MessageDTO>>` to simulate storage
     }
 
 }

@@ -35,7 +35,7 @@
                      <children>
                          <VBox alignment="CENTER" HBox.hgrow="NEVER">
                              <children>
-                               <StackPane>
+                               <StackPane VBox.vgrow="NEVER">
                                    <children>
                                        <Pane style="-fx-background-color: #220225D5; -fx-background-radius: 15;">
                                        <effect>
@@ -44,7 +44,7 @@
                                     </Pane>
                                        <HBox fx:id="loginPanelHBox" alignment="CENTER">
                                            <children>
-                                               <VBox alignment="CENTER" spacing="20" style="-fx-padding: 40; -fx-background-radius: 15;">
+                                               <VBox alignment="CENTER" spacing="20" style="-fx-padding: 40; -fx-background-radius: 15;" HBox.hgrow="NEVER">
                                                    <VBox alignment="CENTER">
                                                        <children>
                                                            <Label fx:id="titleLabel" style="-fx-font-size: 24; -fx-font-weight: bold; -fx-font-family: Open Sans;" text="Welcome back!" textFill="#cfcfcfda">
@@ -59,9 +59,9 @@
                                                            </Label>
                                                        </children>
                                                    </VBox>
-                                                   <VBox fx:id="emailVBox" alignment="CENTER_LEFT" fillWidth="false" spacing="3.0">
+                                                   <VBox fx:id="emailVBox" alignment="CENTER_LEFT" fillWidth="false" spacing="3.0" VBox.vgrow="NEVER">
                                                        <children>
-                                                           <Label fx:id="emailLabel" alignment="TOP_LEFT" styleClass="credentialLabel" stylesheets="@login-view.css" text="EMAIL ADDRESS *" textFill="#b5b5b5">
+                                                           <Label fx:id="emailLabel" alignment="TOP_LEFT" maxWidth="390.0" styleClass="credentialLabel" stylesheets="@login-view.css" text="EMAIL ADDRESS *" textFill="#b5b5b5" VBox.vgrow="NEVER">
                                                                <font>
                                                                    <Font name="Open Sans ExtraBold" size="12.0" />
                                                                </font>
@@ -71,7 +71,7 @@
                                                    </VBox>
                                                    <VBox fx:id="usernameVBox" alignment="CENTER_LEFT" fillWidth="false" managed="false" spacing="3.0" visible="false">
                                                        <children>
-                                                           <Label fx:id="usernameLabel" alignment="TOP_LEFT" text="USERNAME  *" textFill="#b5b5b5">
+                                                           <Label fx:id="usernameLabel" alignment="TOP_LEFT" maxWidth="390.0" text="USERNAME  *" textFill="#b5b5b5">
                                                                <font>
                                                                    <Font name="Open Sans ExtraBold" size="12.0" />
                                                                </font>
@@ -82,7 +82,7 @@
                                                    </VBox>
                                                    <VBox fx:id="passwordVBox" alignment="CENTER_LEFT" fillWidth="false" prefWidth="286.0" spacing="3.0">
                                                        <children>
-                                                           <Label fx:id="passwordLabel" alignment="TOP_LEFT" styleClass="credentialLabel" stylesheets="@login-view.css" text="PASSWORD *" textFill="#b5b5b5">
+                                                           <Label fx:id="passwordLabel" alignment="TOP_LEFT" maxWidth="390.0" styleClass="credentialLabel" stylesheets="@login-view.css" text="PASSWORD *" textFill="#b5b5b5" VBox.vgrow="NEVER">
                                                                <font>
                                                                    <Font name="Open Sans ExtraBold" size="12.0" />
                                                                </font>
@@ -94,7 +94,7 @@
                                                    </VBox>
                                                    <VBox fx:id="confirmPasswordVBox" alignment="CENTER_LEFT" fillWidth="false" managed="false" spacing="3.0" visible="false">
                                                        <children>
-                                                           <Label fx:id="confirmPasswordLabel" alignment="TOP_LEFT" text="CONFIRM PASSWORD *" textFill="#b5b5b5">
+                                                           <Label fx:id="confirmPasswordLabel" alignment="TOP_LEFT" maxWidth="390.0" text="CONFIRM PASSWORD *" textFill="#b5b5b5">
                                                                <font>
                                                                    <Font name="Open Sans ExtraBold" size="12.0" />
                                                                </font>

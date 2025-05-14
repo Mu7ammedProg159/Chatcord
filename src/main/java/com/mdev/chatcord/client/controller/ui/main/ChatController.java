@@ -4,7 +4,9 @@ import com.mdev.chatcord.client.connection.ClientThread;
 import com.mdev.chatcord.client.dto.MessageDTO;
 import com.mdev.chatcord.client.enums.EMessageStatus;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
@@ -13,6 +15,8 @@ import javafx.scene.layout.VBox;
 import lombok.*;
 import org.onyxfx.graphics.layout.OFxSwitcher;
 import org.springframework.stereotype.Component;
+
+import java.io.IOException;
 
 @Component
 @RequiredArgsConstructor
@@ -46,6 +50,15 @@ public class ChatController {
             clientThread.sendMessage(messageDTO);
             messageField.clear();
         }
+    }
+
+    private void loadChat(String contactId) {
+
+        messagesContainer.getChildren().clear();
+        chatTitle.setText("Chat with " + contactId);
+
+        // TODO: Load the chat history for this contact
+        // You'll probably want a `Map<String, List<MessageDTO>>` to simulate storage
     }
 
 }

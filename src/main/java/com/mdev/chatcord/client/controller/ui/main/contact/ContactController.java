@@ -18,6 +18,8 @@ public class ContactController {
         chatName.setText(name);
         if (!lastMessage.isEmpty())
             lastChatMessage.setText(lastMessage);
+        else
+            lastChatMessage.setText("No messages sent yet.");
 
         timestamp.setText(time);
         Image img = new Image(getClass().getResource(contactImageURL).toExternalForm());

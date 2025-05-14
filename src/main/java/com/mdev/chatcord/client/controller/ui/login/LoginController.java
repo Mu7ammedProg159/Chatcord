@@ -164,7 +164,6 @@ public class LoginController implements LoadingHandler, UIHandler {
             try {
                 String registerResponse = userService.register(email, password, username);
 
-
                 loadOtpWindow(email);
 
                 logger.info(registerResponse);

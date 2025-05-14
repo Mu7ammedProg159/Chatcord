@@ -1,9 +1,7 @@
 package com.mdev.chatcord.client.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -12,7 +10,11 @@ import org.springframework.stereotype.Component;
 @Getter
 @Setter
 public class JwtRequest{
-    private String domain = "http://localhost:8080";
+
+    @Value("${chatcord.server.domain.url}")
+    private String domain;
     private String authUri = "/api/auth";
+    private String requestUri = "/api/request";
     private UserDTO userDTO;
+
 }

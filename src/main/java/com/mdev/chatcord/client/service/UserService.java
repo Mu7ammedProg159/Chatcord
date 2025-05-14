@@ -119,7 +119,7 @@ public class UserService {
 
         try{
             jwtRequest.setUserDTO(webClient.get()
-                    .uri(jwtRequest.getDomain() + jwtRequest.getAuthUri() + "/users/me")
+                    .uri(jwtRequest.getDomain() + jwtRequest.getRequestUri() + "/users/me")
                     .header(HttpHeaders.AUTHORIZATION, "Bearer " + jwtToken)
                     .retrieve()
                     .onStatus(HttpStatusCode::isError, GlobalWebClientExceptionHandler::handleResponse)
