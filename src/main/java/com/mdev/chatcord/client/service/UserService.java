@@ -101,26 +101,25 @@ public class UserService {
 
     public Object login(String email, String password) {
 
-        String jwtToken;
         try {
-            jwtToken = webClient.post()
+            jwtRequest.setToken(webClient.post()
                     .uri(jwtRequest.getDomain() + jwtRequest.getAuthUri() + "/login")
                     .contentType(MediaType.APPLICATION_JSON)
                     .bodyValue(Map.of("email", email, "password", password))
                     .retrieve()
                     .onStatus(HttpStatusCode::isError, GlobalWebClientExceptionHandler::handleResponse)
                     .bodyToMono(String.class)
-                    .block();
+                    .block());
         } catch (RuntimeException e) {
             throw new RuntimeException(e.getMessage());
         }
 
-        logger.info("This is the token for the signed user: " + jwtToken);
+        logger.info("This is the token for the signed user: " + jwtRequest.getToken());
 
         try{
             jwtRequest.setUserDTO(webClient.get()
                     .uri(jwtRequest.getDomain() + jwtRequest.getRequestUri() + "/users/me")
-                    .header(HttpHeaders.AUTHORIZATION, "Bearer " + jwtToken)
+                    .header(HttpHeaders.AUTHORIZATION, "Bearer " + jwtRequest.getToken())
                     .retrieve()
                     .onStatus(HttpStatusCode::isError, GlobalWebClientExceptionHandler::handleResponse)
                     .bodyToMono(UserDTO.class)

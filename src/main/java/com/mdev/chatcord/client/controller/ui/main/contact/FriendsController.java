@@ -6,6 +6,7 @@ import com.mdev.chatcord.client.dto.FriendDTO;
 import com.mdev.chatcord.client.implementation.TimeUtil;
 import com.mdev.chatcord.client.implementation.UIErrorHandler;
 import com.mdev.chatcord.client.implementation.UIHandler;
+import com.mdev.chatcord.client.service.FriendContactDTO;
 import com.mdev.chatcord.client.service.FriendService;
 import com.mdev.chatcord.client.service.UserService;
 import javafx.event.ActionEvent;
@@ -53,14 +54,24 @@ public class FriendsController implements TimeUtil, UIErrorHandler {
     private StackPane mainOverlayPane;
 
     @FXML
-    public void initialize(){
-
+    public void initialize() throws IOException {
+        reloadContacts();
     }
 
-    public void reloadContacts(){
-        List<FriendDTO> allFriends = friendService.getAllFriends();
-        for (int i=0; i > 0; i++){
+    public void reloadContacts() throws IOException {
+        List<FriendContactDTO> allFriends = friendService.getAllFriends();
+        for (FriendContactDTO friend: allFriends){
+            FXMLLoader loader = springFXMLLoader.getLoader("/view/main-layout/contact-view.fxml");
+            Parent root = loader.load();
+            ContactController controller = loader.getController();
+            if (friend.getLastMessageSent() == null)
+                controller.setData(friend.getName(), "PENDING", String.valueOf(friend.getLastMessageSendDate()),
+                        0, friend.getProfilePictureURL());
+            else
+                controller.setData(friend.getName(), friend.getLastMessageSent(), friend.getLastMessageSent(),
+                        0, friend.getProfilePictureURL());
 
+            contactsListView.getChildren().add(root);
         }
     }
 
@@ -74,6 +85,14 @@ public class FriendsController implements TimeUtil, UIErrorHandler {
             controller.setContactList(contactsListView);
 
             mainOverlayPane.getChildren().add(root);
+
+            controller.setOnReload(() -> {
+                try {
+                    reloadContacts();
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+            });
 
             controller.setOnClose(() -> {
                 mainOverlayPane.getChildren().remove(root);

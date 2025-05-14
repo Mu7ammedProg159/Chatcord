@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -29,6 +30,7 @@ public class FriendService {
         try{
             return webClient.get()
                     .uri(jwtRequest.getDomain() + jwtRequest.getRequestUri() + "/users/" + username + "/" + tag)
+                    .header(HttpHeaders.AUTHORIZATION, "Bearer " + jwtRequest.getToken())
                     .retrieve()
                     .onStatus(HttpStatusCode::isError, GlobalWebClientExceptionHandler::handleResponse)
                     .bodyToMono(FriendDTO.class)
@@ -38,13 +40,14 @@ public class FriendService {
         }
     }
 
-    public List<FriendDTO> getAllFriends() {
+    public List<FriendContactDTO> getAllFriends() {
         try {
             return webClient.get()
                     .uri(jwtRequest.getDomain() + jwtRequest.getRequestUri() + "/users/friend/all")
+                    .header(HttpHeaders.AUTHORIZATION, "Bearer " + jwtRequest.getToken())
                     .retrieve()
                     .onStatus(HttpStatusCode::isError, GlobalWebClientExceptionHandler::handleResponse)
-                    .bodyToMono(new ParameterizedTypeReference<List<FriendDTO>>() {})
+                    .bodyToMono(new ParameterizedTypeReference<List<FriendContactDTO>>() {})
                     .block();
         } catch (RuntimeException e) {
             throw new RuntimeException(e.getMessage());

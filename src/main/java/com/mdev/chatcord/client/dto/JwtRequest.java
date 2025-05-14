@@ -16,5 +16,6 @@ public class JwtRequest{
     private String authUri = "/api/auth";
     private String requestUri = "/api/request";
     private UserDTO userDTO;
+    private String token;
 
 }

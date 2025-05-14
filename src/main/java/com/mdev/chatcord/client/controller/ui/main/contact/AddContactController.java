@@ -46,6 +46,8 @@ public class AddContactController extends DragWindow implements UIErrorHandler {
 
     private VBox contactList;
 
+    private Runnable onReload;
+
     private Runnable onClose;
 
     @FXML
@@ -77,22 +79,20 @@ public class AddContactController extends DragWindow implements UIErrorHandler {
             errorLabel.setText(e.getMessage());
         }
 
-        if (friendDTO != null){
-            FXMLLoader contactLoader = springFXMLLoader.getLoader("/view/main-layout/contact-view.fxml");
-            Parent newContact;
-            try {
-                newContact = contactLoader.load();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-            ContactController contactController = contactLoader.getController();
+        onReload.run();
+//        if (friendDTO != null){
+//            FXMLLoader contactLoader = springFXMLLoader.getLoader("/view/main-layout/contact-view.fxml");
+//            Parent newContact;
+//            try {
+//                newContact = contactLoader.load();
+//            } catch (IOException e) {
+//                throw new RuntimeException(e);
+//            }
+//            ContactController contactController = contactLoader.getController();
+//
+//            contactController.setData(friendDTO.getFriendName(), null, convertToHourTime(System.currentTimeMillis()),
+//                    0, friendDTO.getFriendPfp());
 
-            contactController.setData(friendDTO.getFriendName(), null, convertToHourTime(System.currentTimeMillis()),
-                    0, friendDTO.getFriendPfp());
-
-            newContact.setOnMouseClicked(e -> loadChat(friendDTO.getFriendName() + finalFriendDTO.getTag()));
-            contactList.getChildren().add(newContact);
-        }
     }
 
     public void onCancel(ActionEvent e) {
