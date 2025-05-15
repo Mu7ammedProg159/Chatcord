@@ -1,5 +1,7 @@
 package com.mdev.chatcord.client.controller.ui.main.contact;
 
+import com.mdev.chatcord.client.enums.EFriendStatus;
+import com.mdev.chatcord.client.implementation.UIHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -7,19 +9,43 @@ import javafx.scene.image.ImageView;
 import org.springframework.stereotype.Component;
 
 @Component
-public class ContactController {
+public class ContactController implements UIHandler {
     @FXML private ImageView contactImage;
     @FXML private Label chatName;
     @FXML private Label lastChatMessage;
     @FXML private Label timestamp;
     @FXML private Label unseenMessagesCounter;
+    @FXML private Label friendStatus;
 
-    public void setData(String name, String lastMessage, String time, int unseenCount, String contactImageURL) {
+    public void setData(String name, String lastMessage, String time, int unseenCount, String contactImageURL, EFriendStatus status) {
         chatName.setText(name);
-        if (!lastMessage.isEmpty())
+        if (lastMessage != null)
             lastChatMessage.setText(lastMessage);
-        else
-            lastChatMessage.setText("No messages sent yet.");
+        else{
+            setVisibility(false, lastChatMessage);
+            //lastChatMessage.setText("No messages sent yet.");
+            setVisibility(true, friendStatus);
+        }
+
+        switch (status){
+            case ACCEPTED -> {
+                friendStatus.setText(status.name());
+                friendStatus.getStyleClass().setAll("acceptedFriendStatus");
+            }
+            case PENDING -> {
+                friendStatus.setText(status.name());
+                friendStatus.getStyleClass().setAll("pendingFriendStatus");
+            }
+            case REQUESTED -> {
+                friendStatus.setText(status.name());
+                friendStatus.getStyleClass().setAll("requestedFriendStatus");
+            }
+            case DECLINED -> {
+                friendStatus.setText(status.name());
+                friendStatus.getStyleClass().setAll("declinedFriendStatus");
+            }
+        }
+
 
         try {
             timestamp.setText(time);

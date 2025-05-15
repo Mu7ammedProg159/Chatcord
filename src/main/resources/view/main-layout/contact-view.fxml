@@ -25,8 +25,16 @@
                      <children>
                         <VBox alignment="CENTER_LEFT" spacing="2.0" HBox.hgrow="ALWAYS">
                            <children>
-                              <Label fx:id="chatName" alignment="TOP_CENTER" style="-fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14;" text="Username" textAlignment="CENTER" VBox.vgrow="ALWAYS" />
+                              <Label fx:id="chatName" alignment="TOP_CENTER" style="-fx-text-fill: #dddddd; -fx-font-weight: bold; -fx-font-size: 14;" text="Username" textAlignment="CENTER" textFill="#dddddd" VBox.vgrow="ALWAYS" />
                               <Label fx:id="lastChatMessage" alignment="CENTER" disable="true" minHeight="24.0" text="No messages yet " textFill="#9e9d9d" wrapText="true" VBox.vgrow="ALWAYS" />
+                              <Label fx:id="friendStatus" alignment="CENTER" layoutX="10.0" layoutY="37.0" managed="false" prefHeight="27.0" prefWidth="83.0" styleClass="pendingFriendStatus" stylesheets="@../css/friend-status.css" text="PENDING" textFill="WHITE" visible="false" wrapText="true">
+                                 <padding>
+                                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                 </padding>
+                                 <font>
+                                    <Font name="System Bold" size="12.0" />
+                                 </font>
+                              </Label>
                            </children>
                            <HBox.margin>
                               <Insets />

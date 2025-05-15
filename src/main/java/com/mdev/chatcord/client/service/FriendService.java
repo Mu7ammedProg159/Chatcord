@@ -67,4 +67,18 @@ public class FriendService {
             throw new RuntimeException(e.getMessage());
         }
     }
+
+    public List<FriendContactDTO> getAllPendingFriends() {
+        try {
+            return webClient.get()
+                    .uri(jwtRequest.getDomain() + jwtRequest.getFriendUri() + "/pending/all")
+                    .header(HttpHeaders.AUTHORIZATION, "Bearer " + jwtRequest.getToken())
+                    .retrieve()
+                    .onStatus(HttpStatusCode::isError, GlobalWebClientExceptionHandler::handleResponse)
+                    .bodyToMono(new ParameterizedTypeReference<List<FriendContactDTO>>() {})
+                    .block();
+        } catch (RuntimeException e) {
+            throw new RuntimeException(e.getMessage());
+        }
+    }
 }
