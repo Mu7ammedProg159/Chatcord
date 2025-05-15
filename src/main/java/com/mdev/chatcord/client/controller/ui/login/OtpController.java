@@ -75,12 +75,6 @@ public class OtpController extends DragWindow implements EventStageHandler, UIEr
     public void setToEmail(String email){
         toEmail.setText(email);
         startCountdown();
-        try {
-            userService.resendOtp(toEmail.getText());
-        } catch (RuntimeException e){
-            logger.error(e.getMessage());
-        }
-        startCountdown();
     }
 
     @FXML
@@ -118,6 +112,7 @@ public class OtpController extends DragWindow implements EventStageHandler, UIEr
     @FXML
     public void cancelOtp(MouseEvent event){
         if (event.getTarget() == backgroundHBox && onClose != null) {
+            countdownTimer.stop();
             onClose.run();
         }
     }
@@ -136,15 +131,19 @@ public class OtpController extends DragWindow implements EventStageHandler, UIEr
                 secondsRemaining--;
                 resendLink.setText("Resend in: " + secondsRemaining + "s");
 
-                if (secondsRemaining <= 0) {
-                    countdownTimer.stop();
-                    resendLink.setText("Resend"); // or "You can resend now"
-                    resendLink.setDisable(false);
-                    secondsRemaining = 60; // Reset if you want to use again
-                }
-                 else {
-                     resendLink.setDisable(true);
-                }
+            if (secondsRemaining <= 0) {
+                countdownTimer.stop();
+                resendLink.setText("Resend"); // or "You can resend now"
+                resendLink.setDisable(false);
+                secondsRemaining = 60; // Reset if you want to use again
+            }
+             else {
+                 resendLink.setDisable(true);
+            }
+             if (isVerifiedMode)
+                 countdownTimer.stop();
+                resendLink.setText("Help"); // or "You can resend now"
+                resendLink.setDisable(false);
             }));
             countdownTimer.setCycleCount((int) secondsRemaining); // Run it 60 times
             countdownTimer.play();

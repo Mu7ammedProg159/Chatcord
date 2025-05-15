@@ -13,7 +13,7 @@ public class GlobalWebClientExceptionHandler {
             .defaultIfEmpty("No error message provided.")
             .flatMap(errorBody -> {
                 String message = switch (status) {
-                    case UNAUTHORIZED, FORBIDDEN, NOT_FOUND, LOCKED, TOO_MANY_REQUESTS, CONFLICT, BAD_REQUEST, INTERNAL_SERVER_ERROR -> errorBody;
+                    case UNAUTHORIZED, FORBIDDEN, NOT_FOUND, LOCKED, TOO_MANY_REQUESTS, CONFLICT, BAD_REQUEST, INTERNAL_SERVER_ERROR, ALREADY_REPORTED -> errorBody;
                     default -> "Error (" + status.value() + "): " + errorBody;
                 };
                 return Mono.error(new RuntimeException(message));

@@ -29,7 +29,7 @@ public class FriendService {
     public FriendDTO addFriend(String username, String tag){
         try{
             return webClient.get()
-                    .uri(jwtRequest.getDomain() + jwtRequest.getRequestUri() + "/users/" + username + "/" + tag)
+                    .uri(jwtRequest.getDomain() + jwtRequest.getFriendUri() + "/add/" + username + "/" + tag)
                     .header(HttpHeaders.AUTHORIZATION, "Bearer " + jwtRequest.getToken())
                     .retrieve()
                     .onStatus(HttpStatusCode::isError, GlobalWebClientExceptionHandler::handleResponse)
@@ -43,11 +43,25 @@ public class FriendService {
     public List<FriendContactDTO> getAllFriends() {
         try {
             return webClient.get()
-                    .uri(jwtRequest.getDomain() + jwtRequest.getRequestUri() + "/users/friend/all")
+                    .uri(jwtRequest.getDomain() + jwtRequest.getFriendUri() + "/all")
                     .header(HttpHeaders.AUTHORIZATION, "Bearer " + jwtRequest.getToken())
                     .retrieve()
                     .onStatus(HttpStatusCode::isError, GlobalWebClientExceptionHandler::handleResponse)
                     .bodyToMono(new ParameterizedTypeReference<List<FriendContactDTO>>() {})
+                    .block();
+        } catch (RuntimeException e) {
+            throw new RuntimeException(e.getMessage());
+        }
+    }
+
+    public FriendContactDTO getFriend(String username, String tag) {
+        try {
+            return webClient.get()
+                    .uri(jwtRequest.getDomain() + jwtRequest.getFriendUri() + "/" + username + "/" + tag)
+                    .header(HttpHeaders.AUTHORIZATION, "Bearer " + jwtRequest.getToken())
+                    .retrieve()
+                    .onStatus(HttpStatusCode::isError, GlobalWebClientExceptionHandler::handleResponse)
+                    .bodyToMono(FriendContactDTO.class)
                     .block();
         } catch (RuntimeException e) {
             throw new RuntimeException(e.getMessage());

@@ -275,7 +275,7 @@ public class LoginController implements LoadingHandler, UIHandler {
     @Override
     public ThrowingRunnable loadOnSuccess() {
         return () -> {
-            Platform.runLater(() -> submitButton.setText("Login"));
+            Platform.runLater(() -> submitButton.setText("Log In"));
             try {
                 stageInitializer.switchScenes(stage, "/view/main-layout/main-view.fxml", "Chatcord", 1350, 720);
             } catch (Exception e) {

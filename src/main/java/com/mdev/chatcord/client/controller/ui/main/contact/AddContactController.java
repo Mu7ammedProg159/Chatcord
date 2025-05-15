@@ -25,6 +25,8 @@ import org.apache.commons.text.WordUtils;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.util.List;
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 @Component
@@ -46,7 +48,7 @@ public class AddContactController extends DragWindow implements UIErrorHandler {
 
     private VBox contactList;
 
-    private Runnable onReload;
+    private BiConsumer<String, String> onRetrieveContact;
 
     private Runnable onClose;
 
@@ -74,12 +76,13 @@ public class AddContactController extends DragWindow implements UIErrorHandler {
             } else {
                 setVisibility(false, errorLabel);
                 friendDTO = friendService.addFriend(friendUsername, friendTag);
+                onRetrieveContact.accept(friendUsername, friendTag);
             }
         } catch (RuntimeException e){
+            setVisibility(true, errorLabel);
             errorLabel.setText(e.getMessage());
         }
 
-        onReload.run();
 //        if (friendDTO != null){
 //            FXMLLoader contactLoader = springFXMLLoader.getLoader("/view/main-layout/contact-view.fxml");
 //            Parent newContact;

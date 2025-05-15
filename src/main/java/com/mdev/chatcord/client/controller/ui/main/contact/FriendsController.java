@@ -9,6 +9,7 @@ import com.mdev.chatcord.client.implementation.UIHandler;
 import com.mdev.chatcord.client.service.FriendContactDTO;
 import com.mdev.chatcord.client.service.FriendService;
 import com.mdev.chatcord.client.service.UserService;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -55,24 +56,46 @@ public class FriendsController implements TimeUtil, UIErrorHandler {
 
     @FXML
     public void initialize() throws IOException {
-        reloadContacts();
+       reloadContacts();
     }
 
-    public void reloadContacts() throws IOException {
+    public void reloadContacts() {
         List<FriendContactDTO> allFriends = friendService.getAllFriends();
         for (FriendContactDTO friend: allFriends){
             FXMLLoader loader = springFXMLLoader.getLoader("/view/main-layout/contact-view.fxml");
-            Parent root = loader.load();
+            Parent root = null;
+            try {
+                root = loader.load();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
             ContactController controller = loader.getController();
             if (friend.getLastMessageSent() == null)
-                controller.setData(friend.getName(), "PENDING", String.valueOf(friend.getLastMessageSendDate()),
+                controller.setData(friend.getName(), "PENDING", friend.getTag(),
                         0, friend.getProfilePictureURL());
             else
-                controller.setData(friend.getName(), friend.getLastMessageSent(), friend.getLastMessageSent(),
+                controller.setData(friend.getName(), friend.getLastMessageSent(), String.valueOf(friend.getLastMessageSendDate()),
                         0, friend.getProfilePictureURL());
 
             contactsListView.getChildren().add(root);
         }
+    }
+
+    public void getContact(String username, String tag) throws IOException {
+        FXMLLoader loader = springFXMLLoader.getLoader("/view/main-layout/contact-view.fxml");
+        Parent root = loader.load();
+        ContactController controller = loader.getController();
+
+        FriendContactDTO friend = friendService.getFriend(username, tag);
+
+        if (friend.getLastMessageSent() == null)
+            controller.setData(friend.getName(), "PENDING", friend.getTag(),
+                    0, friend.getProfilePictureURL());
+        else
+            controller.setData(friend.getName(), friend.getLastMessageSent(), friend.getLastMessageSent(),
+                    0, friend.getProfilePictureURL());
+
+        contactsListView.getChildren().add(root);
     }
 
     @FXML
@@ -86,9 +109,15 @@ public class FriendsController implements TimeUtil, UIErrorHandler {
 
             mainOverlayPane.getChildren().add(root);
 
-            controller.setOnReload(() -> {
+            controller.setOnRetrieveContact((username, tag) -> {
                 try {
-                    reloadContacts();
+                    Platform.runLater(()->{
+                        try {
+                            getContact(username, tag);
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
+                    });
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }

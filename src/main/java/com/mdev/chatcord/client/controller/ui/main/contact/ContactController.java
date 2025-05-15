@@ -21,7 +21,13 @@ public class ContactController {
         else
             lastChatMessage.setText("No messages sent yet.");
 
-        timestamp.setText(time);
+        try {
+            timestamp.setText(time);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+
         Image img = new Image(getClass().getResource(contactImageURL).toExternalForm());
         contactImage.setImage(img);
 
