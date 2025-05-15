@@ -115,7 +115,7 @@ public class StageInitializer implements ApplicationListener<StageReadyEvent> {
             primaryStage.show();
 
         } catch (IOException e) {
-            throw new RuntimeException("Failed to load: " + fxmlPath, e);
+            throw new RuntimeException(e);
         }
     }
 }

@@ -2,6 +2,7 @@ package com.mdev.chatcord.client.implementation;
 
 import javafx.scene.Node;
 import javafx.scene.control.Labeled;
+import javafx.scene.control.ToggleButton;
 import javafx.scene.effect.Blend;
 import javafx.scene.effect.BlendMode;
 import javafx.scene.effect.ColorInput;
@@ -36,5 +37,31 @@ public interface UIHandler extends UIErrorHandler {
 
     public default void clearTint(ImageView view) {
         view.setEffect(null);
+    }
+
+    public default void bindImageStates(Color normal, Color hover, Color pressed, Color selected, ToggleButton... toggles) {
+        for (ToggleButton toggle : toggles) {
+            Node graphic = toggle.getGraphic();
+            if (!(graphic instanceof ImageView image)) continue;
+
+            // Default state
+            applyTint(image, toggle.isSelected() ? selected : normal);
+
+            toggle.hoverProperty().addListener((obs, oldVal, isHovering) -> {
+                if (!toggle.isPressed() && !toggle.isSelected()) {
+                    applyTint(image, isHovering ? hover : normal);
+                }
+            });
+
+            toggle.pressedProperty().addListener((obs, oldVal, isPressed) -> {
+                if (!toggle.isSelected()) {
+                    applyTint(image, isPressed ? pressed : (toggle.isHover() ? hover : normal));
+                }
+            });
+
+            toggle.selectedProperty().addListener((obs, oldVal, isSelected) -> {
+                applyTint(image, isSelected ? selected : (toggle.isHover() ? hover : normal));
+            });
+        }
     }
 }

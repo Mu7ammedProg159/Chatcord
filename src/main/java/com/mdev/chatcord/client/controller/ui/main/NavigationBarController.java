@@ -13,6 +13,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ToggleButton;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
@@ -38,7 +40,8 @@ import java.io.IOException;
 public class NavigationBarController implements EventStageHandler, UIHandler {
 
     @FXML private VBox navBarContainer, navBarUserContainer;
-    @FXML private Button homeBtn, chatBtn, favBtn, settingsBtn, logoutBtn;
+    @FXML private ToggleButton homeBtn, chatBtn, favBtn, settingsBtn;
+    @FXML private Button logoutBtn;
     @FXML private ImageView avatarImage;
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
@@ -60,40 +63,20 @@ public class NavigationBarController implements EventStageHandler, UIHandler {
 
     @FXML
     public void initialize(){
-        homeBtn.requestFocus();
+
+        ToggleGroup toggleGroup = new ToggleGroup();
+        homeBtn.setToggleGroup(toggleGroup);
+        chatBtn.setToggleGroup(toggleGroup);
+        favBtn.setToggleGroup(toggleGroup);
+        settingsBtn.setToggleGroup(toggleGroup);
+
+        bindImageStates(Color.web("#9F8CB2"), Color.web("#E2D7EC"), Color.web("#E2D7EC"),
+                Color.web("#E2D7EC"), homeBtn, chatBtn, favBtn, settingsBtn);
     }
 
     public void setData(Stage stage, ClientThread clientThread){
         this.stage = stage;
         this.clientThread = clientThread;
-    }
-
-    @FXML
-    public void onNavBarButtonEntered(MouseEvent event){
-        Button btn = (Button) event.getTarget();
-        ImageView imageView = (ImageView) btn.getChildrenUnmodifiable().get(0);
-        applyTint(imageView, Color.web("#E2D7EC"));
-    }
-
-    @FXML
-    public void onNavBarButtonExited(MouseEvent event){
-        Button btn = (Button) event.getTarget();
-        ImageView imageView = (ImageView) btn.getChildrenUnmodifiable().get(0);
-        applyTint(imageView, Color.web("#9F8CB2"));
-    }
-
-    @FXML
-    public void onNavBarButtonPressed(MouseEvent event){
-        Button btn = (Button) event.getTarget();
-        ImageView imageView = (ImageView) btn.getChildrenUnmodifiable().get(0);
-        applyTint(imageView, Color.web("#E2D7EC"));
-    }
-
-    @FXML
-    public void onNavBarButtonFocused(MouseEvent event){
-        Button btn = (Button) event.getTarget();
-        ImageView imageView = (ImageView) btn.getChildrenUnmodifiable().get(0);
-        applyTint(imageView, Color.web("#E2E2E2"));
     }
 
     @FXML
@@ -112,7 +95,6 @@ public class NavigationBarController implements EventStageHandler, UIHandler {
         if (switcher.getChildren().size() > 1)
             switcher.setIndex(2);
     }
-
 
     @FXML
     public void onLogoutClick(ActionEvent event) {

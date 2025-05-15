@@ -14,7 +14,7 @@
     -fx-background-radius: 10px;
 }
 
-.navigationBtn:focused{
+.navigationBtn:selected{
     -fx-background-color: #6884fe;
     -fx-background-radius: 10px;
 }

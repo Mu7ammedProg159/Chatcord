@@ -27,7 +27,6 @@ public class ContactController {
             throw new RuntimeException(e);
         }
 
-
         Image img = new Image(getClass().getResource(contactImageURL).toExternalForm());
         contactImage.setImage(img);
 

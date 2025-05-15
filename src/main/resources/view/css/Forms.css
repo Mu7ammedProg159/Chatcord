@@ -19,6 +19,7 @@
     -fx-border-color: #35383c;
     -fx-border-width: 2px;
     -fx-text-fill: #71baea;
+    -fx-font-size: 14px;
 }
 
 .submitBtn{

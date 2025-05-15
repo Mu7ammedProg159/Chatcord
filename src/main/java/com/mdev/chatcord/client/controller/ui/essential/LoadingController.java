@@ -68,7 +68,8 @@ public class LoadingController implements UIErrorHandler {
                     try {
                         onSucceeded.run();
                     } catch (Exception e) {
-                        logger.error(e.getMessage());
+                        //logger.error(e.getMessage()); //Use this in production. It makes debugging harder.
+                        throw new RuntimeException(e);
                     }
                     loadingAnimation.stop();
                     setLoadingVisibility(false);
@@ -79,7 +80,8 @@ public class LoadingController implements UIErrorHandler {
             protected void failed() {
                 Platform.runLater(() -> {
                     Throwable ex = getException();
-                    logger.error(ex.getMessage());
+                    //logger.error(ex.getMessage()); //Use this in production. It makes debugging harder.
+                    throw new RuntimeException(ex);
                 });
                 loadingAnimation.stop();
                 setLoadingVisibility(false);
