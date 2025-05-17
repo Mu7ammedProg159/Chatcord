@@ -1,12 +1,10 @@
 package com.mdev.chatcord.client.service;
 
 import com.mdev.chatcord.client.dto.FriendDTO;
-import com.mdev.chatcord.client.dto.JwtRequest;
+import com.mdev.chatcord.client.dto.HttpRequest;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatusCode;
@@ -21,7 +19,7 @@ import java.util.List;
 public class FriendService {
 
     private final WebClient webClient = WebClient.create();
-    private final JwtRequest jwtRequest;
+    private final HttpRequest jwtRequest;
 
     @Getter
     private String errorMessage = "";

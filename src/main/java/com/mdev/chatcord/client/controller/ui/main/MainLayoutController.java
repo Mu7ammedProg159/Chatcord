@@ -6,12 +6,10 @@ import com.mdev.chatcord.client.connection.ClientThread;
 import com.mdev.chatcord.client.controller.ui.main.contact.FriendsController;
 import com.mdev.chatcord.client.controller.ui.settings.SettingsController;
 import com.mdev.chatcord.client.enums.EMessageStatus;
-import com.mdev.chatcord.client.dto.JwtRequest;
+import com.mdev.chatcord.client.dto.HttpRequest;
 import com.mdev.chatcord.client.dto.MessageDTO;
 import com.mdev.chatcord.client.implementation.UIHandler;
-import jakarta.annotation.PostConstruct;
 import javafx.application.Platform;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -29,7 +27,6 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.net.*;
-import java.util.List;
 
 @Component
 @RequiredArgsConstructor
@@ -60,7 +57,7 @@ public class MainLayoutController implements UIHandler {
 
     private final StageInitializer stageInitializer;
 
-    private final JwtRequest jwtRequest;
+    private final HttpRequest jwtRequest;
 
     private final SpringFXMLLoader springFXMLLoader;
 
@@ -116,6 +113,8 @@ public class MainLayoutController implements UIHandler {
     private void initializeControllers() {
         chatController.setData(username, tag);
         navigationBarController.setSwitcher(switcher);
+        navigationBarController.getHomeBtn().setSelected(true);
+        navigationBarController.getSwitcher().setIndex(0);
         navigationBarController.setMainOverlayPane(overlayPane);
         friendsController.setMainOverlayPane(overlayPane);
     }

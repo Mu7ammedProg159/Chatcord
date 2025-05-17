@@ -1,6 +1,6 @@
 package com.mdev.chatcord.client.service;
 
-import com.mdev.chatcord.client.dto.JwtRequest;
+import com.mdev.chatcord.client.dto.HttpRequest;
 import com.mdev.chatcord.client.dto.UserDTO;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +18,7 @@ import java.util.Objects;
 public class UserService {
 
     private final WebClient webClient = WebClient.create();
-    private final JwtRequest jwtRequest;
+    private final HttpRequest jwtRequest;
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
 

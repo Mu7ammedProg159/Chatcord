@@ -1,6 +1,6 @@
 package com.mdev.chatcord.client.controller.ui.settings;
 
-import com.mdev.chatcord.client.dto.JwtRequest;
+import com.mdev.chatcord.client.dto.HttpRequest;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Hyperlink;
@@ -35,7 +35,7 @@ public class AccountSettingsController {
     private Label usernameLabel;
 
     @Autowired
-    private JwtRequest jwtRequest;
+    private HttpRequest jwtRequest;
 
     @FXML
     public void initialize(){

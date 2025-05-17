@@ -9,13 +9,13 @@ import org.springframework.stereotype.Component;
 @NoArgsConstructor
 @Getter
 @Setter
-public class JwtRequest{
+public class HttpRequest {
 
     @Value("${chatcord.server.domain.url}")
     private String domain;
     private String authUri = "/api/auth";
     private String requestUri = "/api/request";
-    private String friendUri = "/api/request/users/friend";
+    private String friendUri = requestUri + "/users/friend";
     private UserDTO userDTO;
     private String token;
 

@@ -4,7 +4,7 @@ import com.mdev.chatcord.client.component.SpringFXMLLoader;
 import com.mdev.chatcord.client.component.StageInitializer;
 import com.mdev.chatcord.client.connection.ClientThread;
 import com.mdev.chatcord.client.controller.ui.settings.SettingsController;
-import com.mdev.chatcord.client.dto.JwtRequest;
+import com.mdev.chatcord.client.dto.HttpRequest;
 import com.mdev.chatcord.client.implementation.EventStageHandler;
 import com.mdev.chatcord.client.implementation.ThrowingRunnable;
 import com.mdev.chatcord.client.implementation.UIHandler;
@@ -12,18 +12,14 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 import lombok.*;
 import org.onyxfx.graphics.layout.OFxSwitcher;
 import org.slf4j.Logger;
@@ -59,7 +55,7 @@ public class NavigationBarController implements EventStageHandler, UIHandler {
     private StageInitializer stageInitializer;
 
     @Autowired
-    private JwtRequest jwtRequest;
+    private HttpRequest jwtRequest;
 
     @Getter
     @Setter
@@ -74,8 +70,10 @@ public class NavigationBarController implements EventStageHandler, UIHandler {
         favBtn.setToggleGroup(toggleGroup);
         settingsBtn.setToggleGroup(toggleGroup);
 
+
         bindImageStates(Color.web("#9F8CB2"), Color.web("#E2D7EC"), Color.web("#E2D7EC"),
                 Color.web("#E2D7EC"), homeBtn, chatBtn, favBtn, settingsBtn);
+
     }
 
     public void setData(Stage stage, ClientThread clientThread){
