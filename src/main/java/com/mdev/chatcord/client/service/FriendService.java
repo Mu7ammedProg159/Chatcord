@@ -28,7 +28,7 @@ public class FriendService {
         try{
             return webClient.get()
                     .uri(jwtRequest.getDomain() + jwtRequest.getFriendUri() + "/add/" + username + "/" + tag)
-                    .header(HttpHeaders.AUTHORIZATION, "Bearer " + jwtRequest.getToken())
+                    .header(HttpHeaders.AUTHORIZATION, "Bearer " + jwtRequest.getAccessToken())
                     .retrieve()
                     .onStatus(HttpStatusCode::isError, GlobalWebClientExceptionHandler::handleResponse)
                     .bodyToMono(FriendDTO.class)
@@ -42,7 +42,7 @@ public class FriendService {
         try {
             return webClient.get()
                     .uri(jwtRequest.getDomain() + jwtRequest.getFriendUri() + "/all")
-                    .header(HttpHeaders.AUTHORIZATION, "Bearer " + jwtRequest.getToken())
+                    .header(HttpHeaders.AUTHORIZATION, "Bearer " + jwtRequest.getAccessToken())
                     .retrieve()
                     .onStatus(HttpStatusCode::isError, GlobalWebClientExceptionHandler::handleResponse)
                     .bodyToMono(new ParameterizedTypeReference<List<FriendContactDTO>>() {})
@@ -56,7 +56,7 @@ public class FriendService {
         try {
             return webClient.get()
                     .uri(jwtRequest.getDomain() + jwtRequest.getFriendUri() + "/" + username + "/" + tag)
-                    .header(HttpHeaders.AUTHORIZATION, "Bearer " + jwtRequest.getToken())
+                    .header(HttpHeaders.AUTHORIZATION, "Bearer " + jwtRequest.getAccessToken())
                     .retrieve()
                     .onStatus(HttpStatusCode::isError, GlobalWebClientExceptionHandler::handleResponse)
                     .bodyToMono(FriendContactDTO.class)
@@ -70,7 +70,7 @@ public class FriendService {
         try {
             return webClient.get()
                     .uri(jwtRequest.getDomain() + jwtRequest.getFriendUri() + "/pending/all")
-                    .header(HttpHeaders.AUTHORIZATION, "Bearer " + jwtRequest.getToken())
+                    .header(HttpHeaders.AUTHORIZATION, "Bearer " + jwtRequest.getAccessToken())
                     .retrieve()
                     .onStatus(HttpStatusCode::isError, GlobalWebClientExceptionHandler::handleResponse)
                     .bodyToMono(new ParameterizedTypeReference<List<FriendContactDTO>>() {})

@@ -1,15 +1,19 @@
 package com.mdev.chatcord.client.service;
 
+import com.mdev.chatcord.client.dto.DeviceDto;
 import com.mdev.chatcord.client.dto.HttpRequest;
 import com.mdev.chatcord.client.dto.UserDTO;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -101,24 +105,31 @@ public class UserService {
     public void login(String email, String password) {
 
         try {
-            jwtRequest.setToken(webClient.post()
+            DeviceDto deviceDto = new DeviceDto();
+            var tokens = webClient.post()
                     .uri(jwtRequest.getDomain() + jwtRequest.getAuthUri() + "/login")
                     .contentType(MediaType.APPLICATION_JSON)
-                    .bodyValue(Map.of("email", email, "password", password))
+                    .bodyValue(Map.of("email", email, "password", password, "DeviceInfo", deviceDto))
                     .retrieve()
                     .onStatus(HttpStatusCode::isError, GlobalWebClientExceptionHandler::handleResponse)
-                    .bodyToMono(String.class)
-                    .block());
-        } catch (RuntimeException e) {
+                    .bodyToMono(new ParameterizedTypeReference<List<String>>() {})
+                    .block();
+
+            assert tokens != null;
+            jwtRequest.setRefreshToken(tokens.get(1), deviceDto.getDeviceId());
+            jwtRequest.setAccessToken(tokens.get(0));
+
+        } catch (RuntimeException | IOException e) {
             throw new RuntimeException(e.getMessage());
         }
 
-        logger.info("This is the token for the signed user: " + jwtRequest.getToken());
+        logger.info("Access token for the signed user: " + jwtRequest.getAccessToken());
+        logger.info("Refresh token for the signed user: " + jwtRequest.getRefreshToken());
 
         try{
             jwtRequest.setUserDTO(webClient.get()
                     .uri(jwtRequest.getDomain() + jwtRequest.getRequestUri() + "/users/me")
-                    .header(HttpHeaders.AUTHORIZATION, "Bearer " + jwtRequest.getToken())
+                    .header(HttpHeaders.AUTHORIZATION, "Bearer " + jwtRequest.getAccessToken())
                     .retrieve()
                     .onStatus(HttpStatusCode::isError, GlobalWebClientExceptionHandler::handleResponse)
                     .bodyToMono(UserDTO.class)
