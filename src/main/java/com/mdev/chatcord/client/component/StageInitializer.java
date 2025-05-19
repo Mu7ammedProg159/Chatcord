@@ -2,6 +2,7 @@ package com.mdev.chatcord.client.component;
 
 import com.mdev.chatcord.client.ChatcordApplication.StageReadyEvent;
 import com.mdev.chatcord.client.annotation.aspect.DraggableWindowInitializer;
+import com.mdev.chatcord.client.dto.DeviceDto;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -13,6 +14,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationListener;
@@ -21,8 +23,12 @@ import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
 
 @Component
+@Slf4j
 public class StageInitializer implements ApplicationListener<StageReadyEvent> {
     //@Value("classpath:/view/hello-view.fxml")
     //private Resource helloResource;
@@ -38,10 +44,12 @@ public class StageInitializer implements ApplicationListener<StageReadyEvent> {
 
     private final String applicationTitle;
     private final AnnotationConfigApplicationContext applicationContext;
+    private final DeviceDto deviceDto;
 
-    public StageInitializer(@Value("${spring.application.ui.title}") String applicationTitle, AnnotationConfigApplicationContext applicationContext) {
+    public StageInitializer(@Value("${spring.application.ui.title}") String applicationTitle, AnnotationConfigApplicationContext applicationContext, DeviceDto deviceDto) {
         this.applicationTitle = applicationTitle;
         this.applicationContext = applicationContext;
+        this.deviceDto = deviceDto;
     }
 
     @Override
@@ -72,6 +80,9 @@ public class StageInitializer implements ApplicationListener<StageReadyEvent> {
             scene.setFill(Color.TRANSPARENT); // Make scene background transparent
 
             primaryStage.setScene(scene);
+
+            initializeAccess();
+
             primaryStage.show();
 
         } catch (IOException e) {
@@ -79,7 +90,6 @@ public class StageInitializer implements ApplicationListener<StageReadyEvent> {
         }
 
     }
-
 
     public void switchScenes(Stage currentStage, String fxmlPath, String title, int width, int height) {
         try {
@@ -117,5 +127,9 @@ public class StageInitializer implements ApplicationListener<StageReadyEvent> {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private void initializeAccess() throws IOException {
+
     }
 }

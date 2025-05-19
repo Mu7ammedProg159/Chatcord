@@ -23,6 +23,7 @@ public class UserService {
 
     private final WebClient webClient = WebClient.create();
     private final HttpRequest jwtRequest;
+    private final DeviceDto deviceDto;
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -105,21 +106,21 @@ public class UserService {
     public void login(String email, String password) {
 
         try {
-            DeviceDto deviceDto = new DeviceDto();
             var tokens = webClient.post()
                     .uri(jwtRequest.getDomain() + jwtRequest.getAuthUri() + "/login")
                     .contentType(MediaType.APPLICATION_JSON)
-                    .bodyValue(Map.of("email", email, "password", password, "DeviceInfo", deviceDto))
+                    .bodyValue(Map.of("email", email, "password", password, "DeviceDto", deviceDto))
                     .retrieve()
                     .onStatus(HttpStatusCode::isError, GlobalWebClientExceptionHandler::handleResponse)
                     .bodyToMono(new ParameterizedTypeReference<List<String>>() {})
                     .block();
 
             assert tokens != null;
-            jwtRequest.setRefreshToken(tokens.get(1), deviceDto.getDeviceId());
             jwtRequest.setAccessToken(tokens.get(0));
+            jwtRequest.setRefreshToken(tokens.get(1), deviceDto.getDEVICE_ID());
 
         } catch (RuntimeException | IOException e) {
+            logger.error(e.getMessage());
             throw new RuntimeException(e.getMessage());
         }
 
