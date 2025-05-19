@@ -60,6 +60,10 @@ public class HttpRequest {
             throw new IllegalStateException("APPDATA environment variable not found. Are you on Windows?");
         }
 
+        String refreshToken = getRefreshToken();
+        if (refreshToken != null)
+            return;
+
         Path dir = Path.of(appData, "Chatcord", deviceId);
         Path tokenFile = dir.resolve("refresh.key");
 
