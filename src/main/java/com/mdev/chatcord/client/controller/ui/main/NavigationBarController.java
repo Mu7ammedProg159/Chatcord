@@ -107,8 +107,8 @@ public class NavigationBarController implements EventStageHandler, UIHandler {
         //userService.logoutUser(username, tag);
 
         clientThread.close();
-        jwtRequest.setAccessToken(null);
         userService.logout();
+        jwtRequest.setAccessToken(null);
         stageInitializer.switchScenes(getStageActionEvent(event), "/view/login/sign-view.fxml", "Login", 1380, 750);
     }
 

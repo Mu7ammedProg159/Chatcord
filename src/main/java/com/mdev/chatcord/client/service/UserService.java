@@ -2,7 +2,7 @@ package com.mdev.chatcord.client.service;
 
 import com.mdev.chatcord.client.dto.DeviceDto;
 import com.mdev.chatcord.client.dto.HttpRequest;
-import com.mdev.chatcord.client.dto.UserDTO;
+import com.mdev.chatcord.client.dto.Profile;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.UUID;
 
 @RequiredArgsConstructor
 @Service
@@ -105,9 +106,9 @@ public class UserService {
     }
 
     public void login(String email, String password) {
-
+        List<String> response = null;
         try {
-            var response = webClient.post()
+            response = webClient.post()
                     .uri(jwtRequest.getDomain() + jwtRequest.getAuthUri() + "/login")
                     .contentType(MediaType.APPLICATION_JSON)
                     .header("User-Agent", deviceDto.getOS())
@@ -120,18 +121,10 @@ public class UserService {
             assert response != null;
             jwtRequest.setAccessToken(response.get(0));
 
-            jwtRequest.setUUID(response.get(2));
-
-            if (response.get(1) != null)
-                jwtRequest.setRefreshToken(response.get(1), deviceDto.getDEVICE_ID(), jwtRequest.getUUID());
-
-        } catch (RuntimeException | IOException e) {
+        } catch (RuntimeException e) {
             logger.error(e.getMessage());
             throw new RuntimeException(e.getMessage());
         }
-
-        logger.info("Access token for the signed user: " + jwtRequest.getAccessToken());
-        logger.info("Refresh token for the signed user: " + jwtRequest.getRefreshToken());
 
         try{
             jwtRequest.setUserDTO(webClient.get()
@@ -139,10 +132,13 @@ public class UserService {
                     .header(HttpHeaders.AUTHORIZATION, "Bearer " + jwtRequest.getAccessToken())
                     .retrieve()
                     .onStatus(HttpStatusCode::isError, GlobalWebClientExceptionHandler::handleResponse)
-                    .bodyToMono(UserDTO.class)
+                    .bodyToMono(Profile.class)
                     .block());
 
-        } catch (RuntimeException e){
+            if (response.get(1) != null)
+                jwtRequest.setRefreshToken(response.get(1), deviceDto.getDEVICE_ID(), String.valueOf(jwtRequest.getUserDTO().getUuid()));
+
+        } catch (RuntimeException | IOException e){
             throw new RuntimeException(e.getMessage());
         }
     }
@@ -150,16 +146,17 @@ public class UserService {
     public void logout(){
         try {
             String response = webClient.post()
-                    .uri(jwtRequest.getDomain() + jwtRequest.getAuthUri() + "/logout")
+                    .uri(jwtRequest.getDomain() + jwtRequest.getAuthUri() + "/logout?deviceId=" + deviceDto.getDEVICE_ID())
                     .header(HttpHeaders.AUTHORIZATION, "Bearer " + jwtRequest.getAccessToken())
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .bodyValue(Map.of("deviceId", deviceDto.getDEVICE_ID()))
+                    .bodyValue(Map.of("DEVICE_ID", deviceDto.getDEVICE_ID()))
                     .retrieve()
                     .onStatus(HttpStatusCode::isError, GlobalWebClientExceptionHandler::handleResponse)
                     .bodyToMono(String.class)
                     .block();
 
-            jwtRequest.deleteRefreshKeyFile(deviceDto.getDEVICE_ID(), jwtRequest.getUUID());
+            jwtRequest.deleteRefreshKeyFile(deviceDto.getDEVICE_ID(), String.valueOf(jwtRequest.getUserDTO().getUuid()));
+
+            logger.info(response);
         } catch (RuntimeException e) {
             logger.info(e.getMessage());
             throw new RuntimeException(e.getMessage());

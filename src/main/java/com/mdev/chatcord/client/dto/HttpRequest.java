@@ -24,10 +24,9 @@ public class HttpRequest {
     private String authUri = "/api/auth";
     private String requestUri = "/api/request";
     private String friendUri = requestUri + "/users/friend";
-    private UserDTO userDTO;
+    private Profile userDTO;
     private String accessToken;
     private String refreshToken;
-    private String UUID;
 
     @Autowired
     private DeviceDto deviceDto;
@@ -38,8 +37,8 @@ public class HttpRequest {
             throw new IllegalStateException("APPDATA environment variable not found. Are you on Windows?");
         }
 
-        Path dir = Path.of(appData, "Chatcord", deviceDto.getDEVICE_ID());
-        Path tokenFile = dir.resolve("refresh.key");
+        Path dir = Path.of(appData, "Chatcord", String.valueOf(this.userDTO.getUuid()));
+        Path tokenFile = dir.resolve(deviceDto.getDEVICE_ID() + "-refresh.key");
 
         if (tokenFile.toFile().exists()) {
             String refreshToken = null;
@@ -65,8 +64,8 @@ public class HttpRequest {
         if (refreshToken != null)
             return;
 
-        Path dir = Path.of(appData, "Chatcord", deviceId);
-        Path tokenFile = dir.resolve(uuid + "-refresh.key");
+        Path dir = Path.of(appData, "Chatcord", uuid);
+        Path tokenFile = dir.resolve(deviceId + "-refresh.key");
 
         // Create directories if needed
         Files.createDirectories(dir);
@@ -85,11 +84,9 @@ public class HttpRequest {
         }
 
         String refreshToken = getRefreshToken();
-        if (refreshToken != null)
-            return;
 
-        Path dir = Path.of(appData, "Chatcord", deviceId);
-        Path tokenFile = dir.resolve(uuid + "-refresh.key");
+        Path dir = Path.of(appData, "Chatcord", uuid);
+        Path tokenFile = dir.resolve(deviceId + "-refresh.key");
 
         try {
             Files.delete(tokenFile);
