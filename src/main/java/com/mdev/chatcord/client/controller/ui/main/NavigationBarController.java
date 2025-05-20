@@ -8,6 +8,7 @@ import com.mdev.chatcord.client.dto.HttpRequest;
 import com.mdev.chatcord.client.implementation.EventStageHandler;
 import com.mdev.chatcord.client.implementation.ThrowingRunnable;
 import com.mdev.chatcord.client.implementation.UIHandler;
+import com.mdev.chatcord.client.service.UserService;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -47,6 +48,9 @@ public class NavigationBarController implements EventStageHandler, UIHandler {
     private Stage stage;
     private ClientThread clientThread;
     private StackPane mainOverlayPane;
+
+    @Autowired
+    private UserService userService;
 
     @Autowired
     private SpringFXMLLoader springFXMLLoader;
@@ -104,6 +108,7 @@ public class NavigationBarController implements EventStageHandler, UIHandler {
 
         clientThread.close();
         jwtRequest.setAccessToken(null);
+        userService.logout();
         stageInitializer.switchScenes(getStageActionEvent(event), "/view/login/sign-view.fxml", "Login", 1380, 750);
     }
 

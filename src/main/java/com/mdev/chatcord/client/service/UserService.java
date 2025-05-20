@@ -107,7 +107,7 @@ public class UserService {
     public void login(String email, String password) {
 
         try {
-            var tokens = webClient.post()
+            var response = webClient.post()
                     .uri(jwtRequest.getDomain() + jwtRequest.getAuthUri() + "/login")
                     .contentType(MediaType.APPLICATION_JSON)
                     .header("User-Agent", deviceDto.getOS())
@@ -117,11 +117,13 @@ public class UserService {
                     .bodyToMono(new ParameterizedTypeReference<List<String>>() {})
                     .block();
 
-            assert tokens != null;
-            jwtRequest.setAccessToken(tokens.get(0));
+            assert response != null;
+            jwtRequest.setAccessToken(response.get(0));
 
-            if (tokens.get(1) != null)
-                jwtRequest.setRefreshToken(tokens.get(1), deviceDto.getDEVICE_ID());
+            jwtRequest.setUUID(response.get(2));
+
+            if (response.get(1) != null)
+                jwtRequest.setRefreshToken(response.get(1), deviceDto.getDEVICE_ID(), jwtRequest.getUUID());
 
         } catch (RuntimeException | IOException e) {
             logger.error(e.getMessage());
@@ -141,6 +143,25 @@ public class UserService {
                     .block());
 
         } catch (RuntimeException e){
+            throw new RuntimeException(e.getMessage());
+        }
+    }
+
+    public void logout(){
+        try {
+            String response = webClient.post()
+                    .uri(jwtRequest.getDomain() + jwtRequest.getAuthUri() + "/logout")
+                    .header(HttpHeaders.AUTHORIZATION, "Bearer " + jwtRequest.getAccessToken())
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .bodyValue(Map.of("deviceId", deviceDto.getDEVICE_ID()))
+                    .retrieve()
+                    .onStatus(HttpStatusCode::isError, GlobalWebClientExceptionHandler::handleResponse)
+                    .bodyToMono(String.class)
+                    .block();
+
+            jwtRequest.deleteRefreshKeyFile(deviceDto.getDEVICE_ID(), jwtRequest.getUUID());
+        } catch (RuntimeException e) {
+            logger.info(e.getMessage());
             throw new RuntimeException(e.getMessage());
         }
     }

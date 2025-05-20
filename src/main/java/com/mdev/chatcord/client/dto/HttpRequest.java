@@ -27,6 +27,7 @@ public class HttpRequest {
     private UserDTO userDTO;
     private String accessToken;
     private String refreshToken;
+    private String UUID;
 
     @Autowired
     private DeviceDto deviceDto;
@@ -53,7 +54,7 @@ public class HttpRequest {
         return null;
     }
 
-    public void setRefreshToken(String token, String deviceId) throws IOException {
+    public void setRefreshToken(String token, String deviceId, String uuid) throws IOException {
         // Build path: %APPDATA%/Chatcord/<uuid>/refresh.key
         String appData = System.getenv("APPDATA"); // This resolves to AppData/Roaming on Windows
         if (appData == null) {
@@ -65,7 +66,7 @@ public class HttpRequest {
             return;
 
         Path dir = Path.of(appData, "Chatcord", deviceId);
-        Path tokenFile = dir.resolve("refresh.key");
+        Path tokenFile = dir.resolve(uuid + "-refresh.key");
 
         // Create directories if needed
         Files.createDirectories(dir);
@@ -74,5 +75,27 @@ public class HttpRequest {
         Files.writeString(tokenFile, token, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
 
         log.info("Refresh token saved to: {}", tokenFile);
+    }
+
+    public void deleteRefreshKeyFile(String deviceId, String uuid){
+        // Build path: %APPDATA%/Chatcord/<uuid>/refresh.key
+        String appData = System.getenv("APPDATA"); // This resolves to AppData/Roaming on Windows
+        if (appData == null) {
+            throw new IllegalStateException("APPDATA environment variable not found. Are you on Windows?");
+        }
+
+        String refreshToken = getRefreshToken();
+        if (refreshToken != null)
+            return;
+
+        Path dir = Path.of(appData, "Chatcord", deviceId);
+        Path tokenFile = dir.resolve(uuid + "-refresh.key");
+
+        try {
+            Files.delete(tokenFile);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        log.info("Refresh token has been deleted from: {}", tokenFile);
     }
 }

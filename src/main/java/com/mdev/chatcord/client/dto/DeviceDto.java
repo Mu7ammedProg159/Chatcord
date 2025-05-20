@@ -20,15 +20,12 @@ public class DeviceDto {
     private String DEVICE_NAME;
     private String OS;
     private String OS_VERSION;
-    private String LOCAL_IP_ADDRESS;
 
     public DeviceDto() {
         try {
             this.DEVICE_NAME = InetAddress.getLocalHost().getHostName();
-            this.LOCAL_IP_ADDRESS = InetAddress.getLocalHost().getHostAddress();
         } catch (UnknownHostException e) {
             this.DEVICE_NAME = "UNAVAILABLE";
-            this.LOCAL_IP_ADDRESS = "UNAVAILABLE";
             log.error(e.getMessage());
         }
         this.OS = System.getProperty("os.name");
