@@ -63,6 +63,7 @@ public class UserService {
             return message;
 
         } catch (RuntimeException e) {
+            logger.info(e.getMessage());
             throw new RuntimeException(e.getMessage());
         }
     }
@@ -118,7 +119,9 @@ public class UserService {
 
             assert tokens != null;
             jwtRequest.setAccessToken(tokens.get(0));
-            jwtRequest.setRefreshToken(tokens.get(1), deviceDto.getDEVICE_ID());
+
+            if (tokens.get(1) != null)
+                jwtRequest.setRefreshToken(tokens.get(1), deviceDto.getDEVICE_ID());
 
         } catch (RuntimeException | IOException e) {
             logger.error(e.getMessage());
