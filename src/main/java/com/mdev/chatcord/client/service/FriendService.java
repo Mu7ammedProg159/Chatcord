@@ -2,6 +2,7 @@ package com.mdev.chatcord.client.service;
 
 import com.mdev.chatcord.client.dto.FriendDTO;
 import com.mdev.chatcord.client.dto.HttpRequest;
+import com.mdev.chatcord.client.exception.GlobalWebClientExceptionHandler;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

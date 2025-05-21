@@ -112,7 +112,8 @@ public class OtpController extends DragWindow implements EventStageHandler, UIEr
     @FXML
     public void cancelOtp(MouseEvent event){
         if (event.getTarget() == backgroundHBox && onClose != null) {
-            countdownTimer.stop();
+            if (countdownTimer != null)
+                countdownTimer.stop();
             onClose.run();
         }
     }

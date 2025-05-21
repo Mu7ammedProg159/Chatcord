@@ -3,6 +3,7 @@ package com.mdev.chatcord.client.service;
 import com.mdev.chatcord.client.dto.DeviceDto;
 import com.mdev.chatcord.client.dto.HttpRequest;
 import com.mdev.chatcord.client.dto.Profile;
+import com.mdev.chatcord.client.exception.GlobalWebClientExceptionHandler;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -16,7 +17,6 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.UUID;
 
 @RequiredArgsConstructor
 @Service
@@ -54,7 +54,7 @@ public class UserService {
 
         try {
             String message = webClient.post()
-                    .uri(jwtRequest.getDomain() + jwtRequest.getAuthUri() + "/verify-email")
+                    .uri(jwtRequest.getDomain() + jwtRequest.getAuthUri() + "otp/verify-email")
                     .contentType(MediaType.APPLICATION_JSON)
                     .bodyValue(Map.of("email", email, "otp", otp))
                     .retrieve()
@@ -73,7 +73,7 @@ public class UserService {
 
         try {
             String message = webClient.post()
-                    .uri(jwtRequest.getDomain() + jwtRequest.getAuthUri() + "/resend-otp")
+                    .uri(jwtRequest.getDomain() + jwtRequest.getAuthUri() + "otp/resend-otp")
                     .contentType(MediaType.APPLICATION_JSON)
                     .bodyValue(Map.of("email", email))
                     .retrieve()
@@ -91,7 +91,7 @@ public class UserService {
 
         try {
             long message = Long.parseLong(Objects.requireNonNull(webClient.post()
-                    .uri(jwtRequest.getDomain() + jwtRequest.getAuthUri() + "/retry-otp-send")
+                    .uri(jwtRequest.getDomain() + jwtRequest.getAuthUri() + "otp/retry-otp-send")
                     .contentType(MediaType.APPLICATION_JSON)
                     .bodyValue(Map.of("email", email))
                     .retrieve()
