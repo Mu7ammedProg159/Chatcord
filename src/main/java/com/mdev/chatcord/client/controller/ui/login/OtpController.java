@@ -1,6 +1,7 @@
 package com.mdev.chatcord.client.controller.ui.login;
 
 import com.mdev.chatcord.client.component.DragWindow;
+import com.mdev.chatcord.client.exception.BusinessException;
 import com.mdev.chatcord.client.implementation.EventStageHandler;
 import com.mdev.chatcord.client.implementation.UIErrorHandler;
 import com.mdev.chatcord.client.service.UserService;
@@ -92,7 +93,7 @@ public class OtpController extends DragWindow implements EventStageHandler, UIEr
             userService.verify(email, otp);
             logger.info("Now I should do /verify-email Webclient"); // move to next field
             switchToVerified();
-        } catch (RuntimeException e) {
+        } catch (BusinessException e) {
             setError(null, null, num0, num1, num2, num3, num4, num5);
             logger.info(e.getMessage());
         }
@@ -103,7 +104,7 @@ public class OtpController extends DragWindow implements EventStageHandler, UIEr
         num0.requestFocus();
         try {
             userService.resendOtp(toEmail.getText());
-        } catch (RuntimeException e){
+        } catch (BusinessException e){
             logger.error(e.getMessage());
         }
         startCountdown();
@@ -122,7 +123,7 @@ public class OtpController extends DragWindow implements EventStageHandler, UIEr
         try{
             secondsRemaining = userService.canResendOtp(toEmail.getText());
 
-        } catch (RuntimeException e){
+        } catch (BusinessException e){
             logger.error(e.getMessage());
         }
 

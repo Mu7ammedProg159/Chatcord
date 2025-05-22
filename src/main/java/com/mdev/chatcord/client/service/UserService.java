@@ -3,6 +3,7 @@ package com.mdev.chatcord.client.service;
 import com.mdev.chatcord.client.dto.DeviceDto;
 import com.mdev.chatcord.client.dto.HttpRequest;
 import com.mdev.chatcord.client.dto.Profile;
+import com.mdev.chatcord.client.exception.BusinessException;
 import com.mdev.chatcord.client.exception.GlobalWebClientExceptionHandler;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -44,8 +45,8 @@ public class UserService {
                     .block();
             return message;
 
-        } catch (RuntimeException e) {
-            throw new RuntimeException(e.getMessage());
+        } catch (BusinessException e) {
+            throw new BusinessException(e.getErrorCode(), e.getMessage());
         }
 
     }
@@ -63,9 +64,9 @@ public class UserService {
                     .block();
             return message;
 
-        } catch (RuntimeException e) {
+        } catch (BusinessException e) {
             logger.info(e.getMessage());
-            throw new RuntimeException(e.getMessage());
+            throw new BusinessException(e.getErrorCode(), e.getMessage());
         }
     }
 
@@ -82,8 +83,8 @@ public class UserService {
                     .block();
             return message;
 
-        } catch (RuntimeException e) {
-            throw new RuntimeException(e.getMessage());
+        } catch (BusinessException e) {
+            throw new BusinessException(e.getErrorCode(), e.getMessage());
         }
     }
 
@@ -100,8 +101,8 @@ public class UserService {
                     .block()));
             return message;
 
-        } catch (RuntimeException e) {
-            throw new RuntimeException(e.getMessage());
+        } catch (BusinessException e) {
+            throw new BusinessException(e.getErrorCode(), e.getMessage());
         }
     }
 
@@ -121,9 +122,9 @@ public class UserService {
             assert response != null;
             jwtRequest.setAccessToken(response.get(0));
 
-        } catch (RuntimeException e) {
+        } catch (BusinessException e) {
             logger.error(e.getMessage());
-            throw new RuntimeException(e.getMessage());
+            throw new BusinessException(e.getErrorCode(), e.getMessage());
         }
 
         try{
@@ -138,8 +139,12 @@ public class UserService {
             if (response.get(1) != null)
                 jwtRequest.setRefreshToken(response.get(1), deviceDto.getDEVICE_ID(), String.valueOf(jwtRequest.getUserDTO().getUuid()));
 
-        } catch (RuntimeException | IOException e){
-            throw new RuntimeException(e.getMessage());
+        } catch (BusinessException e){
+            logger.info(e.getMessage());
+            throw new BusinessException(e.getErrorCode(), e.getMessage());
+        } catch (IOException exception){
+            logger.info(exception.getMessage());
+            throw new RuntimeException(exception.getMessage());
         }
     }
 
@@ -157,9 +162,9 @@ public class UserService {
             jwtRequest.deleteRefreshKeyFile(deviceDto.getDEVICE_ID(), String.valueOf(jwtRequest.getUserDTO().getUuid()));
 
             logger.info(response);
-        } catch (RuntimeException e) {
+        } catch (BusinessException e) {
             logger.info(e.getMessage());
-            throw new RuntimeException(e.getMessage());
+            throw new BusinessException(e.getErrorCode(), e.getMessage());
         }
     }
 }

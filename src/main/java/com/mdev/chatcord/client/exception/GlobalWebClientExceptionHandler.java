@@ -8,8 +8,6 @@ public class GlobalWebClientExceptionHandler {
 
     public static Mono<? extends Throwable> handleResponse(ClientResponse response) {
                 return response.bodyToMono(BackendExceptionResponse.class)
-                        .map(error ->
-                                new BusinessException(error.getErrorCode(),
-                                        error.getErrorMessage()));
+                        .map(error -> new BusinessException(error.getErrorCode(), error.getErrorMessage()));
     }
 }

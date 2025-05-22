@@ -3,6 +3,7 @@ package com.mdev.chatcord.client.controller.ui.login;
 import com.mdev.chatcord.client.component.SpringFXMLLoader;
 import com.mdev.chatcord.client.component.StageInitializer;
 import com.mdev.chatcord.client.controller.ui.essential.LoadingController;
+import com.mdev.chatcord.client.exception.BusinessException;
 import com.mdev.chatcord.client.implementation.LoadingHandler;
 import com.mdev.chatcord.client.implementation.ThrowingRunnable;
 import com.mdev.chatcord.client.enums.ELoginStatus;
@@ -253,14 +254,14 @@ public class LoginController implements LoadingHandler, UIHandler {
             Platform.runLater(() -> submitButton.setText(""));
             try {
                 userService.login(email, password);
-            } catch (RuntimeException e) {
+            } catch (BusinessException e) {
                 Platform.runLater(() -> {
                     emailLabel.setText(labelString[0] + " – " + e.getMessage());
                     passwordLabel.setText(labelString[1] + " – " + e.getMessage());
                     submitButton.setText("Login");
                     changeLoginStatus(ELoginStatus.ERROR);
 
-                    if (e.getMessage().equalsIgnoreCase("Please verify your email address to login.")) {
+                    if (e.getErrorCode().equalsIgnoreCase("1005")) {
                         try {
                             loadOtpWindow(email);
                         } catch (IOException ex) {
