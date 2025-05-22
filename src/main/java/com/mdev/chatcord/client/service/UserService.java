@@ -32,17 +32,18 @@ public class UserService {
     @Getter
     private String errorMessage = "";
 
-    public String register(String email, String password, String username){
+    public String register(String email, String password, String username) {
 
         try {
-            String message = webClient.post()
-                    .uri(jwtRequest.getDomain() + jwtRequest.getAuthUri() + "/register")
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .bodyValue(Map.of("email", email, "password", password, "username", username))
-                    .retrieve()
-                    .onStatus(HttpStatusCode::isError, GlobalWebClientExceptionHandler::handleResponse)
-                    .bodyToMono(String.class)
-                    .block();
+            String message = GlobalWebClientExceptionHandler.wrapWithFallback(() ->
+                    webClient.post()
+                            .uri(jwtRequest.getDomain() + jwtRequest.getAuthUri() + "/register")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .bodyValue(Map.of("email", email, "password", password, "username", username))
+                            .retrieve()
+                            .onStatus(HttpStatusCode::isError, GlobalWebClientExceptionHandler::handleResponse)
+                            .bodyToMono(String.class)
+                            .block());
             return message;
 
         } catch (BusinessException e) {
@@ -51,17 +52,18 @@ public class UserService {
 
     }
 
-    public String verify(String email, String otp){
+    public String verify(String email, String otp) {
 
         try {
-            String message = webClient.post()
-                    .uri(jwtRequest.getDomain() + jwtRequest.getAuthUri() + "otp/verify-email")
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .bodyValue(Map.of("email", email, "otp", otp))
-                    .retrieve()
-                    .onStatus(HttpStatusCode::isError, GlobalWebClientExceptionHandler::handleResponse)
-                    .bodyToMono(String.class)
-                    .block();
+            String message = GlobalWebClientExceptionHandler.wrapWithFallback(() ->
+                    webClient.post()
+                            .uri(jwtRequest.getDomain() + jwtRequest.getAuthUri() + "/email/verify")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .bodyValue(Map.of("email", email, "otp", otp))
+                            .retrieve()
+                            .onStatus(HttpStatusCode::isError, GlobalWebClientExceptionHandler::handleResponse)
+                            .bodyToMono(String.class)
+                            .block());
             return message;
 
         } catch (BusinessException e) {
@@ -70,17 +72,18 @@ public class UserService {
         }
     }
 
-    public String resendOtp(String email){
+    public String resendOtp(String email) {
 
         try {
-            String message = webClient.post()
-                    .uri(jwtRequest.getDomain() + jwtRequest.getAuthUri() + "otp/resend-otp")
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .bodyValue(Map.of("email", email))
-                    .retrieve()
-                    .onStatus(HttpStatusCode::isError, GlobalWebClientExceptionHandler::handleResponse)
-                    .bodyToMono(String.class)
-                    .block();
+            String message = GlobalWebClientExceptionHandler.wrapWithFallback(() ->
+                    webClient.post()
+                            .uri(jwtRequest.getDomain() + jwtRequest.getAuthUri() + "/otp/resend-otp")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .bodyValue(Map.of("email", email))
+                            .retrieve()
+                            .onStatus(HttpStatusCode::isError, GlobalWebClientExceptionHandler::handleResponse)
+                            .bodyToMono(String.class)
+                            .block());
             return message;
 
         } catch (BusinessException e) {
@@ -88,17 +91,18 @@ public class UserService {
         }
     }
 
-    public long canResendOtp(String email){
+    public long canResendOtp(String email) {
 
         try {
-            long message = Long.parseLong(Objects.requireNonNull(webClient.post()
-                    .uri(jwtRequest.getDomain() + jwtRequest.getAuthUri() + "otp/retry-otp-send")
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .bodyValue(Map.of("email", email))
-                    .retrieve()
-                    .onStatus(HttpStatusCode::isError, GlobalWebClientExceptionHandler::handleResponse)
-                    .bodyToMono(String.class)
-                    .block()));
+            long message = Long.parseLong(Objects.requireNonNull(GlobalWebClientExceptionHandler.wrapWithFallback(() ->
+                    webClient.post()
+                            .uri(jwtRequest.getDomain() + jwtRequest.getAuthUri() + "/otp/retry-otp-send")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .bodyValue(Map.of("email", email))
+                            .retrieve()
+                            .onStatus(HttpStatusCode::isError, GlobalWebClientExceptionHandler::handleResponse)
+                            .bodyToMono(String.class)
+                            .block())));
             return message;
 
         } catch (BusinessException e) {
@@ -109,15 +113,17 @@ public class UserService {
     public void login(String email, String password) {
         List<String> response = null;
         try {
-            response = webClient.post()
-                    .uri(jwtRequest.getDomain() + jwtRequest.getAuthUri() + "/login")
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .header("User-Agent", deviceDto.getOS())
-                    .bodyValue(Map.of("email", email, "password", password, "deviceDto", deviceDto))
-                    .retrieve()
-                    .onStatus(HttpStatusCode::isError, GlobalWebClientExceptionHandler::handleResponse)
-                    .bodyToMono(new ParameterizedTypeReference<List<String>>() {})
-                    .block();
+            response = GlobalWebClientExceptionHandler.wrapWithFallback(() ->
+                    webClient.post()
+                            .uri(jwtRequest.getDomain() + jwtRequest.getAuthUri() + "/login")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .header("User-Agent", deviceDto.getOS())
+                            .bodyValue(Map.of("email", email, "password", password, "deviceDto", deviceDto))
+                            .retrieve()
+                            .onStatus(HttpStatusCode::isError, GlobalWebClientExceptionHandler::handleResponse)
+                            .bodyToMono(new ParameterizedTypeReference<List<String>>() {
+                            })
+                            .block());
 
             assert response != null;
             jwtRequest.setAccessToken(response.get(0));
@@ -127,37 +133,39 @@ public class UserService {
             throw new BusinessException(e.getErrorCode(), e.getMessage());
         }
 
-        try{
-            jwtRequest.setUserDTO(webClient.get()
-                    .uri(jwtRequest.getDomain() + jwtRequest.getRequestUri() + "/users/me")
-                    .header(HttpHeaders.AUTHORIZATION, "Bearer " + jwtRequest.getAccessToken())
-                    .retrieve()
-                    .onStatus(HttpStatusCode::isError, GlobalWebClientExceptionHandler::handleResponse)
-                    .bodyToMono(Profile.class)
-                    .block());
+        try {
+            jwtRequest.setUserDTO(GlobalWebClientExceptionHandler.wrapWithFallback(() ->
+                    webClient.get()
+                            .uri(jwtRequest.getDomain() + jwtRequest.getRequestUri() + "/users/me")
+                            .header(HttpHeaders.AUTHORIZATION, "Bearer " + jwtRequest.getAccessToken())
+                            .retrieve()
+                            .onStatus(HttpStatusCode::isError, GlobalWebClientExceptionHandler::handleResponse)
+                            .bodyToMono(Profile.class)
+                            .block()));
 
             if (response.get(1) != null)
                 jwtRequest.setRefreshToken(response.get(1), deviceDto.getDEVICE_ID(), String.valueOf(jwtRequest.getUserDTO().getUuid()));
 
-        } catch (BusinessException e){
+        } catch (BusinessException e) {
             logger.info(e.getMessage());
             throw new BusinessException(e.getErrorCode(), e.getMessage());
-        } catch (IOException exception){
+        } catch (IOException exception) {
             logger.info(exception.getMessage());
             throw new RuntimeException(exception.getMessage());
         }
     }
 
-    public void logout(){
+    public void logout() {
         try {
-            String response = webClient.post()
-                    .uri(jwtRequest.getDomain() + jwtRequest.getAuthUri() + "/logout?deviceId=" + deviceDto.getDEVICE_ID())
-                    .header(HttpHeaders.AUTHORIZATION, "Bearer " + jwtRequest.getAccessToken())
-                    .bodyValue(Map.of("DEVICE_ID", deviceDto.getDEVICE_ID()))
-                    .retrieve()
-                    .onStatus(HttpStatusCode::isError, GlobalWebClientExceptionHandler::handleResponse)
-                    .bodyToMono(String.class)
-                    .block();
+            String response = GlobalWebClientExceptionHandler.wrapWithFallback(() ->
+                    webClient.post()
+                            .uri(jwtRequest.getDomain() + jwtRequest.getAuthUri() + "/logout?deviceId=" + deviceDto.getDEVICE_ID())
+                            .header(HttpHeaders.AUTHORIZATION, "Bearer " + jwtRequest.getAccessToken())
+                            .bodyValue(Map.of("DEVICE_ID", deviceDto.getDEVICE_ID()))
+                            .retrieve()
+                            .onStatus(HttpStatusCode::isError, GlobalWebClientExceptionHandler::handleResponse)
+                            .bodyToMono(String.class)
+                            .block());
 
             jwtRequest.deleteRefreshKeyFile(deviceDto.getDEVICE_ID(), String.valueOf(jwtRequest.getUserDTO().getUuid()));
 
