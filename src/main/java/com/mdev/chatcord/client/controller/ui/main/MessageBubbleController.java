@@ -1,6 +1,6 @@
 package com.mdev.chatcord.client.controller.ui.main;
 
-import com.mdev.chatcord.client.dto.MessageDTO;
+import com.mdev.chatcord.client.dto.chat.MessageDTO;
 import com.mdev.chatcord.client.implementation.TimeUtil;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -10,9 +10,6 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import lombok.Getter;
 import org.springframework.stereotype.Component;
-
-import java.time.*;
-import java.time.format.DateTimeFormatter;
 
 @Component
 public class MessageBubbleController implements TimeUtil {
@@ -31,17 +28,17 @@ public class MessageBubbleController implements TimeUtil {
     private int messageOffset;
 
     public void setData(MessageDTO dto) {
-        username.setText(dto.getUsername());
-        message.setText(dto.getMessage());
+        username.setText(dto.getSender());
+        message.setText(dto.getContent());
         status.setText(String.valueOf(dto.getMessageStatus()));
 
-        boolean isSameSender = dto.getUsername().equals(lastSender);
+        boolean isSameSender = dto.getSender().equals(lastSender);
         boolean isLastMessageExpired = (dto.getTimestamp() - lastMessageTimestamp) > 60_000;
 
         String time = convertToHourTime(dto.getTimestamp());
         timestamp.setText(time);
-        Image img = new Image(getClass().getResource(dto.getProfileImageURL()).toExternalForm());
-        pfp.setImage(img);
+//        Image img = new Image(getClass().getResource(dto.getProfileImageURL()).toExternalForm());
+//        pfp.setImage(img);
 
         /*// Only show PFP if sender changed
         if (!isSameSender || isLastMessageExpired) {

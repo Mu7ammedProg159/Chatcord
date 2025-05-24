@@ -1,22 +1,17 @@
 package com.mdev.chatcord.client.controller.ui.main;
 
 import com.mdev.chatcord.client.connection.ClientThread;
-import com.mdev.chatcord.client.dto.MessageDTO;
+import com.mdev.chatcord.client.dto.chat.MessageDTO;
 import com.mdev.chatcord.client.enums.EMessageStatus;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
-import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import lombok.*;
-import org.onyxfx.graphics.layout.OFxSwitcher;
 import org.springframework.stereotype.Component;
-
-import java.io.IOException;
 
 @Component
 @RequiredArgsConstructor
@@ -44,7 +39,7 @@ public class ChatController {
 
         if (!message.isEmpty()){
 
-            MessageDTO messageDTO = new MessageDTO(username, message, profileImageURL, System.currentTimeMillis(),
+            MessageDTO messageDTO = new MessageDTO(username, message, System.currentTimeMillis(),
                     EMessageStatus.SENT); //Node messageNode = createMessageNode(username, message, pfpImage);
 
             clientThread.sendMessage(messageDTO);

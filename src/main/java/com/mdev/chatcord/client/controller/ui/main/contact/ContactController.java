@@ -1,11 +1,14 @@
 package com.mdev.chatcord.client.controller.ui.main.contact;
 
+import com.mdev.chatcord.client.dto.chat.PrivateChatDTO;
 import com.mdev.chatcord.client.enums.EFriendStatus;
 import com.mdev.chatcord.client.implementation.UIHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -16,6 +19,10 @@ public class ContactController implements UIHandler {
     @FXML private Label timestamp;
     @FXML private Label unseenMessagesCounter;
     @FXML private Label friendStatus;
+
+    @Getter
+    @Setter
+    private PrivateChatDTO privateChatDTO;
 
     public void setData(String name, String lastMessage, String time, int unseenCount, String contactImageURL, EFriendStatus status) {
         chatName.setText(name);

@@ -1,27 +1,19 @@
 package com.mdev.chatcord.client.controller.ui.main.contact;
 
 import com.mdev.chatcord.client.component.SpringFXMLLoader;
-import com.mdev.chatcord.client.controller.ui.main.ChatController;
-import com.mdev.chatcord.client.dto.FriendDTO;
 import com.mdev.chatcord.client.implementation.TimeUtil;
 import com.mdev.chatcord.client.implementation.UIErrorHandler;
-import com.mdev.chatcord.client.implementation.UIHandler;
-import com.mdev.chatcord.client.service.FriendContactDTO;
+import com.mdev.chatcord.client.dto.FriendContactDTO;
 import com.mdev.chatcord.client.service.FriendService;
-import com.mdev.chatcord.client.service.UserService;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
 import lombok.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,10 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Component
 @AllArgsConstructor

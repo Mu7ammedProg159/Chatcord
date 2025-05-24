@@ -3,6 +3,8 @@ package com.mdev.chatcord.client.controller.ui.main.contact;
 import com.mdev.chatcord.client.component.DragWindow;
 import com.mdev.chatcord.client.component.SpringFXMLLoader;
 import com.mdev.chatcord.client.dto.FriendDTO;
+import com.mdev.chatcord.client.dto.chat.ChatDTO;
+import com.mdev.chatcord.client.dto.chat.PrivateChatDTO;
 import com.mdev.chatcord.client.implementation.UIErrorHandler;
 import com.mdev.chatcord.client.service.FriendService;
 import jakarta.annotation.security.RunAs;
@@ -68,14 +70,16 @@ public class AddContactController extends DragWindow implements UIErrorHandler {
     public void onAddFriend(ActionEvent actionEvent){
         String friendUsername = usernameField.getText();
         String friendTag = tagField.getText();
+        PrivateChatDTO privateChatDTO = null;
         FriendDTO friendDTO = null;
+        ChatDTO chatDTO = null;
         try {
             if (isAnyFieldEmpty(friendUsername, friendTag)) {
                 setVisibility(true, errorLabel);
                 errorLabel.setText("Please fill all fields.");
             } else {
                 setVisibility(false, errorLabel);
-                friendDTO = friendService.addFriend(friendUsername, friendTag);
+                privateChatDTO = friendService.addFriend(friendUsername, friendTag);
                 onRetrieveContact.accept(friendUsername, friendTag);
             }
         } catch (RuntimeException e){

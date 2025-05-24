@@ -1,7 +1,7 @@
 package com.mdev.chatcord.client.connection;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mdev.chatcord.client.dto.MessageDTO;
+import com.mdev.chatcord.client.dto.chat.MessageDTO;
 import lombok.Setter;
 
 import java.io.*;
@@ -42,7 +42,7 @@ public class ClientThread {
                     ObjectMapper mapper = new ObjectMapper();
                     MessageDTO receivedMessage = mapper.readValue(json, MessageDTO.class);
 
-                    if (receivedMessage.getMessage().contains("__REGISTER__")){
+                    if (receivedMessage.getContent().contains("__REGISTER__")){
                         continue;
                     }
 

@@ -1,7 +1,11 @@
 package com.mdev.chatcord.client.service;
 
+import com.mdev.chatcord.client.dto.FriendContactDTO;
 import com.mdev.chatcord.client.dto.FriendDTO;
 import com.mdev.chatcord.client.dto.HttpRequest;
+import com.mdev.chatcord.client.dto.chat.ChatDTO;
+import com.mdev.chatcord.client.dto.chat.PrivateChatDTO;
+import com.mdev.chatcord.client.exception.BusinessException;
 import com.mdev.chatcord.client.exception.GlobalWebClientExceptionHandler;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -25,16 +29,17 @@ public class FriendService {
     @Getter
     private String errorMessage = "";
 
-    public FriendDTO addFriend(String username, String tag){
+    public PrivateChatDTO addFriend(String username, String tag){
         try{
             return webClient.get()
                     .uri(jwtRequest.getDomain() + jwtRequest.getFriendUri() + "/add/" + username + "/" + tag)
                     .header(HttpHeaders.AUTHORIZATION, "Bearer " + jwtRequest.getAccessToken())
                     .retrieve()
                     .onStatus(HttpStatusCode::isError, GlobalWebClientExceptionHandler::handleResponse)
-                    .bodyToMono(FriendDTO.class)
+                    .bodyToMono(PrivateChatDTO.class)
                     .block();
-        } catch (RuntimeException e){
+        } catch (BusinessException e){
+            log.error(e.getMessage());
             throw new RuntimeException(e.getMessage());
         }
     }

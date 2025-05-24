@@ -7,7 +7,7 @@ import com.mdev.chatcord.client.controller.ui.main.contact.FriendsController;
 import com.mdev.chatcord.client.controller.ui.settings.SettingsController;
 import com.mdev.chatcord.client.enums.EMessageStatus;
 import com.mdev.chatcord.client.dto.HttpRequest;
-import com.mdev.chatcord.client.dto.MessageDTO;
+import com.mdev.chatcord.client.dto.chat.MessageDTO;
 import com.mdev.chatcord.client.implementation.UIHandler;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -93,7 +93,7 @@ public class MainLayoutController implements UIHandler {
                     sentMessage(dto);
                 });
             });
-            clientThread.sendMessage(new MessageDTO("SERVER", "__REGISTER__", "/images/pfp.png", 0L, EMessageStatus.SENT));
+            clientThread.sendMessage(new MessageDTO("SERVER", "__REGISTER__", 0L, EMessageStatus.SENT));
 
         } catch (SocketException e){
             throw new RuntimeException(e);
@@ -121,7 +121,7 @@ public class MainLayoutController implements UIHandler {
 
     private void sentMessage(MessageDTO dto) {
         //System.out.println("DTO received: " + dto.getMessage());
-        Image profilePicture = createImage(dto.getProfileImageURL());
+        Image profilePicture = createImage(profileImageURL);
         //Node messageNode = createMessageNode(dto.getUsername(), dto.getMessage(), profilePicture);
         try {
             FXMLLoader loader = springFXMLLoader.getLoader("/view/main-layout/message-view.fxml");

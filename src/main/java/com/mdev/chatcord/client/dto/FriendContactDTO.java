@@ -1,4 +1,4 @@
-package com.mdev.chatcord.client.service;
+package com.mdev.chatcord.client.dto;
 
 import com.mdev.chatcord.client.enums.EFriendStatus;
 import lombok.AllArgsConstructor;
