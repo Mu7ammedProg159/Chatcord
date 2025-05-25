@@ -46,7 +46,6 @@ public class NavigationBarController implements EventStageHandler, UIHandler {
 
     private OFxSwitcher switcher;
     private Stage stage;
-    private ClientThread clientThread;
     private StackPane mainOverlayPane;
 
     @Autowired
@@ -60,6 +59,9 @@ public class NavigationBarController implements EventStageHandler, UIHandler {
 
     @Autowired
     private HttpRequest jwtRequest;
+
+    @Autowired
+    private ClientThread clientThread;
 
     @Getter
     @Setter
@@ -80,9 +82,8 @@ public class NavigationBarController implements EventStageHandler, UIHandler {
 
     }
 
-    public void setData(Stage stage, ClientThread clientThread){
+    public void setData(Stage stage){
         this.stage = stage;
-        this.clientThread = clientThread;
     }
 
     @FXML

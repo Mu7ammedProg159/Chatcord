@@ -16,7 +16,5 @@ public class FriendContactDTO {
     private String name;
     private String tag;
     private String profilePictureURL;
-    private String lastMessageSent;
-    private LocalDateTime LastMessageSendDate;
     private EFriendStatus friendStatus;
 }

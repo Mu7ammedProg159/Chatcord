@@ -2,34 +2,39 @@ package com.mdev.chatcord.client.connection;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mdev.chatcord.client.dto.chat.MessageDTO;
-import lombok.Setter;
+import lombok.*;
+import org.springframework.aot.hint.annotation.RegisterReflectionForBinding;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Controller;
 
 import java.io.*;
 import java.net.*;
 import java.nio.charset.StandardCharsets;
 
+@Controller
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+@Getter
+@Setter
 public class ClientThread {
 
-    private final String username;
-    private final String tag;
-    private final int serverPort;
-    private final String serverIp;
-    private DatagramSocket socket;
+    @Value("${spring.application.udp.server.port}")
+    private int serverPort;
+    @Value("${spring.application.udp.server.ip}")
+    private String serverIp;
 
-    private String debugString;
+    private DatagramSocket socket;
 
     @Setter
     private MessageDispatcher messageDispatcher;
 
-    public ClientThread(String username, String tag, int serverPort, String serverIp) throws SocketException {
-        this.username = username;
-        this.tag = tag;
-        this.serverPort = serverPort;
-        this.serverIp = serverIp;
-        this.socket = new DatagramSocket(); // random port
-    }
-
     public void listen(MessageDispatcher onMessageReceived) {
+        try {
+            socket = new DatagramSocket();
+        } catch (SocketException e) {
+            throw new RuntimeException(e);
+        }
         new Thread(() -> {
             System.out.println("Started listening...");
             try {

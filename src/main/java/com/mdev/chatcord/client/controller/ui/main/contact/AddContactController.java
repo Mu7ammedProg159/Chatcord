@@ -71,8 +71,8 @@ public class AddContactController extends DragWindow implements UIErrorHandler {
         String friendUsername = usernameField.getText();
         String friendTag = tagField.getText();
         PrivateChatDTO privateChatDTO = null;
-        FriendDTO friendDTO = null;
-        ChatDTO chatDTO = null;
+//        FriendDTO friendDTO = null;
+//        ChatDTO chatDTO = null;
         try {
             if (isAnyFieldEmpty(friendUsername, friendTag)) {
                 setVisibility(true, errorLabel);

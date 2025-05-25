@@ -44,42 +44,42 @@ public class FriendService {
         }
     }
 
-    public List<FriendContactDTO> getAllFriends() {
+    public List<PrivateChatDTO> getAllFriends() {
         try {
             return webClient.get()
                     .uri(jwtRequest.getDomain() + jwtRequest.getFriendUri() + "/all")
                     .header(HttpHeaders.AUTHORIZATION, "Bearer " + jwtRequest.getAccessToken())
                     .retrieve()
                     .onStatus(HttpStatusCode::isError, GlobalWebClientExceptionHandler::handleResponse)
-                    .bodyToMono(new ParameterizedTypeReference<List<FriendContactDTO>>() {})
+                    .bodyToMono(new ParameterizedTypeReference<List<PrivateChatDTO>>() {})
                     .block();
         } catch (RuntimeException e) {
             throw new RuntimeException(e.getMessage());
         }
     }
 
-    public FriendContactDTO getFriend(String username, String tag) {
+    public PrivateChatDTO getFriend(String username, String tag) {
         try {
             return webClient.get()
                     .uri(jwtRequest.getDomain() + jwtRequest.getFriendUri() + "/" + username + "/" + tag)
                     .header(HttpHeaders.AUTHORIZATION, "Bearer " + jwtRequest.getAccessToken())
                     .retrieve()
                     .onStatus(HttpStatusCode::isError, GlobalWebClientExceptionHandler::handleResponse)
-                    .bodyToMono(FriendContactDTO.class)
+                    .bodyToMono(PrivateChatDTO.class)
                     .block();
         } catch (RuntimeException e) {
             throw new RuntimeException(e.getMessage());
         }
     }
 
-    public List<FriendContactDTO> getAllPendingFriends() {
+    public List<PrivateChatDTO> getAllPendingFriends() {
         try {
             return webClient.get()
                     .uri(jwtRequest.getDomain() + jwtRequest.getFriendUri() + "/pending/all")
                     .header(HttpHeaders.AUTHORIZATION, "Bearer " + jwtRequest.getAccessToken())
                     .retrieve()
                     .onStatus(HttpStatusCode::isError, GlobalWebClientExceptionHandler::handleResponse)
-                    .bodyToMono(new ParameterizedTypeReference<List<FriendContactDTO>>() {})
+                    .bodyToMono(new ParameterizedTypeReference<List<PrivateChatDTO>>() {})
                     .block();
         } catch (RuntimeException e) {
             throw new RuntimeException(e.getMessage());

@@ -1,6 +1,9 @@
 package com.mdev.chatcord.client.controller.ui.main.contact;
 
 import com.mdev.chatcord.client.component.SpringFXMLLoader;
+import com.mdev.chatcord.client.dto.chat.ChatDTO;
+import com.mdev.chatcord.client.dto.chat.ChatMemberDTO;
+import com.mdev.chatcord.client.dto.chat.PrivateChatDTO;
 import com.mdev.chatcord.client.implementation.TimeUtil;
 import com.mdev.chatcord.client.implementation.UIErrorHandler;
 import com.mdev.chatcord.client.dto.FriendContactDTO;
@@ -52,21 +55,21 @@ public class FriendsController implements TimeUtil, UIErrorHandler {
     public void reloadContacts() {
 
         // This retrieve all the request from others to us asking for friendship.
-        List<FriendContactDTO> allPendingFriends = friendService.getAllPendingFriends();
-        for (FriendContactDTO pendingFriend: allPendingFriends) {
-            addFriendContact(pendingFriend);
-        }
+        List<PrivateChatDTO> allPendingFriends = friendService.getAllPendingFriends();
+        if (!allPendingFriends.isEmpty())
+            for (PrivateChatDTO pendingFriend: allPendingFriends) {
+                addFriendContact(pendingFriend);
+            }
 
         // This retrieve all the friends that we asked to add and the ones we added.
-        List<FriendContactDTO> allFriends = friendService.getAllFriends();
-        for (FriendContactDTO friend: allFriends){
-            addFriendContact(friend);
-        }
-
-
+        List<PrivateChatDTO> allFriends = friendService.getAllFriends();
+        if (!allFriends.isEmpty())
+            for (PrivateChatDTO friend: allFriends){
+                addFriendContact(friend);
+            }
     }
 
-    private void addFriendContact(FriendContactDTO friend) {
+    private void addFriendContact(PrivateChatDTO privateChat) {
         FXMLLoader loader = springFXMLLoader.getLoader("/view/main-layout/contact-view.fxml");
         Parent root = null;
         try {
@@ -75,8 +78,8 @@ public class FriendsController implements TimeUtil, UIErrorHandler {
             throw new RuntimeException(e);
         }
         ContactController controller = loader.getController();
-        controller.setData(friend.getName(), String.valueOf(friend.getFriendStatus()), friend.getTag(),
-                    0, friend.getProfilePictureURL(), friend.getFriendStatus());
+
+        controller.setPrivateChatDTO(privateChat);
 
         contactsListView.getChildren().add(root);
     }
@@ -86,10 +89,9 @@ public class FriendsController implements TimeUtil, UIErrorHandler {
         Parent root = loader.load();
         ContactController controller = loader.getController();
 
-        FriendContactDTO friend = friendService.getFriend(username, tag);
+        PrivateChatDTO contactDetails = friendService.getFriend(username, tag);
 
-        controller.setData(friend.getName(), friend.getLastMessageSent(), friend.getTag(),
-                0, friend.getProfilePictureURL(), friend.getFriendStatus());
+        controller.setData(contactDetails);
 
         contactsListView.getChildren().add(root);
     }

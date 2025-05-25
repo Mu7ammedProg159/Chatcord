@@ -71,7 +71,7 @@
                                           <Font size="14.0" />
                                        </font>
                                     </TextField>
-                                    <Button fx:id="sendBtn" alignment="CENTER" defaultButton="true" minHeight="35.0" minWidth="35.0" styleClass="sendButton" stylesheets="@../css/chat-left-view.css" textFill="#0269c9">
+                                    <Button fx:id="sendBtn" alignment="CENTER" defaultButton="true" minHeight="35.0" minWidth="35.0" onAction="#onSendBtnClicked" styleClass="sendButton" stylesheets="@../css/chat-left-view.css" textFill="#0269c9">
                                        <HBox.margin>
                                           <Insets right="2.0" />
                                        </HBox.margin>

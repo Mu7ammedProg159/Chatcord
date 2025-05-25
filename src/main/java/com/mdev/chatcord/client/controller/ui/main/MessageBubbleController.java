@@ -27,10 +27,11 @@ public class MessageBubbleController implements TimeUtil {
     private long lastMessageTimestamp;
     private int messageOffset;
 
-    public void setData(MessageDTO dto) {
+    public void setData(MessageDTO dto, Image avatar) {
         username.setText(dto.getSender());
         message.setText(dto.getContent());
         status.setText(String.valueOf(dto.getMessageStatus()));
+        pfp.setImage(avatar);
 
         boolean isSameSender = dto.getSender().equals(lastSender);
         boolean isLastMessageExpired = (dto.getTimestamp() - lastMessageTimestamp) > 60_000;
