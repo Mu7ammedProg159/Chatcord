@@ -77,7 +77,7 @@ public class UserService {
         try {
             String message = GlobalWebClientExceptionHandler.wrapWithFallback(() ->
                     webClient.post()
-                            .uri(jwtRequest.getDomain() + jwtRequest.getAuthUri() + "/otp/resend-otp")
+                            .uri(jwtRequest.getDomain() + jwtRequest.getAuthUri() + "/otp/resend")
                             .contentType(MediaType.APPLICATION_JSON)
                             .bodyValue(Map.of("email", email))
                             .retrieve()
