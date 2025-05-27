@@ -13,7 +13,7 @@
 <?import org.onyxfx.graphics.layout.OFxSwitcher?>
 
 
-<AnchorPane style="-fx-background-color: transparent;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mdev.chatcord.client.controller.ui.main.MainLayoutController">
+<AnchorPane style="-fx-background-color: transparent;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mdev.chatcord.client.homepage.controller.MainLayoutController">
    <children>
       <StackPane fx:id="overlayPane" stylesheets="@../css/verification-view.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>

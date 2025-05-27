@@ -1,11 +1,10 @@
 package com.mdev.chatcord.client;
 
-import com.mdev.chatcord.client.dto.DeviceDto;
-import com.mdev.chatcord.client.dto.HttpRequest;
+import com.mdev.chatcord.client.device.dto.DeviceDto;
+import com.mdev.chatcord.client.authentication.dto.HttpRequest;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.stage.Stage;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.ApplicationEvent;

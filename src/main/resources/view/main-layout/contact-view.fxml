@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane minWidth="280.0" style="-fx-background-color: transparent;" stylesheets="@../css/contact.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mdev.chatcord.client.controller.ui.main.contact.ContactController">
+<AnchorPane minWidth="280.0" style="-fx-background-color: transparent;" stylesheets="@../css/contact.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mdev.chatcord.client.friend.controller.ContactController">
    <children>
       <Button fx:id="chatBtn" mnemonicParsing="false" onAction="#onChatBtnClicked" styleClass="backgroundImage" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <graphic>

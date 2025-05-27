@@ -1,9 +1,8 @@
 package com.mdev.chatcord.client.connection;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mdev.chatcord.client.dto.chat.MessageDTO;
+import com.mdev.chatcord.client.message.dto.MessageDTO;
 import lombok.*;
-import org.springframework.aot.hint.annotation.RegisterReflectionForBinding;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 

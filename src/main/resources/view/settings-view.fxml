@@ -13,7 +13,7 @@
 <?import javafx.scene.text.Font?>
 <?import org.onyxfx.graphics.layout.OFxSwitcher?>
 
-<StackPane fx:id="overlayPane" onMouseClicked="#onClose" prefHeight="750.0" prefWidth="1380.0" styleClass="backgroundImage" stylesheets="@css/verification-view.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mdev.chatcord.client.controller.ui.settings.SettingsController">
+<StackPane fx:id="overlayPane" onMouseClicked="#onClose" prefHeight="750.0" prefWidth="1380.0" styleClass="backgroundImage" stylesheets="@css/verification-view.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mdev.chatcord.client.settings.controller.SettingsController">
    <children>
       <BorderPane fx:id="root" maxHeight="530.0" maxWidth="800.0" styleClass="backgroundImage" stylesheets="@css/main-layout.css">
       

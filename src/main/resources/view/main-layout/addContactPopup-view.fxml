@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<StackPane fx:id="overlayPane" onMousePressed="#onClose" prefHeight="750.0" prefWidth="1380.0" style="-fx-background-color: #220225B5;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mdev.chatcord.client.controller.ui.main.contact.AddContactController">
+<StackPane fx:id="overlayPane" onMousePressed="#onClose" prefHeight="750.0" prefWidth="1380.0" style="-fx-background-color: #220225B5;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mdev.chatcord.client.friend.controller.AddContactController">
    <stylesheets>
       <URL value="@../css/main-layout.css" />
       <URL value="@../css/Forms.css" />
