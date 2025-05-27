@@ -1,6 +1,6 @@
 package com.mdev.chatcord.client.chat.direct.dto;
 
-import com.mdev.chatcord.client.chat.ChatDTO;
+import com.mdev.chatcord.client.chat.dto.ChatDTO;
 import com.mdev.chatcord.client.friend.dto.FriendContactDTO;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

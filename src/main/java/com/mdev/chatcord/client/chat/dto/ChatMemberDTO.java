@@ -1,4 +1,4 @@
-package com.mdev.chatcord.client.chat;
+package com.mdev.chatcord.client.chat.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

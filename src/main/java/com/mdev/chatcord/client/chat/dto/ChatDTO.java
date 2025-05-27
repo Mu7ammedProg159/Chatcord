@@ -1,4 +1,4 @@
-package com.mdev.chatcord.client.chat;
+package com.mdev.chatcord.client.chat.dto;
 
 import com.mdev.chatcord.client.message.dto.MessageDTO;
 import com.mdev.chatcord.client.friend.enums.EFriendStatus;

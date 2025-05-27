@@ -1,25 +1,25 @@
 
 .pendingFriendStatus{
-    -fx-background-color: #f84a1f;
+    -fx-background-color: #b13a1d;
     -fx-text-fill: #dddddd;
-    -fx-background-radius: 15px;
+    -fx-background-radius: 17px;
 }
 
 .declinedFriendStatus{
-    -fx-background-color: #BC2C31;
+    -fx-background-color: #8f2428;
     -fx-text-fill: #dddddd;
-    -fx-background-radius: 15px;
+    -fx-background-radius: 17px;
 }
 
 .acceptedFriendStatus{
     -fx-background-color: #17c5a6;
     -fx-text-fill: #dddddd;
-    -fx-background-radius: 15px;
+    -fx-background-radius: 17px;
 }
 
 .requestedFriendStatus{
     -fx-background-color: #0269c9;
     -fx-text-fill: #dddddd;
-    -fx-background-radius: 15px;
+    -fx-background-radius: 17px;
 }
 

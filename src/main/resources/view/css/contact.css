@@ -17,8 +17,8 @@
     -fx-background-radius: 20px;
 }
 
-.backgroundImage:focused{
-    -fx-background-color: #240829d5;
+.backgroundImage:selected{
+    -fx-background-color: #153353;
     -fx-border-radius: 20px;
     -fx-background-radius: 20px;
 }

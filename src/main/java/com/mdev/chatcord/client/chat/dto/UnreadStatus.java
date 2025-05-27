@@ -1,4 +1,4 @@
-package com.mdev.chatcord.client.chat;
+package com.mdev.chatcord.client.chat.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,6 +9,8 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class ChatRoleDTO {
-    private String name;
+public class UnreadStatus {
+    private int unreadCount;
+    private boolean isMuted;
+    private boolean isPinned;
 }

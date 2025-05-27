@@ -13,7 +13,7 @@
 <?import org.onyxfx.graphics.layout.OFxSwitcher?>
 
 
-<AnchorPane style="-fx-background-color: transparent;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mdev.chatcord.client.homepage.controller.MainLayoutController">
+<AnchorPane style="-fx-background-color: transparent;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mdev.chatcord.client.core.controller.MainLayoutController">
    <children>
       <StackPane fx:id="overlayPane" stylesheets="@../css/verification-view.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
@@ -54,7 +54,7 @@
                                     <HBox fx:id="ddd" spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                        <children>
                                            <fx:include source="navigation-bar-view.fxml" HBox.hgrow="ALWAYS" />
-                                           <fx:include source="contact-list-view.fxml" HBox.hgrow="ALWAYS" />
+                                           <fx:include source="../chat/friends-view.fxml" HBox.hgrow="ALWAYS" />
                                        </children>
                                     </HBox>
                                  </children>
@@ -84,7 +84,7 @@
                                           </VBox>
                                        </children>
                                     </AnchorPane>
-                                    <fx:include source="chat-view.fxml" VBox.vgrow="ALWAYS" />
+                                    <fx:include source="../chat/chat-view.fxml" VBox.vgrow="ALWAYS" />
                                  </children>
                                  <BorderPane.margin>
                                     <Insets bottom="10.0" left="10.0" right="15.0" top="30.0" />

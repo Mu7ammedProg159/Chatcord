@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.String?>
 <?import java.net.URL?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.Cursor?>
@@ -13,6 +12,7 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
@@ -79,10 +79,24 @@
                   <ScrollPane fx:id="contactScrollPane" fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" stylesheets="@../css/ScrollPanel.css" VBox.vgrow="ALWAYS">
                      <content>
                         <VBox fx:id="contactsListView" spacing="10.0">
-                           <styleClass>
-                              <String fx:value="backgroundImage" />
-                              <String fx:value="content" />
-                           </styleClass>
+                           <stylesheets>
+                              <URL value="@../css/contact.css" />
+                              <URL value="@../css/friend-status.css" />
+                           </stylesheets>
+                           <children>
+                              <HBox alignment="CENTER" VBox.vgrow="NEVER">
+                                 <children>
+                                    <Pane opacity="0.65" prefHeight="3.0" style="-fx-background-color: #7d1b90; -fx-background-radius: 8;" HBox.hgrow="ALWAYS">
+                                       <HBox.margin>
+                                          <Insets bottom="5.0" left="8.0" right="8.0" top="5.0" />
+                                       </HBox.margin>
+                                    </Pane>
+                                 </children>
+                              </HBox>
+                           </children>
+                           <padding>
+                              <Insets bottom="8.0" left="8.0" right="8.0" />
+                           </padding>
                         </VBox>
                      </content>
                      <VBox.margin>

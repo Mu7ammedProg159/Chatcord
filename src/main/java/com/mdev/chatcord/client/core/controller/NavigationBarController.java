@@ -1,4 +1,4 @@
-package com.mdev.chatcord.client.homepage.controller;
+package com.mdev.chatcord.client.core.controller;
 
 import com.mdev.chatcord.client.chat.events.ContactSelectedEvent;
 import com.mdev.chatcord.client.common.service.SpringFXMLLoader;
@@ -140,6 +140,7 @@ public class NavigationBarController implements EventStageHandler, UIHandler {
     @EventListener
     public void onContactSelected(ContactSelectedEvent event){
         switcher.setIndex(1);
+        chatBtn.setSelected(true);
     }
 
 }

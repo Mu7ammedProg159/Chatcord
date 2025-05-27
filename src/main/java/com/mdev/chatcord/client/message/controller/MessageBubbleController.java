@@ -1,7 +1,7 @@
 package com.mdev.chatcord.client.message.controller;
 
 import com.mdev.chatcord.client.message.dto.MessageDTO;
-import com.mdev.chatcord.client.common.implementation.TimeUtil;
+import com.mdev.chatcord.client.common.implementation.TimeUtils;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -12,7 +12,7 @@ import lombok.Getter;
 import org.springframework.stereotype.Component;
 
 @Component
-public class MessageBubbleController implements TimeUtil {
+public class MessageBubbleController implements TimeUtils {
 
     @FXML @Getter
     private Label username;

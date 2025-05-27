@@ -1,4 +1,4 @@
-package com.mdev.chatcord.client.homepage.controller;
+package com.mdev.chatcord.client.core.controller;
 
 import com.mdev.chatcord.client.chat.direct.controller.ChatController;
 import com.mdev.chatcord.client.common.service.SpringFXMLLoader;
@@ -9,7 +9,6 @@ import com.mdev.chatcord.client.settings.controller.SettingsController;
 import com.mdev.chatcord.client.authentication.dto.HttpRequest;
 import com.mdev.chatcord.client.user.dto.ProfileDetails;
 import com.mdev.chatcord.client.common.implementation.UIHandler;
-import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
@@ -20,7 +19,6 @@ import org.onyxfx.graphics.layout.OFxSwitcher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -83,15 +81,15 @@ public class MainLayoutController implements UIHandler {
         initializeControllers();
          //clientThread.listen(this::displayMessage);
 
-        chatController.sendMessage("SERVER", "Community", "");
+        //chatController.sendMessage("SERVER", "Community", "");
 
         navigationBarController.setData(stageInitializer.getPrimaryStage());
 
         // Scroll to bottom on new message
-        chatController.getMessagesContainer().heightProperty().addListener(
-                (obs, oldVal, newVal) ->
-                        chatController.getChatScrollPane().setVvalue(
-                                chatController.getChatScrollPane().getVmax()));
+//        chatController.getMessagesContainer().heightProperty().addListener(
+//                (obs, oldVal, newVal) ->
+//                        chatController.getChatScrollPane().setVvalue(
+//                                chatController.getChatScrollPane().getVmax()));
     }
 
     private void initializeControllers() {

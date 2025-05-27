@@ -281,7 +281,7 @@ public class LoginController implements LoadingHandler, UIHandler {
         return () -> {
             Platform.runLater(() -> submitButton.setText("Log In"));
             try {
-                stageInitializer.switchScenes(stage, "/view/main-layout/main-view.fxml", "Chatcord", 1350, 720);
+                stageInitializer.switchScenes(stage, "/view/main/main-view.fxml", "Chatcord", 1350, 720);
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
