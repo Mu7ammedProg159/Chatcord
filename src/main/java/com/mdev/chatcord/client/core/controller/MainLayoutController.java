@@ -3,7 +3,7 @@ package com.mdev.chatcord.client.core.controller;
 import com.mdev.chatcord.client.chat.direct.controller.ChatController;
 import com.mdev.chatcord.client.common.service.SpringFXMLLoader;
 import com.mdev.chatcord.client.common.service.StageInitializer;
-import com.mdev.chatcord.client.connection.ClientThread;
+import com.mdev.chatcord.client.connection.udp.ClientThread;
 import com.mdev.chatcord.client.friend.controller.FriendsController;
 import com.mdev.chatcord.client.settings.controller.SettingsController;
 import com.mdev.chatcord.client.authentication.dto.HttpRequest;
@@ -15,6 +15,7 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.onyxfx.graphics.layout.OFxSwitcher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,6 +24,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class MainLayoutController implements UIHandler {
 
     @FXML
@@ -39,15 +41,6 @@ public class MainLayoutController implements UIHandler {
 
     private String username;
     private String tag;
-    private String lastMessageSender;
-    private String profileImageURL;
-    private Image pfpImage;
-
-    private String debugString;
-
-    private final ClientThread clientThread;
-
-    private final Logger logger = LoggerFactory.getLogger(MainLayoutController.class);
 
     private final StageInitializer stageInitializer;
 
@@ -68,10 +61,6 @@ public class MainLayoutController implements UIHandler {
     public void initialize() {
 
         userDetails = jwtRequest.getUserDTO();
-
-        profileImageURL = "/images/pfp2.jpg";
-        pfpImage = createImage(profileImageURL);
-
         username = userDetails.getUsername();
         tag = userDetails.getTag();
 

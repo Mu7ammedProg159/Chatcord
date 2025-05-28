@@ -1,4 +1,4 @@
-package com.mdev.chatcord.client.connection;
+package com.mdev.chatcord.client.connection.udp;
 
 import com.mdev.chatcord.client.message.dto.MessageDTO;
 

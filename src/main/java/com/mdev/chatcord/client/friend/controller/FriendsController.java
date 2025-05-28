@@ -1,9 +1,14 @@
 package com.mdev.chatcord.client.friend.controller;
 
+import com.mdev.chatcord.client.chat.dto.ChatDTO;
+import com.mdev.chatcord.client.chat.dto.ChatMemberDTO;
+import com.mdev.chatcord.client.chat.dto.ChatRoleDTO;
+import com.mdev.chatcord.client.chat.enums.ChatType;
 import com.mdev.chatcord.client.common.service.SpringFXMLLoader;
 import com.mdev.chatcord.client.chat.direct.dto.PrivateChatDTO;
 import com.mdev.chatcord.client.common.implementation.TimeUtils;
 import com.mdev.chatcord.client.common.implementation.UIErrorHandler;
+import com.mdev.chatcord.client.friend.dto.FriendContactDTO;
 import com.mdev.chatcord.client.friend.service.FriendService;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -49,10 +54,16 @@ public class FriendsController implements TimeUtils, UIErrorHandler {
 
     private ToggleGroup toggleGroup;
 
+    private ChatMemberDTO sender;
+
     @FXML
     public void initialize() {
-        addCommunityContact();
+
+        sender = new ChatMemberDTO(friendService.getJwtRequest().getUserDTO().getUsername(), friendService.getJwtRequest().getUserDTO().getTag(),
+                friendService.getJwtRequest().getUserDTO().getPfpUrl(), new ChatRoleDTO("Member"));
+
         reloadContacts();
+        addCommunityContact();
     }
 
     public void reloadContacts() {
@@ -82,8 +93,21 @@ public class FriendsController implements TimeUtils, UIErrorHandler {
         }
         ContactController controller = loader.getController();
 
-        controller.setCommunityChat("Community", "/images/CommunityIcon65x65.png",
-                "There are no messages yet.", LocalDateTime.now());
+        //controller.setCommunityChat("Community", "/images/CommunityIcon65x65.png",
+//                "There are no messages yet.", LocalDateTime.now());
+
+        PrivateChatDTO privateChatDTO = new PrivateChatDTO();
+        privateChatDTO.setChatDTO(ChatDTO.builder()
+                        .chatType(String.valueOf(ChatType.COMMUNITY))
+                        .createdAt(LocalDateTime.now())
+                        .chatMembersDto(List.of(
+                                sender
+                        ))
+                .build());
+        privateChatDTO.setFriendContactDTO(new FriendContactDTO("Community"));
+
+        controller.setData(privateChatDTO);
+
         controller.getContactBtn().setToggleGroup(toggleGroup);
         contactsListView.getChildren().add(0, root);
     }

@@ -17,6 +17,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Getter
 @Slf4j
 public class FriendService {
 

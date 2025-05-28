@@ -24,4 +24,7 @@ public class ChatDTO {
     private UnreadStatus unreadStatus;
     private EFriendStatus relationship;
 
+    public ChatDTO(List<ChatMemberDTO> chatMembersDto) {
+        this.chatMembersDto = chatMembersDto;
+    }
 }

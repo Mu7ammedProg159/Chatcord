@@ -1,6 +1,7 @@
 package com.mdev.chatcord.client.authentication.service;
 
 import com.mdev.chatcord.client.authentication.dto.AuthenticationResponse;
+import com.mdev.chatcord.client.connection.websocket.SocketClientHolder;
 import com.mdev.chatcord.client.device.dto.DeviceDto;
 import com.mdev.chatcord.client.authentication.dto.HttpRequest;
 import com.mdev.chatcord.client.exception.BusinessException;
@@ -120,6 +121,9 @@ public class AuthenticationService {
             jwtRequest.setAccessToken(response.getAccessToken());
             jwtRequest.setRefreshToken(response.getRefreshToken(), deviceDto.getDEVICE_ID(), response.getProfileDetails().getUuid());
             jwtRequest.getUserDTO().setEmail(email);
+
+            // Form Real-time connection using Websockets.
+            SocketClientHolder.init(response.getAccessToken());
 
         } catch (BusinessException e) {
             log.error(e.getMessage());

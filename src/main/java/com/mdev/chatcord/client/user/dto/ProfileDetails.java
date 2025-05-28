@@ -17,4 +17,8 @@ public class ProfileDetails {
     private String about;
     private String quote;
 
+    public ProfileDetails (String username){
+        this.username = username;
+    }
+
 }

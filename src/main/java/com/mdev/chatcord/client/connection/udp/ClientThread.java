@@ -1,8 +1,10 @@
-package com.mdev.chatcord.client.connection;
+package com.mdev.chatcord.client.connection.udp;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mdev.chatcord.client.message.dto.MessageDTO;
 import lombok.*;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 
@@ -16,6 +18,7 @@ import java.nio.charset.StandardCharsets;
 @Builder
 @Getter
 @Setter
+@Slf4j
 public class ClientThread {
 
     @Value("${spring.application.udp.server.port}")
@@ -24,6 +27,9 @@ public class ClientThread {
     private String serverIp;
 
     private DatagramSocket socket;
+
+    @Autowired
+    private ObjectMapper mapper;
 
     @Setter
     private MessageDispatcher messageDispatcher;
@@ -43,7 +49,6 @@ public class ClientThread {
                     socket.receive(packet);
 
                     String json = new String(packet.getData(), 0, packet.getLength(), StandardCharsets.UTF_8);
-                    ObjectMapper mapper = new ObjectMapper();
                     MessageDTO receivedMessage = mapper.readValue(json, MessageDTO.class);
 
                     if (receivedMessage.getContent().contains("__REGISTER__")){
@@ -61,7 +66,6 @@ public class ClientThread {
     public void sendMessage(MessageDTO messageText) {
         try {
 
-            ObjectMapper mapper = new ObjectMapper();
             String json = mapper.writeValueAsString(messageText); // Serialize to JSON
             byte[] jsonBytes = json.getBytes(StandardCharsets.UTF_8);
 
@@ -69,7 +73,7 @@ public class ClientThread {
                     jsonBytes, jsonBytes.length,
                     InetAddress.getByName(serverIp), serverPort);
 
-            System.out.println("Sending message: " + json);
+            log.info("Sending message: {}", json);
 
             socket.send(packet);
 

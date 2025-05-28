@@ -3,7 +3,7 @@ package com.mdev.chatcord.client.core.controller;
 import com.mdev.chatcord.client.chat.events.ContactSelectedEvent;
 import com.mdev.chatcord.client.common.service.SpringFXMLLoader;
 import com.mdev.chatcord.client.common.service.StageInitializer;
-import com.mdev.chatcord.client.connection.ClientThread;
+import com.mdev.chatcord.client.connection.udp.ClientThread;
 import com.mdev.chatcord.client.settings.controller.SettingsController;
 import com.mdev.chatcord.client.authentication.dto.HttpRequest;
 import com.mdev.chatcord.client.common.implementation.EventStageHandler;

@@ -1,10 +1,12 @@
 package com.mdev.chatcord.client.message.dto;
 
+import com.mdev.chatcord.client.chat.dto.ChatMemberDTO;
 import com.mdev.chatcord.client.chat.enums.ChatType;
 import com.mdev.chatcord.client.message.enums.EMessageStatus;
 import lombok.*;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -15,16 +17,9 @@ public class MessageDTO implements Serializable {
 
     private ChatType chatType;
     private String content;
-    private String sender; // uuid
-    private String receiver; // Can be username#tag or guildId << this is currently is the group.
-    private long timestamp;
+    private ChatMemberDTO sender; // uuid
+    private ChatMemberDTO receiver; // Can be username#tag or guildId << this is currently is the group.
+    private LocalDateTime sentAt;
     private boolean isEdited;
     private EMessageStatus messageStatus;
-
-    public MessageDTO(String content, String sender, long timestamp, EMessageStatus messageStatus) {
-        this.content = content;
-        this.sender = sender;
-        this.timestamp = timestamp;
-        this.messageStatus = messageStatus;
-    }
 }

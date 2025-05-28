@@ -15,4 +15,8 @@ public class FriendContactDTO {
     private String tag;
     private String profilePictureURL;
     private EFriendStatus friendStatus;
+
+    public FriendContactDTO(String name) {
+        this.name = name;
+    }
 }

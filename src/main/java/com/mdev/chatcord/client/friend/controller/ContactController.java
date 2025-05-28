@@ -69,33 +69,36 @@ public class ContactController implements UIHandler, TimeUtils {
         FriendContactDTO friendInfo = privateChat.getFriendContactDTO();
         ChatDTO chatInfo = privateChat.getChatDTO();
         this.chatType = ChatType.valueOf(privateChat.getChatDTO().getChatType());
-
         chatName.setText(friendInfo.getName());
+
         if (chatInfo.getLastMessage() != null)
             lastChatMessage.setText(chatInfo.getLastMessage());
         else{
-            setVisibility(false, lastChatMessage);
-            //lastChatMessage.setText("No messages sent yet.");
-            setVisibility(true, friendStatus);
+            if (friendInfo.getFriendStatus() != null){
+                setVisibility(false, lastChatMessage);
+                setVisibility(true, friendStatus);
+            }
+            lastChatMessage.setText("No messages sent yet.");
         }
 
-        switch (friendInfo.getFriendStatus()){
-            case ACCEPTED -> {
-                friendStatus.setText(friendInfo.getFriendStatus().name());
-                friendStatus.getStyleClass().setAll("acceptedFriendStatus");
-            }
-            case PENDING -> {
-                friendStatus.setText(friendInfo.getFriendStatus().name());
-                friendStatus.getStyleClass().setAll("pendingFriendStatus");
-            }
-            case REQUESTED -> {
-                friendStatus.setText(friendInfo.getFriendStatus().name());
-                friendStatus.getStyleClass().setAll("requestedFriendStatus");
-            }
-            case DECLINED -> {
-                friendStatus.setText(friendInfo.getFriendStatus().name());
-                friendStatus.getStyleClass().setAll("declinedFriendStatus");
-            }
+        if (friendInfo.getFriendStatus() != null)
+            switch (friendInfo.getFriendStatus()){
+                case ACCEPTED -> {
+                    friendStatus.setText(friendInfo.getFriendStatus().name());
+                    friendStatus.getStyleClass().setAll("acceptedFriendStatus");
+                }
+                case PENDING -> {
+                    friendStatus.setText(friendInfo.getFriendStatus().name());
+                    friendStatus.getStyleClass().setAll("pendingFriendStatus");
+                }
+                case REQUESTED -> {
+                    friendStatus.setText(friendInfo.getFriendStatus().name());
+                    friendStatus.getStyleClass().setAll("requestedFriendStatus");
+                }
+                case DECLINED -> {
+                    friendStatus.setText(friendInfo.getFriendStatus().name());
+                    friendStatus.getStyleClass().setAll("declinedFriendStatus");
+                }
         }
 
 
@@ -105,16 +108,16 @@ public class ContactController implements UIHandler, TimeUtils {
             log.info(e.getMessage());
         }
 
-        Image img = new Image(getClass().getResource(friendInfo.getProfilePictureURL()).toExternalForm());
-        contactImage.setImage(img);
+        contactImage.setImage(createImage(friendInfo.getProfilePictureURL()==null ? "/images/CommunityIcon65x65.png" : friendInfo.getProfilePictureURL()));
 
-        if (chatInfo.getUnreadStatus().getUnreadCount() > 0) {
-            unseenMessagesCounter.setText(String.valueOf(chatInfo.getUnreadStatus().getUnreadCount()));
-            unseenMessagesCounter.setVisible(true);
-        } else {
-            unseenMessagesCounter.setText(String.valueOf(0));
-            unseenMessagesCounter.setVisible(false);
-        }
+        if (chatInfo.getUnreadStatus() != null)
+            if (chatInfo.getUnreadStatus().getUnreadCount() > 0) {
+                unseenMessagesCounter.setText(String.valueOf(chatInfo.getUnreadStatus().getUnreadCount()));
+                unseenMessagesCounter.setVisible(true);
+            } else {
+                unseenMessagesCounter.setText(String.valueOf(0));
+                unseenMessagesCounter.setVisible(false);
+            }
     }
 
     public void onClick(PrivateChatDTO chat){
@@ -123,13 +126,6 @@ public class ContactController implements UIHandler, TimeUtils {
 
     @FXML
     public void onChatBtnClicked(ActionEvent event){
-        switch (chatType){
-            case COMMUNITY -> {
-                onClick(null);
-            }
-            case PRIVATE -> {
-                onClick(privateChatDTO);
-            }
-        }
+      onClick(privateChatDTO);
     }
 }
