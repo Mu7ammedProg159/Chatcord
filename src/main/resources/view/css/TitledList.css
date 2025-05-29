@@ -1,0 +1,41 @@
+.chat-section-pane {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-text-fill: #ffffffd1;
+    -fx-font-family: gg sans;
+    -fx-font-weight: bold;
+    -fx-font-size: 18px;
+}
+
+.chat-section-pane > .title {
+    -fx-background-color: transparent;
+    -fx-padding: 6 0 6 12;
+    -fx-border-color: transparent;
+    -fx-text-fill: #ffffffd1;
+}
+
+.chat-section-pane > .title > .arrow-button {
+    -fx-background-color: transparent;
+    -fx-padding: 0 8 0 0;
+    -fx-shape: "M 0 0 L 6 6 L 0 12";  /* Right-pointing thin chevron */
+    -fx-scale-shape: false;
+    -fx-background-insets: 0;
+    -fx-background-radius: 0;
+    -fx-pref-width: 6;
+    -fx-pref-height: 12;
+    -fx-border-color: transparent;
+    -fx-background-color: #dcd3c4; /* Match your text color */
+}
+
+/* 🔁 Rotate when expanded */
+.chat-section-pane:expanded > .title > .arrow-button {
+    -fx-rotate: 90;
+}
+
+/* 🧹 Hide default arrow shape */
+.chat-section-pane > .title > .arrow-button > .arrow {
+    -fx-shape: "";
+    -fx-padding: 0;
+    -fx-opacity: 0;
+    -fx-background-color: transparent;
+}
