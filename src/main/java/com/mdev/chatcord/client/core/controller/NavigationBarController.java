@@ -5,11 +5,11 @@ import com.mdev.chatcord.client.common.service.SpringFXMLLoader;
 import com.mdev.chatcord.client.common.service.StageInitializer;
 import com.mdev.chatcord.client.connection.udp.ClientThread;
 import com.mdev.chatcord.client.settings.controller.SettingsController;
-import com.mdev.chatcord.client.authentication.dto.HttpRequest;
 import com.mdev.chatcord.client.common.implementation.EventStageHandler;
 import com.mdev.chatcord.client.common.implementation.ThrowingRunnable;
 import com.mdev.chatcord.client.common.implementation.UIHandler;
 import com.mdev.chatcord.client.authentication.service.AuthenticationService;
+import com.mdev.chatcord.client.token.dto.TokenFactory;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -60,7 +60,7 @@ public class NavigationBarController implements EventStageHandler, UIHandler {
     private StageInitializer stageInitializer;
 
     @Autowired
-    private HttpRequest jwtRequest;
+    private TokenFactory tokenFactory;
 
     @Autowired
     private ClientThread clientThread;
@@ -111,7 +111,7 @@ public class NavigationBarController implements EventStageHandler, UIHandler {
 
         clientThread.close();
         authenticationService.logout();
-        jwtRequest.setAccessToken(null);
+        tokenFactory.setAccessToken(null);
         stageInitializer.switchScenes(getStageActionEvent(event), "/view/login/sign-view.fxml", "Login", 1380, 750);
     }
 

@@ -3,22 +3,18 @@ package com.mdev.chatcord.client.core.controller;
 import com.mdev.chatcord.client.chat.direct.controller.ChatController;
 import com.mdev.chatcord.client.common.service.SpringFXMLLoader;
 import com.mdev.chatcord.client.common.service.StageInitializer;
-import com.mdev.chatcord.client.connection.udp.ClientThread;
 import com.mdev.chatcord.client.friend.controller.FriendsController;
 import com.mdev.chatcord.client.settings.controller.SettingsController;
-import com.mdev.chatcord.client.authentication.dto.HttpRequest;
 import com.mdev.chatcord.client.user.dto.ProfileDetails;
 import com.mdev.chatcord.client.common.implementation.UIHandler;
+import com.mdev.chatcord.client.user.service.User;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.image.Image;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.onyxfx.graphics.layout.OFxSwitcher;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -44,7 +40,7 @@ public class MainLayoutController implements UIHandler {
 
     private final StageInitializer stageInitializer;
 
-    private final HttpRequest jwtRequest;
+    private final User userDetails;
 
     private final SpringFXMLLoader springFXMLLoader;
 
@@ -55,12 +51,9 @@ public class MainLayoutController implements UIHandler {
     private final FriendsController friendsController;
     private final SettingsController settingsController;
 
-    private ProfileDetails userDetails;
-
     @FXML
     public void initialize() {
 
-        userDetails = jwtRequest.getUserDTO();
         username = userDetails.getUsername();
         tag = userDetails.getTag();
 

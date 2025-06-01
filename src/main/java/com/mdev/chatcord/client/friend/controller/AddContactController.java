@@ -4,6 +4,7 @@ import com.mdev.chatcord.client.common.service.DragWindow;
 import com.mdev.chatcord.client.common.service.SpringFXMLLoader;
 import com.mdev.chatcord.client.chat.direct.dto.PrivateChatDTO;
 import com.mdev.chatcord.client.common.implementation.UIErrorHandler;
+import com.mdev.chatcord.client.friend.dto.ContactPreview;
 import com.mdev.chatcord.client.friend.service.FriendService;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -61,7 +62,7 @@ public class AddContactController extends DragWindow implements UIErrorHandler {
     public void onAddFriend(ActionEvent actionEvent){
         String friendUsername = usernameField.getText();
         String friendTag = tagField.getText();
-        PrivateChatDTO privateChatDTO = null;
+        ContactPreview contactPreview = null;
 
         try {
             if (isAnyFieldEmpty(friendUsername, friendTag)) {
@@ -69,7 +70,7 @@ public class AddContactController extends DragWindow implements UIErrorHandler {
                 errorLabel.setText("Please fill all fields.");
             } else {
                 setVisibility(false, errorLabel);
-                privateChatDTO = friendService.addFriend(friendUsername, friendTag);
+                contactPreview = friendService.addFriend(friendUsername, friendTag);
                 onRetrieveContact.accept(friendUsername, friendTag);
             }
         } catch (RuntimeException e){

@@ -2,9 +2,12 @@ package com.mdev.chatcord.client.common.service;
 
 import com.mdev.chatcord.client.ChatcordApplication.StageReadyEvent;
 import com.mdev.chatcord.client.device.dto.DeviceDto;
+import com.mdev.chatcord.client.token.service.UserActivityMonitor;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -37,11 +40,13 @@ public class StageInitializer implements ApplicationListener<StageReadyEvent> {
 
     private final String applicationTitle;
     private final AnnotationConfigApplicationContext applicationContext;
+    private final UserActivityMonitor userActivityMonitor;
     private final DeviceDto deviceDto;
 
-    public StageInitializer(@Value("${spring.application.ui.title}") String applicationTitle, AnnotationConfigApplicationContext applicationContext, DeviceDto deviceDto) {
+    public StageInitializer(@Value("${spring.application.ui.title}") String applicationTitle, AnnotationConfigApplicationContext applicationContext, UserActivityMonitor userActivityMonitor, DeviceDto deviceDto) {
         this.applicationTitle = applicationTitle;
         this.applicationContext = applicationContext;
+        this.userActivityMonitor = userActivityMonitor;
         this.deviceDto = deviceDto;
     }
 
@@ -71,6 +76,9 @@ public class StageInitializer implements ApplicationListener<StageReadyEvent> {
 
             Scene scene = new Scene(parent, 1380, 750);
             scene.setFill(Color.TRANSPARENT); // Make scene background transparent
+
+            scene.addEventFilter(MouseEvent.ANY,e -> userActivityMonitor.markActivity());
+            scene.addEventFilter(KeyEvent.ANY, e -> userActivityMonitor.markActivity());
 
             primaryStage.setScene(scene);
 

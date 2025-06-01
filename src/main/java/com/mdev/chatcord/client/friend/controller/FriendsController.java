@@ -1,14 +1,10 @@
 package com.mdev.chatcord.client.friend.controller;
 
-import com.mdev.chatcord.client.chat.dto.ChatDTO;
 import com.mdev.chatcord.client.chat.dto.ChatMemberDTO;
-import com.mdev.chatcord.client.chat.dto.ChatRoleDTO;
-import com.mdev.chatcord.client.chat.enums.ChatType;
 import com.mdev.chatcord.client.common.service.SpringFXMLLoader;
-import com.mdev.chatcord.client.chat.direct.dto.PrivateChatDTO;
 import com.mdev.chatcord.client.common.implementation.TimeUtils;
 import com.mdev.chatcord.client.common.implementation.UIErrorHandler;
-import com.mdev.chatcord.client.friend.dto.FriendContactDTO;
+import com.mdev.chatcord.client.friend.dto.ContactPreview;
 import com.mdev.chatcord.client.friend.service.FriendService;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -28,7 +24,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Component
@@ -58,61 +53,49 @@ public class FriendsController implements TimeUtils, UIErrorHandler {
 
     @FXML
     public void initialize() {
-
-        sender = new ChatMemberDTO(friendService.getJwtRequest().getUserDTO().getUsername(), friendService.getJwtRequest().getUserDTO().getTag(),
-                friendService.getJwtRequest().getUserDTO().getPfpUrl(), new ChatRoleDTO("Member"));
-
         reloadContacts();
-        addCommunityContact();
     }
 
     public void reloadContacts() {
 
-        // This retrieve all the request from others to us asking for friendship.
-        List<PrivateChatDTO> allPendingFriends = friendService.getAllPendingFriends();
-        if (allPendingFriends != null)
-            for (PrivateChatDTO pendingFriend: allPendingFriends) {
-                addFriendContact(pendingFriend);
-            }
-
         // This retrieve all the friends that we asked to add and the ones we added.
-        List<PrivateChatDTO> allFriends = friendService.getAllFriends();
+        List<ContactPreview> allFriends = friendService.getAllFriends();
         if (allFriends != null)
-            for (PrivateChatDTO friend: allFriends){
+            for (ContactPreview friend: allFriends){
                 addFriendContact(friend);
             }
     }
 
-    private void addCommunityContact() {
-        FXMLLoader loader = springFXMLLoader.getLoader("/view/chat/contact-view.fxml");
-        Node root = null;
-        try {
-            root = loader.load();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        ContactController controller = loader.getController();
+//    private void addCommunityContact() {
+//        FXMLLoader loader = springFXMLLoader.getLoader("/view/chat/contact-view.fxml");
+//        Node root = null;
+//        try {
+//            root = loader.load();
+//        } catch (IOException e) {
+//            throw new RuntimeException(e);
+//        }
+//        ContactController controller = loader.getController();
+//
+//        //controller.setCommunityChat("Community", "/images/CommunityIcon65x65.png",
+////                "There are no messages yet.", LocalDateTime.now());
+//
+//        PrivateChatDTO privateChatDTO = new PrivateChatDTO();
+//        privateChatDTO.setChatDTO(ChatDTO.builder()
+//                        .chatType(String.valueOf(ChatType.COMMUNITY))
+//                        .createdAt(LocalDateTime.now())
+//                        .chatMembersDto(List.of(
+//                                sender
+//                        ))
+//                .build());
+//        privateChatDTO.setContactPreview(new ContactPreview("Community"));
+//
+//        controller.setData(privateChatDTO);
+//
+//        controller.getContactBtn().setToggleGroup(toggleGroup);
+//        contactsListView.getChildren().add(0, root);
+//    }
 
-        //controller.setCommunityChat("Community", "/images/CommunityIcon65x65.png",
-//                "There are no messages yet.", LocalDateTime.now());
-
-        PrivateChatDTO privateChatDTO = new PrivateChatDTO();
-        privateChatDTO.setChatDTO(ChatDTO.builder()
-                        .chatType(String.valueOf(ChatType.COMMUNITY))
-                        .createdAt(LocalDateTime.now())
-                        .chatMembersDto(List.of(
-                                sender
-                        ))
-                .build());
-        privateChatDTO.setFriendContactDTO(new FriendContactDTO("Community"));
-
-        controller.setData(privateChatDTO);
-
-        controller.getContactBtn().setToggleGroup(toggleGroup);
-        contactsListView.getChildren().add(0, root);
-    }
-
-    private void addFriendContact(PrivateChatDTO privateChat) {
+    private void addFriendContact(ContactPreview privateChat) {
         FXMLLoader loader = springFXMLLoader.getLoader("/view/chat/contact-view.fxml");
         Node root = null;
         try {
@@ -129,12 +112,12 @@ public class FriendsController implements TimeUtils, UIErrorHandler {
         contactsListView.getChildren().add(root);
     }
 
-    public PrivateChatDTO getContact(String username, String tag) throws IOException {
+    public ContactPreview getContact(String username, String tag) throws IOException {
         FXMLLoader loader = springFXMLLoader.getLoader("/view/chat/contact-view.fxml");
         Parent root = loader.load();
         ContactController controller = loader.getController();
 
-        PrivateChatDTO contactDetails = friendService.getFriend(username, tag);
+        ContactPreview contactDetails = friendService.getFriend(username, tag);
 
         controller.setData(contactDetails);
 

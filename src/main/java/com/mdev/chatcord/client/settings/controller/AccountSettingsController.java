@@ -1,6 +1,8 @@
 package com.mdev.chatcord.client.settings.controller;
 
 import com.mdev.chatcord.client.authentication.dto.HttpRequest;
+import com.mdev.chatcord.client.user.dto.ProfileDetails;
+import com.mdev.chatcord.client.user.service.User;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Hyperlink;
@@ -35,19 +37,17 @@ public class AccountSettingsController {
     private Label usernameLabel;
 
     @Autowired
-    private HttpRequest jwtRequest;
+    private User userDetails;
 
     @FXML
     public void initialize(){
-        emailLabel.setText(jwtRequest.getUserDTO().getEmail());
-        usernameLabel.setText(jwtRequest.getUserDTO().getUsername());
-        tagLabel.setText(jwtRequest.getUserDTO().getTag());
+        emailLabel.setText(userDetails.getEmail());
+        usernameLabel.setText(userDetails.getUsername());
+        tagLabel.setText(userDetails.getTag());
     }
 
     @FXML
     public void onChangePhoto(ActionEvent event) {
-
-
 
         FileChooser fileChooser = new FileChooser();
 

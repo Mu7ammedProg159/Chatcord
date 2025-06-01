@@ -5,15 +5,13 @@ import com.mdev.chatcord.client.chat.events.ContactSelectedEvent;
 import com.mdev.chatcord.client.common.implementation.UIHandler;
 import com.mdev.chatcord.client.common.service.SpringFXMLLoader;
 import com.mdev.chatcord.client.connection.udp.ClientThread;
-import com.mdev.chatcord.client.authentication.dto.HttpRequest;
 import com.mdev.chatcord.client.message.controller.MessageBubbleController;
-import com.mdev.chatcord.client.chat.dto.ChatDTO;
 import com.mdev.chatcord.client.chat.dto.ChatMemberDTO;
 import com.mdev.chatcord.client.message.dto.MessageDTO;
 import com.mdev.chatcord.client.chat.enums.ChatType;
 import com.mdev.chatcord.client.message.enums.EMessageStatus;
 import com.mdev.chatcord.client.message.service.MessageSenderFactory;
-import com.mdev.chatcord.client.user.dto.ProfileDetails;
+import com.mdev.chatcord.client.user.service.User;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -29,13 +27,11 @@ import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Scope;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Component
 //@Scope(scopeName = "prototype")
@@ -64,7 +60,7 @@ public class ChatController implements UIHandler {
     private ClientThread clientThread;
 
     @Autowired
-    private HttpRequest httpRequest;
+    private User userDetails;
 
     @Autowired
     private MessageSenderFactory senderFactory;
@@ -120,7 +116,7 @@ public class ChatController implements UIHandler {
     public void onSendBtnClicked(ActionEvent event) {
         // This is only for Private CHat --- I MUST change the logic here later...
 //        if (chatDTO == null)
-//            sendMessage(httpRequest.getUserDTO().getUsername(), "All", httpRequest.getUserDTO().getPfpUrl());
+//            sendMessage(userDetails.getUserDTO().getUsername(), "All", userDetails.getUserDTO().getPfpUrl());
 //        else {
 //            ChatMemberDTO sender = chatDTO.getChatMembersDto().get(0);
 //            ChatMemberDTO receiver = chatDTO.getChatMembersDto().get(1);
@@ -132,7 +128,7 @@ public class ChatController implements UIHandler {
 
         if (chatPreview.getChatDTO().getChatMembersDto().size() == 1)
             sendMessage(new MessageDTO(ChatType.valueOf(chatPreview.getChatDTO().getChatType()), message,
-                    new ChatMemberDTO(httpRequest.getUserDTO().getUsername()),
+                    new ChatMemberDTO(userDetails.getUsername()),
                     new ChatMemberDTO("Everyone"),
                     LocalDateTime.now(), false, EMessageStatus.SENT));
 
@@ -187,8 +183,8 @@ public class ChatController implements UIHandler {
 
             }
             case PRIVATE -> {
-                chatTitle.setText("Chat with " + chatDTO.getFriendContactDTO().getName() +
-                        "#" + chatDTO.getFriendContactDTO().getTag());
+                chatTitle.setText("Chat with " + chatDTO.getContactPreview().getDisplayName() +
+                        "#" + chatDTO.getContactPreview().getLastMessageAt());
 
                 if (chatDTO.getChatDTO().getMessages() != null)
                     for (MessageDTO message : chatDTO.getChatDTO().getMessages()) {

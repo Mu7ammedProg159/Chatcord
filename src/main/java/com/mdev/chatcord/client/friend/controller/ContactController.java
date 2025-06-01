@@ -5,7 +5,7 @@ import com.mdev.chatcord.client.chat.events.ContactSelectedEvent;
 import com.mdev.chatcord.client.common.implementation.TimeUtils;
 import com.mdev.chatcord.client.common.service.SpringFXMLLoader;
 import com.mdev.chatcord.client.chat.direct.controller.ChatController;
-import com.mdev.chatcord.client.friend.dto.FriendContactDTO;
+import com.mdev.chatcord.client.friend.dto.ContactPreview;
 import com.mdev.chatcord.client.chat.dto.ChatDTO;
 import com.mdev.chatcord.client.chat.direct.dto.PrivateChatDTO;
 import com.mdev.chatcord.client.common.implementation.UIHandler;
@@ -13,8 +13,6 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.ToggleButton;
-import javafx.scene.control.ToggleGroup;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -53,6 +51,8 @@ public class ContactController implements UIHandler, TimeUtils {
 
     private ChatType chatType;
 
+    private ContactPreview contactPreview;
+
     public void setCommunityChat(String communityName, String groupAvatarUrl, String lastMessage,
                                  LocalDateTime lastMessageDate){
         chatName.setText(communityName);
@@ -63,61 +63,58 @@ public class ContactController implements UIHandler, TimeUtils {
 
     }
 
-    public void setData(PrivateChatDTO privateChat) {
+    public void setData(ContactPreview contactPreview) {
 
-        this.privateChatDTO = privateChat;
-        FriendContactDTO friendInfo = privateChat.getFriendContactDTO();
-        ChatDTO chatInfo = privateChat.getChatDTO();
-        this.chatType = ChatType.valueOf(privateChat.getChatDTO().getChatType());
-        chatName.setText(friendInfo.getName());
+        this.contactPreview = contactPreview;
+        chatName.setText(contactPreview.getDisplayName());
 
-        if (chatInfo.getLastMessage() != null)
-            lastChatMessage.setText(chatInfo.getLastMessage());
+        if (contactPreview.getLastMessage() != null)
+            lastChatMessage.setText(contactPreview.getLastMessage());
         else{
-            if (friendInfo.getFriendStatus() != null){
+            if (contactPreview.getFriendStatus() != null){
                 setVisibility(false, lastChatMessage);
                 setVisibility(true, friendStatus);
             }
             lastChatMessage.setText("No messages sent yet.");
         }
 
-        if (friendInfo.getFriendStatus() != null)
-            switch (friendInfo.getFriendStatus()){
+        if (contactPreview.getFriendStatus() != null)
+            switch (contactPreview.getFriendStatus()){
                 case ACCEPTED -> {
-                    friendStatus.setText(friendInfo.getFriendStatus().name());
+                    friendStatus.setText(contactPreview.getFriendStatus().name());
                     friendStatus.getStyleClass().setAll("acceptedFriendStatus");
                 }
                 case PENDING -> {
-                    friendStatus.setText(friendInfo.getFriendStatus().name());
+                    friendStatus.setText(contactPreview.getFriendStatus().name());
                     friendStatus.getStyleClass().setAll("pendingFriendStatus");
                 }
                 case REQUESTED -> {
-                    friendStatus.setText(friendInfo.getFriendStatus().name());
+                    friendStatus.setText(contactPreview.getFriendStatus().name());
                     friendStatus.getStyleClass().setAll("requestedFriendStatus");
                 }
                 case DECLINED -> {
-                    friendStatus.setText(friendInfo.getFriendStatus().name());
+                    friendStatus.setText(contactPreview.getFriendStatus().name());
                     friendStatus.getStyleClass().setAll("declinedFriendStatus");
                 }
         }
 
 
         try {
-            timestamp.setText(convertToLocalTime(chatInfo.getLastMessageAt()));
+            timestamp.setText(convertToLocalTime(contactPreview.getLastMessageAt()));
         } catch (Exception e) {
             log.info(e.getMessage());
         }
 
-        contactImage.setImage(createImage(friendInfo.getProfilePictureURL()==null ? "/images/CommunityIcon65x65.png" : friendInfo.getProfilePictureURL()));
+        contactImage.setImage(createImage(contactPreview.getAvatarUrl()==null ? "/images/CommunityIcon65x65.png" : contactPreview.getAvatarUrl()));
 
-        if (chatInfo.getUnreadStatus() != null)
-            if (chatInfo.getUnreadStatus().getUnreadCount() > 0) {
-                unseenMessagesCounter.setText(String.valueOf(chatInfo.getUnreadStatus().getUnreadCount()));
-                unseenMessagesCounter.setVisible(true);
-            } else {
-                unseenMessagesCounter.setText(String.valueOf(0));
-                unseenMessagesCounter.setVisible(false);
-            }
+//        if (contactPreview.getUnreadStatus() != null)
+//            if (contactPreview.getUnreadStatus().getUnreadCount() > 0) {
+//                unseenMessagesCounter.setText(String.valueOf(chatInfo.getUnreadStatus().getUnreadCount()));
+//                unseenMessagesCounter.setVisible(true);
+//            } else {
+//                unseenMessagesCounter.setText(String.valueOf(0));
+//                unseenMessagesCounter.setVisible(false);
+//            }
     }
 
     public void onClick(PrivateChatDTO chat){
