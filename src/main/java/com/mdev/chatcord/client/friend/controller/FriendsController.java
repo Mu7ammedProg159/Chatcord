@@ -36,6 +36,7 @@ public class FriendsController implements TimeUtils, UIErrorHandler {
     @FXML private Button addContactButton;
     @FXML private TextField searchField;
     @FXML private VBox contactsListView;
+    //@FXML private OFxExpandablePane directChatList;
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
 

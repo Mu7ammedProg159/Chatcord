@@ -19,6 +19,7 @@ import javafx.stage.Stage;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import org.onyxfx.graphics.layout.OFxExpandablePane;
 import org.springframework.stereotype.Component;
 
 import java.util.function.BiConsumer;
