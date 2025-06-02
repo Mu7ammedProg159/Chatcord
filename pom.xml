@@ -67,7 +67,7 @@
 		<dependency>
 			<groupId>org.onyxfx</groupId>
 			<artifactId>ofx-graphics</artifactId>
-			<version>1.2-SNAPSHOT</version>
+			<version>1.2.1-SNAPSHOT</version>
 		</dependency>
 
 		<dependency>

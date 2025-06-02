@@ -35,7 +35,7 @@ public class FriendsController implements TimeUtils, UIErrorHandler {
 
     @FXML private Button addContactButton;
     @FXML private TextField searchField;
-    @FXML private VBox contactsListView;
+    @FXML private VBox directChatList;
     //@FXML private OFxExpandablePane directChatList;
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
@@ -110,7 +110,7 @@ public class FriendsController implements TimeUtils, UIErrorHandler {
 
         controller.getContactBtn().setToggleGroup(toggleGroup);
 
-        contactsListView.getChildren().add(root);
+        directChatList.getChildren().add(root);
     }
 
     public ContactPreview getContact(String username, String tag) throws IOException {
@@ -124,7 +124,7 @@ public class FriendsController implements TimeUtils, UIErrorHandler {
 
         controller.getContactBtn().setToggleGroup(toggleGroup);
 
-        contactsListView.getChildren().add(root);
+        directChatList.getChildren().add(root);
 
         return contactDetails;
     }
@@ -136,7 +136,7 @@ public class FriendsController implements TimeUtils, UIErrorHandler {
             Parent root = loader.load();
             AddContactController controller = loader.getController();
 
-            controller.setContactList(contactsListView);
+            controller.setContactList(directChatList);
 
             mainOverlayPane.getChildren().add(root);
 
