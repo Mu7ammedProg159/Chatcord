@@ -48,7 +48,7 @@ public class FriendsController implements TimeUtils, UIErrorHandler {
 
     private StackPane mainOverlayPane;
 
-    private ToggleGroup toggleGroup;
+    private ToggleGroup toggleGroup = new ToggleGroup();
 
     private ChatMemberDTO sender;
 
@@ -113,21 +113,21 @@ public class FriendsController implements TimeUtils, UIErrorHandler {
         directChatList.getChildren().add(root);
     }
 
-    public ContactPreview getContact(String username, String tag) throws IOException {
-        FXMLLoader loader = springFXMLLoader.getLoader("/view/chat/contact-view.fxml");
-        Parent root = loader.load();
-        ContactController controller = loader.getController();
-
-        ContactPreview contactDetails = friendService.getFriend(username, tag);
-
-        controller.setData(contactDetails);
-
-        controller.getContactBtn().setToggleGroup(toggleGroup);
-
-        directChatList.getChildren().add(root);
-
-        return contactDetails;
-    }
+//    public ContactPreview getContact(String username, String tag) throws IOException {
+//        FXMLLoader loader = springFXMLLoader.getLoader("/view/chat/contact-view.fxml");
+//        Parent root = loader.load();
+//        ContactController controller = loader.getController();
+//
+//        ContactPreview contactDetails = friendService.getFriend(username, tag);
+//
+//        controller.setData(contactDetails);
+//
+//        controller.getContactBtn().setToggleGroup(toggleGroup);
+//
+//        directChatList.getChildren().add(root);
+//
+//        return contactDetails;
+//    }
 
     @FXML
     public void onAddContactClick(ActionEvent event) {
@@ -140,14 +140,10 @@ public class FriendsController implements TimeUtils, UIErrorHandler {
 
             mainOverlayPane.getChildren().add(root);
 
-            controller.setOnRetrieveContact((username, tag) -> {
+            controller.setOnRetrieveContact(contactPreview -> {
                 try {
                     Platform.runLater(()->{
-                        try {
-                            getContact(username, tag);
-                        } catch (IOException e) {
-                            throw new RuntimeException(e);
-                        }
+                        addFriendContact(contactPreview);
                     });
                 } catch (Exception e) {
                     throw new RuntimeException(e);

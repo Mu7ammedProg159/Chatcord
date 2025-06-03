@@ -69,7 +69,10 @@ public class ContactController implements UIHandler, TimeUtils {
 
         this.contactPreview = contactPreview;
         chatName.setText(contactPreview.getDisplayName());
-        contactImage.setBackgroundColor(Color.web("#2b8f5a"));
+        contactImage.setBackgroundColor(Color.web(contactPreview.getAvatarColor()));
+        if (contactPreview.getAvatarUrl() != null){
+            contactImage.setUploadedImage(createImage(contactPreview.getAvatarUrl()));
+        }
 
         if (contactPreview.getLastMessage() != null)
             lastChatMessage.setText(contactPreview.getLastMessage());
@@ -126,6 +129,7 @@ public class ContactController implements UIHandler, TimeUtils {
 
     @FXML
     public void onChatBtnClicked(ActionEvent event){
-      onClick(privateChatDTO);
+//      onClick(privateChatDTO);
+        log.info("You pressed {}'s contact.", contactPreview.getDisplayName());
     }
 }

@@ -1,8 +1,6 @@
 package com.mdev.chatcord.client.user.dto;
 
-import com.mdev.chatcord.client.authentication.dto.AuthenticationResponse;
 import lombok.*;
-import org.springframework.stereotype.Component;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -16,6 +14,7 @@ public class ProfileDetails {
     private String tag;
     private String status;
     private String pfpUrl;
+    private String avatarColor;
     private String about;
     private String quote;
 

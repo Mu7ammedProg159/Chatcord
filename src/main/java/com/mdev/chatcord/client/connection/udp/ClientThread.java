@@ -41,7 +41,7 @@ public class ClientThread {
             throw new RuntimeException(e);
         }
         new Thread(() -> {
-            System.out.println("Started listening...");
+            log.info("Started listening UDP Session...");
             try {
                 byte[] buffer = new byte[65507];
                 DatagramPacket packet = new DatagramPacket(buffer, buffer.length);

@@ -99,6 +99,9 @@
                            <pressedColor>
                               <Color red="0.2763157784938812" green="0.2711988389492035" blue="0.2711988389492035" />
                            </pressedColor>
+                           <backgroundColor>
+                              <Color red="0.17105263471603394" green="0.17105263471603394" blue="0.17105263471603394" />
+                           </backgroundColor>
                         </OFxAvatarView>
                      </children>
                   </HBox>

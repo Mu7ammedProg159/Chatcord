@@ -105,7 +105,7 @@
                                     <Image url="@../../images/icons/icons8-forward-24.png" />
                                  </arrowImage>
                                  <children>
-                                    <VBox fx:id="directChatList" alignment="CENTER">
+                                    <VBox fx:id="directChatList" alignment="CENTER" spacing="10.0">
                                        <padding>
                                           <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                                        </padding>

@@ -21,6 +21,7 @@ public class User {
     private String tag;
     private String status;
     private String pfpUrl;
+    private String avatarColor;
     private String about;
     private String quote;
 
@@ -30,6 +31,7 @@ public class User {
             this.username = profileDetails.getUsername();
             this.tag = profileDetails.getTag();
             this.pfpUrl = profileDetails.getPfpUrl();
+            this.avatarColor = profileDetails.getAvatarColor();
             this.about = profileDetails.getAbout();
             this.quote = profileDetails.getQuote();
             this.status = profileDetails.getStatus();

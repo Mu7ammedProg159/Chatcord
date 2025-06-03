@@ -6,6 +6,7 @@ import com.mdev.chatcord.client.chat.direct.dto.PrivateChatDTO;
 import com.mdev.chatcord.client.common.implementation.UIErrorHandler;
 import com.mdev.chatcord.client.friend.dto.ContactPreview;
 import com.mdev.chatcord.client.friend.service.FriendService;
+import com.mdev.chatcord.client.user.dto.ProfileDetails;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -23,6 +24,7 @@ import org.onyxfx.graphics.layout.OFxExpandablePane;
 import org.springframework.stereotype.Component;
 
 import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
 @Component
 @RequiredArgsConstructor
@@ -43,7 +45,7 @@ public class AddContactController extends DragWindow implements UIErrorHandler {
 
     private VBox contactList;
 
-    private BiConsumer<String, String> onRetrieveContact;
+    private Consumer<ContactPreview> onRetrieveContact;
 
     private Runnable onClose;
 
@@ -72,7 +74,7 @@ public class AddContactController extends DragWindow implements UIErrorHandler {
             } else {
                 setVisibility(false, errorLabel);
                 contactPreview = friendService.addFriend(friendUsername, friendTag);
-                onRetrieveContact.accept(friendUsername, friendTag);
+                onRetrieveContact.accept(contactPreview);
             }
         } catch (RuntimeException e){
             setVisibility(true, errorLabel);

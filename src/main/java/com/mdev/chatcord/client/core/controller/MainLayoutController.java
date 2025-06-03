@@ -75,7 +75,6 @@ public class MainLayoutController implements UIHandler {
     }
 
     private void initializeControllers() {
-        chatController.setAvatarImage(createImage(userDetails.getPfpUrl()));
         navigationBarController.setSwitcher(switcher);
         navigationBarController.getHomeBtn().setSelected(true);
         navigationBarController.getSwitcher().setIndex(0);

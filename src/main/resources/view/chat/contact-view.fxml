@@ -18,14 +18,14 @@
          <graphic>
             <HBox spacing="10.0">
                <children>
-                  <VBox alignment="CENTER">
+                  <VBox alignment="CENTER_LEFT" HBox.hgrow="NEVER">
                      <children>
-                        <OFxAvatarView fx:id="contactImage" alignment="TOP_LEFT" fitHeight="18.0" fitWidth="20.0" statusVisible="true">
+                        <OFxAvatarView fx:id="contactImage" alignment="TOP_LEFT" fitHeight="24.0" fitWidth="26.0" size="50.0" statusVisible="true">
                            <defaultImage>
                               <Image url="@../../images/icons/Asset%201.png" />
                            </defaultImage>
                            <statusRingColor>
-                              <Color red="0.08627451211214066" green="0.07450980693101883" blue="0.15294118225574493" />
+                              <Color red="0.26274511218070984" green="0.0470588244497776" blue="0.29411765933036804" />
                            </statusRingColor>
                            <backgroundColor>
                               <Color red="0.16862745583057404" green="0.5607843399047852" blue="0.3529411852359772" />
@@ -69,7 +69,7 @@
                   </AnchorPane>
                   <VBox alignment="CENTER" spacing="5.0">
                      <children>
-                        <Label fx:id="timestamp" alignment="CENTER_RIGHT" style="-fx-text-fill: #636363;" text="3:32 PM" textFill="#636363">
+                        <Label fx:id="timestamp" alignment="CENTER_RIGHT" style="-fx-text-fill: #636363;" text="hh:mm PM" textFill="#636363">
                            <VBox.margin>
                               <Insets />
                            </VBox.margin>
@@ -92,6 +92,9 @@
                      </HBox.margin>
                   </VBox>
                </children>
+               <padding>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </padding>
             </HBox>
          </graphic>
       </ToggleButton>

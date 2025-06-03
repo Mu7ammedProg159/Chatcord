@@ -3,6 +3,7 @@ package com.mdev.chatcord.client.settings.controller;
 import com.mdev.chatcord.client.common.service.DragWindow;
 import com.mdev.chatcord.client.common.service.SpringFXMLLoader;
 import com.mdev.chatcord.client.settings.enums.ESettingStage;
+import com.mdev.chatcord.client.user.service.User;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -15,6 +16,7 @@ import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import org.onyxfx.graphics.layout.OFxSwitcher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,6 +24,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
+@Slf4j
 public class SettingsController extends DragWindow {
 
     @FXML private StackPane overlayPane;
@@ -53,8 +56,6 @@ public class SettingsController extends DragWindow {
     @Autowired
     SpringFXMLLoader springFXMLLoader;
 
-    Logger logger = LoggerFactory.getLogger(SettingsController.class);
-
     private ESettingStage currentSettingStage = ESettingStage.AccountStage;
 
     int navIndex = 0;
@@ -69,7 +70,7 @@ public class SettingsController extends DragWindow {
     }
 
     public void setData(){
-        logger.info("The Account Stage is " + stage);
+        log.info("The Account Stage is {}", stage);
         contentArea.setIndex(0);
     }
 

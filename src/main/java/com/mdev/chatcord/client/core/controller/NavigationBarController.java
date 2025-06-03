@@ -10,6 +10,7 @@ import com.mdev.chatcord.client.common.implementation.ThrowingRunnable;
 import com.mdev.chatcord.client.common.implementation.UIHandler;
 import com.mdev.chatcord.client.authentication.service.AuthenticationService;
 import com.mdev.chatcord.client.token.dto.TokenFactory;
+import com.mdev.chatcord.client.user.service.User;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -17,7 +18,6 @@ import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -66,6 +66,9 @@ public class NavigationBarController implements EventStageHandler, UIHandler {
     @Autowired
     private ClientThread clientThread;
 
+    @Autowired
+    private User user;
+
     @Getter
     @Setter
     private ThrowingRunnable runnable;
@@ -78,7 +81,7 @@ public class NavigationBarController implements EventStageHandler, UIHandler {
         chatBtn.setToggleGroup(toggleGroup);
         favBtn.setToggleGroup(toggleGroup);
         settingsBtn.setToggleGroup(toggleGroup);
-        avatarImage.setBackgroundColor(Color.web("#395061"));
+        avatarImage.setBackgroundColor(Color.web(user.getAvatarColor()));
 
 
         bindImageStates(Color.web("#9F8CB2"), Color.web("#E2D7EC"), Color.web("#E2D7EC"),

@@ -37,9 +37,7 @@ public class HttpRequest {
         }
 
         UriComponentsBuilder builder = UriComponentsBuilder
-                .newInstance()
-                .scheme("http")
-                .host(domain)
+                .fromUriString(domain)
                 .path(path);
 
         for (int i = 0; i < keyValueParams.length; i += 2) {
