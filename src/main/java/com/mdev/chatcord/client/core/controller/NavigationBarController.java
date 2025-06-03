@@ -23,6 +23,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import lombok.*;
+import org.onyxfx.graphics.controls.OFxAvatarView;
 import org.onyxfx.graphics.layout.OFxSwitcher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,7 +43,7 @@ public class NavigationBarController implements EventStageHandler, UIHandler {
     @FXML private VBox navBarContainer, navBarUserContainer;
     @FXML private ToggleButton homeBtn, chatBtn, favBtn, settingsBtn;
     @FXML private Button logoutBtn;
-    @FXML private ImageView avatarImage;
+    @FXML private OFxAvatarView avatarImage;
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -77,6 +78,7 @@ public class NavigationBarController implements EventStageHandler, UIHandler {
         chatBtn.setToggleGroup(toggleGroup);
         favBtn.setToggleGroup(toggleGroup);
         settingsBtn.setToggleGroup(toggleGroup);
+        avatarImage.setBackgroundColor(Color.web("#395061"));
 
 
         bindImageStates(Color.web("#9F8CB2"), Color.web("#E2D7EC"), Color.web("#E2D7EC"),

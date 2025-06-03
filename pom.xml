@@ -29,6 +29,14 @@
 	<properties>
 		<java.version>17</java.version>
 	</properties>
+
+	<repositories>
+		<repository>
+			<id>github</id>
+			<url>https://maven.pkg.github.com/Mu7ammedDev159/OnyxFx-Graphics</url>
+		</repository>
+	</repositories>
+
 	<dependencies>
 
 		<dependency>
@@ -67,7 +75,7 @@
 		<dependency>
 			<groupId>org.onyxfx</groupId>
 			<artifactId>ofx-graphics</artifactId>
-			<version>1.2.1-SNAPSHOT</version>
+			<version>1.2.2-SNAPSHOT</version>
 		</dependency>
 
 		<dependency>

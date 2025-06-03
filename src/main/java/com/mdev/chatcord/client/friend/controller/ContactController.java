@@ -14,10 +14,12 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.image.ImageView;
+import javafx.scene.paint.Color;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import org.onyxfx.graphics.controls.OFxAvatarView;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -29,7 +31,7 @@ import java.time.LocalDateTime;
 @RequiredArgsConstructor
 @Slf4j
 public class ContactController implements UIHandler, TimeUtils {
-    @FXML private ImageView contactImage;
+    @FXML private OFxAvatarView contactImage;
     @FXML private Label chatName;
     @FXML private Label lastChatMessage;
     @FXML private Label timestamp;
@@ -56,7 +58,7 @@ public class ContactController implements UIHandler, TimeUtils {
     public void setCommunityChat(String communityName, String groupAvatarUrl, String lastMessage,
                                  LocalDateTime lastMessageDate){
         chatName.setText(communityName);
-        contactImage.setImage(createImage(groupAvatarUrl));
+//        contactImage.setImage(createImage(groupAvatarUrl));
         lastChatMessage.setText(lastMessage);
         timestamp.setText(convertToLocalTime(lastMessageDate));
         this.chatType = ChatType.COMMUNITY;
@@ -67,6 +69,7 @@ public class ContactController implements UIHandler, TimeUtils {
 
         this.contactPreview = contactPreview;
         chatName.setText(contactPreview.getDisplayName());
+        contactImage.setBackgroundColor(Color.web("#2b8f5a"));
 
         if (contactPreview.getLastMessage() != null)
             lastChatMessage.setText(contactPreview.getLastMessage());
@@ -105,7 +108,7 @@ public class ContactController implements UIHandler, TimeUtils {
             log.info(e.getMessage());
         }
 
-        contactImage.setImage(createImage(contactPreview.getAvatarUrl()==null ? "/images/CommunityIcon65x65.png" : contactPreview.getAvatarUrl()));
+//        contactImage.setUploadedImage(createImage(contactPreview.getAvatarUrl()==null ? "/images/CommunityIcon65x65.png" : contactPreview.getAvatarUrl()));
 
 //        if (contactPreview.getUnreadStatus() != null)
 //            if (contactPreview.getUnreadStatus().getUnreadCount() > 0) {

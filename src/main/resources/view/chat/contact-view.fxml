@@ -3,12 +3,14 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ToggleButton?>
-<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.paint.Color?>
 <?import javafx.scene.text.Font?>
+<?import org.onyxfx.graphics.controls.OFxAvatarView?>
 
 <AnchorPane minWidth="280.0" style="-fx-background-color: transparent;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mdev.chatcord.client.friend.controller.ContactController">
    <children>
@@ -16,7 +18,27 @@
          <graphic>
             <HBox spacing="10.0">
                <children>
-                  <ImageView fx:id="contactImage" fitHeight="55.0" fitWidth="55.0" pickOnBounds="true" preserveRatio="true" />
+                  <VBox alignment="CENTER">
+                     <children>
+                        <OFxAvatarView fx:id="contactImage" alignment="TOP_LEFT" fitHeight="18.0" fitWidth="20.0" statusVisible="true">
+                           <defaultImage>
+                              <Image url="@../../images/icons/Asset%201.png" />
+                           </defaultImage>
+                           <statusRingColor>
+                              <Color red="0.08627451211214066" green="0.07450980693101883" blue="0.15294118225574493" />
+                           </statusRingColor>
+                           <backgroundColor>
+                              <Color red="0.16862745583057404" green="0.5607843399047852" blue="0.3529411852359772" />
+                           </backgroundColor>
+                           <hoverColor>
+                              <Color red="0.3322800099849701" green="0.3124000132083893" blue="0.7099999785423279" opacity="0.8740457892417908" />
+                           </hoverColor>
+                           <pressedColor>
+                              <Color red="0.32309940457344055" green="0.15679824352264404" blue="0.5131579041481018" />
+                           </pressedColor>
+                        </OFxAvatarView>
+                     </children>
+                  </VBox>
                   <AnchorPane style="-fx-background-color: transparent;" HBox.hgrow="ALWAYS">
                      <children>
                         <HBox alignment="CENTER" spacing="15.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">

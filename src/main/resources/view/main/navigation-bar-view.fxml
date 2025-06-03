@@ -6,7 +6,10 @@
 <?import javafx.scene.effect.ColorAdjust?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.paint.Color?>
+<?import org.onyxfx.graphics.controls.OFxAvatarView?>
 
 <VBox alignment="TOP_CENTER" minWidth="80.0" stylesheets="@../css/NavigationBar.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mdev.chatcord.client.core.controller.NavigationBarController">
    <children>
@@ -81,11 +84,24 @@
                         </ImageView>
                      </graphic>
                   </Button>
-                  <ImageView fx:id="avatarImage" fitHeight="55.0" fitWidth="55.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../../images/default_pfp.png" />
-                     </image>
-                  </ImageView>
+                  <HBox alignment="CENTER">
+                     <children>
+                        <OFxAvatarView fx:id="avatarImage" alignment="TOP_LEFT" fitHeight="23.0" fitWidth="25.0" size="50.0">
+                           <defaultImage>
+                              <Image url="@../../images/icons/Asset%201.png" />
+                           </defaultImage>
+                           <statusRingColor>
+                              <Color red="0.08627451211214066" green="0.07450980693101883" blue="0.15294118225574493" />
+                           </statusRingColor>
+                           <hoverColor>
+                              <Color red="0.11604531854391098" green="0.16348379850387573" blue="0.19736842811107635" />
+                           </hoverColor>
+                           <pressedColor>
+                              <Color red="0.2763157784938812" green="0.2711988389492035" blue="0.2711988389492035" />
+                           </pressedColor>
+                        </OFxAvatarView>
+                     </children>
+                  </HBox>
                </children>
                <padding>
                   <Insets bottom="15.0" />
