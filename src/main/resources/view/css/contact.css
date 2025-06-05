@@ -22,3 +22,39 @@
     -fx-border-radius: 20px;
     -fx-background-radius: 20px;
 }
+
+.requestBtn{
+    -fx-background-color: #0269c9D5;
+    -fx-border-radius: 50px;
+    -fx-background-radius: 50px;
+}
+
+.requestBtn:hover{
+    -fx-background-color: #4654c0d5;
+    -fx-border-radius: 50px;
+    -fx-background-radius: 50px;
+}
+
+.requestBtn:pressed{
+    -fx-background-color: #3a48a3d5;
+    -fx-border-radius: 50px;
+    -fx-background-radius: 50px;
+}
+
+.requestCancelBtn{
+    -fx-background-color: #ED4B51D5;
+    -fx-border-radius: 50px;
+    -fx-background-radius: 50px;
+}
+
+.requestCancelBtn:hover{
+    -fx-background-color: #da3e44d5;
+    -fx-border-radius: 50px;
+    -fx-background-radius: 50px;
+}
+
+.requestCancelBtn:pressed{
+    -fx-background-color: #BC2C31D5;
+    -fx-border-radius: 50px;
+    -fx-background-radius: 50px;
+}

@@ -6,14 +6,13 @@ import com.mdev.chatcord.client.common.implementation.TimeUtils;
 import com.mdev.chatcord.client.common.service.SpringFXMLLoader;
 import com.mdev.chatcord.client.chat.direct.controller.ChatController;
 import com.mdev.chatcord.client.friend.dto.ContactPreview;
-import com.mdev.chatcord.client.chat.dto.ChatDTO;
 import com.mdev.chatcord.client.chat.direct.dto.PrivateChatDTO;
 import com.mdev.chatcord.client.common.implementation.UIHandler;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.ToggleButton;
-import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -24,19 +23,18 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDateTime;
-
 @Component
 @Scope(scopeName = "prototype")
 @RequiredArgsConstructor
 @Slf4j
 public class ContactController implements UIHandler, TimeUtils {
     @FXML private OFxAvatarView contactImage;
-    @FXML private Label chatName;
+    @FXML private Label chatName, tag;
     @FXML private Label lastChatMessage;
     @FXML private Label timestamp;
     @FXML private Label unseenMessagesCounter;
     @FXML private Label friendStatus;
+    @FXML private HBox requestContainer;
 
     @Getter
     @FXML private ToggleButton contactBtn;
@@ -55,31 +53,45 @@ public class ContactController implements UIHandler, TimeUtils {
 
     private ContactPreview contactPreview;
 
-    public void setCommunityChat(String communityName, String groupAvatarUrl, String lastMessage,
-                                 LocalDateTime lastMessageDate){
-        chatName.setText(communityName);
-//        contactImage.setImage(createImage(groupAvatarUrl));
-        lastChatMessage.setText(lastMessage);
-        timestamp.setText(convertToLocalTime(lastMessageDate));
-        this.chatType = ChatType.COMMUNITY;
-
-    }
+//    public void setCommunityChat(String communityName, String lastMessage,
+//                                 LocalDateTime lastMessageDate){
+//        chatName.setText(communityName);
+//        contactImage.setUploadedImage(createImage("/images/CommunityIcon65x65.png"));
+//        contactImage.setFitHeight(34);
+//        contactImage.setFitWidth(36);
+//        contactImage.setStatusVisible(false);
+////        contactImage.setImage(createImage(groupAvatarUrl));
+//        lastChatMessage.setText("No Messages yet.");
+//        timestamp.setText(convertToLocalTime(LocalDateTime.now()));
+//        this.chatType = ChatType.COMMUNITY;
+//
+//    }
 
     public void setData(ContactPreview contactPreview) {
-
         this.contactPreview = contactPreview;
         chatName.setText(contactPreview.getDisplayName());
-        contactImage.setBackgroundColor(Color.web(contactPreview.getAvatarColor()));
-        if (contactPreview.getAvatarUrl() != null){
-            contactImage.setUploadedImage(createImage(contactPreview.getAvatarUrl()));
+
+        if (contactPreview.isGroup()){
+            contactImage.setStatusVisible(false);
+            tag.setManaged(false);
+            tag.setVisible(false);
         }
 
-        if (contactPreview.getLastMessage() != null)
+        tag.setText("#" + contactPreview.getTag());
+
+        if (contactPreview.getAvatarUrl() != null){
+            contactImage.setUploadedImage(createImage(contactPreview.getAvatarUrl()));
+        } else
+            contactImage.setBackgroundColor(Color.web(contactPreview.getAvatarColor()));
+
+        if (contactPreview.getLastMessage() != null && !contactPreview.getLastMessage()
+                .equalsIgnoreCase("No Messages sent yet.")){
             lastChatMessage.setText(contactPreview.getLastMessage());
+            isEverChatted(true);
+        }
         else{
             if (contactPreview.getFriendStatus() != null){
-                setVisibility(false, lastChatMessage);
-                setVisibility(true, friendStatus);
+                isEverChatted(false);
             }
             lastChatMessage.setText("No messages sent yet.");
         }
@@ -95,8 +107,12 @@ public class ContactController implements UIHandler, TimeUtils {
                     friendStatus.getStyleClass().setAll("pendingFriendStatus");
                 }
                 case REQUESTED -> {
-                    friendStatus.setText(contactPreview.getFriendStatus().name());
-                    friendStatus.getStyleClass().setAll("requestedFriendStatus");
+//                    friendStatus.setText(contactPreview.getFriendStatus().name());
+                    setVisibility(false, friendStatus);
+                    setVisibility(false, unseenMessagesCounter);
+                    setVisibility(false, timestamp);
+                    setVisibility(true, requestContainer);
+                    //friendStatus.getStyleClass().setAll("requestedFriendStatus");
                 }
                 case DECLINED -> {
                     friendStatus.setText(contactPreview.getFriendStatus().name());
@@ -121,6 +137,12 @@ public class ContactController implements UIHandler, TimeUtils {
 //                unseenMessagesCounter.setText(String.valueOf(0));
 //                unseenMessagesCounter.setVisible(false);
 //            }
+    }
+
+    private void isEverChatted(boolean flag) {
+        setVisibility(flag, lastChatMessage);
+        setVisibility(flag, unseenMessagesCounter);
+        setVisibility(!flag, friendStatus);
     }
 
     public void onClick(PrivateChatDTO chat){

@@ -5,6 +5,7 @@ import com.mdev.chatcord.client.common.service.SpringFXMLLoader;
 import com.mdev.chatcord.client.common.implementation.TimeUtils;
 import com.mdev.chatcord.client.common.implementation.UIErrorHandler;
 import com.mdev.chatcord.client.friend.dto.ContactPreview;
+import com.mdev.chatcord.client.friend.enums.EFriendStatus;
 import com.mdev.chatcord.client.friend.service.FriendService;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -21,10 +22,13 @@ import lombok.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 @Component
 @AllArgsConstructor
@@ -36,6 +40,7 @@ public class FriendsController implements TimeUtils, UIErrorHandler {
     @FXML private Button addContactButton;
     @FXML private TextField searchField;
     @FXML private VBox directChatList;
+    @FXML private VBox contactsListView;
     //@FXML private OFxExpandablePane directChatList;
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
@@ -58,7 +63,7 @@ public class FriendsController implements TimeUtils, UIErrorHandler {
     }
 
     public void reloadContacts() {
-
+        addCommunityContact();
         // This retrieve all the friends that we asked to add and the ones we added.
         List<ContactPreview> allFriends = friendService.getAllFriends();
         if (allFriends != null)
@@ -67,34 +72,27 @@ public class FriendsController implements TimeUtils, UIErrorHandler {
             }
     }
 
-//    private void addCommunityContact() {
-//        FXMLLoader loader = springFXMLLoader.getLoader("/view/chat/contact-view.fxml");
-//        Node root = null;
-//        try {
-//            root = loader.load();
-//        } catch (IOException e) {
-//            throw new RuntimeException(e);
-//        }
-//        ContactController controller = loader.getController();
-//
-//        //controller.setCommunityChat("Community", "/images/CommunityIcon65x65.png",
-////                "There are no messages yet.", LocalDateTime.now());
-//
-//        PrivateChatDTO privateChatDTO = new PrivateChatDTO();
-//        privateChatDTO.setChatDTO(ChatDTO.builder()
-//                        .chatType(String.valueOf(ChatType.COMMUNITY))
-//                        .createdAt(LocalDateTime.now())
-//                        .chatMembersDto(List.of(
-//                                sender
-//                        ))
-//                .build());
-//        privateChatDTO.setContactPreview(new ContactPreview("Community"));
-//
-//        controller.setData(privateChatDTO);
-//
-//        controller.getContactBtn().setToggleGroup(toggleGroup);
-//        contactsListView.getChildren().add(0, root);
-//    }
+    private void addCommunityContact() {
+        FXMLLoader loader = springFXMLLoader.getLoader("/view/chat/contact-view.fxml");
+        Node root = null;
+        try {
+            root = loader.load();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        ContactController controller = loader.getController();
+
+        //controller.setCommunityChat("Community", "/images/CommunityIcon65x65.png",
+//                "There are no messages yet.", LocalDateTime.now());
+        ContactPreview contactPreview = new ContactPreview(UUID.randomUUID(), "Community", null,
+                "/images/CommunityIcon65x65.png", null, null, LocalDateTime.now(),
+                null, true, null);
+
+        controller.setData(contactPreview);
+
+        controller.getContactBtn().setToggleGroup(toggleGroup);
+        contactsListView.getChildren().add(0, root);
+    }
 
     private void addFriendContact(ContactPreview privateChat) {
         FXMLLoader loader = springFXMLLoader.getLoader("/view/chat/contact-view.fxml");
@@ -144,6 +142,7 @@ public class FriendsController implements TimeUtils, UIErrorHandler {
                 try {
                     Platform.runLater(()->{
                         addFriendContact(contactPreview);
+                        mainOverlayPane.getChildren().remove(root);
                     });
                 } catch (Exception e) {
                     throw new RuntimeException(e);

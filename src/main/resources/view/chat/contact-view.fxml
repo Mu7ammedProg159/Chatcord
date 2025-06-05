@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ToggleButton?>
 <?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.StackPane?>
@@ -43,21 +45,19 @@
                      <children>
                         <HBox alignment="CENTER" spacing="15.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                            <children>
-                              <VBox alignment="CENTER_LEFT" spacing="2.0" HBox.hgrow="ALWAYS">
+                              <VBox alignment="CENTER_LEFT" HBox.hgrow="ALWAYS">
                                  <children>
-                                    <Label fx:id="chatName" alignment="TOP_CENTER" style="-fx-text-fill: #dddddd; -fx-font-weight: bold; -fx-font-size: 14;" text="Username" textAlignment="CENTER" textFill="#dddddd" VBox.vgrow="ALWAYS" />
+                                    <VBox alignment="CENTER_LEFT" VBox.vgrow="ALWAYS">
+                                       <children>
+                                          <Label fx:id="chatName" alignment="TOP_LEFT" style="-fx-text-fill: #dddddd; -fx-font-weight: bold; -fx-font-size: 14;" text="Username" textAlignment="CENTER" textFill="#dddddd" />
+                                          <Label fx:id="tag" alignment="TOP_CENTER" disable="true" layoutX="10.0" layoutY="10.0" style="-fx-text-fill: #dddddd; -fx-font-weight: bold; -fx-font-size: 10; -fx-font-family: Open Sans;" text="####" textAlignment="CENTER" textFill="#dddddd">
+                                             <font>
+                                                <Font name="Open Sans Regular" size="4.0" />
+                                             </font>
+                                          </Label>
+                                       </children>
+                                    </VBox>
                                     <Label fx:id="lastChatMessage" alignment="CENTER" disable="true" minHeight="24.0" text="No messages yet " textFill="#9e9d9d" wrapText="true" VBox.vgrow="ALWAYS" />
-                                    <Label fx:id="friendStatus" alignment="CENTER" layoutX="10.0" layoutY="37.0" managed="false" styleClass="pendingFriendStatus" text="PENDING" textFill="WHITE" visible="false" wrapText="true">
-                                       <font>
-                                          <Font name="Open Sans ExtraBold" size="12.0" />
-                                       </font>
-                                       <VBox.margin>
-                                          <Insets />
-                                       </VBox.margin>
-                                       <padding>
-                                          <Insets bottom="3.0" left="6.0" right="6.0" top="3.0" />
-                                       </padding>
-                                    </Label>
                                  </children>
                                  <HBox.margin>
                                     <Insets />
@@ -67,7 +67,7 @@
                         </HBox>
                      </children>
                   </AnchorPane>
-                  <VBox alignment="CENTER" spacing="5.0">
+                  <VBox alignment="CENTER" fillWidth="false" spacing="5.0">
                      <children>
                         <Label fx:id="timestamp" alignment="CENTER_RIGHT" style="-fx-text-fill: #636363;" text="hh:mm PM" textFill="#636363">
                            <VBox.margin>
@@ -76,6 +76,39 @@
                         </Label>
                         <StackPane alignment="CENTER_RIGHT">
                            <children>
+                              <HBox fx:id="requestContainer" managed="false" spacing="10.0" visible="false">
+                                 <children>
+                                    <Button mnemonicParsing="false" prefHeight="33.0" prefWidth="33.0" styleClass="requestBtn">
+                                       <graphic>
+                                          <ImageView fitHeight="17.0" fitWidth="17.0" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@../../images/icons/check.png" />
+                                             </image>
+                                          </ImageView>
+                                       </graphic>
+                                    </Button>
+                                    <Button layoutX="10.0" layoutY="10.0" mnemonicParsing="false" prefHeight="33.0" prefWidth="33.0" styleClass="requestCancelBtn">
+                                       <graphic>
+                                          <ImageView fitHeight="17.0" fitWidth="17.0" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@../../images/icons/x.png" />
+                                             </image>
+                                          </ImageView>
+                                       </graphic>
+                                    </Button>
+                                 </children>
+                                 <padding>
+                                    <Insets left="5.0" />
+                                 </padding>
+                              </HBox>
+                              <Label fx:id="friendStatus" alignment="CENTER" managed="false" styleClass="pendingFriendStatus" text="PENDING" textFill="WHITE" visible="false" wrapText="true">
+                                 <font>
+                                    <Font name="Open Sans ExtraBold" size="12.0" />
+                                 </font>
+                                 <padding>
+                                    <Insets bottom="3.0" left="6.0" right="6.0" top="3.0" />
+                                 </padding>
+                              </Label>
                               <Label fx:id="unseenMessagesCounter" alignment="CENTER" prefHeight="24.0" prefWidth="24.0" style="-fx-background-color: #4a65b7; -fx-background-radius: 15; -fx-label-padding: 0 5; -fx-text-fill: #fcfcfc;" text="1" textAlignment="CENTER" textFill="#dddddd" visible="false">
                                  <StackPane.margin>
                                     <Insets right="2.0" />

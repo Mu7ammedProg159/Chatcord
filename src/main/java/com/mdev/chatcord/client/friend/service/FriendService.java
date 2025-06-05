@@ -44,7 +44,7 @@ public class FriendService {
                     .block();
         } catch (BusinessException e){
             log.error(e.getMessage());
-            throw new RuntimeException(e.getMessage());
+            throw new BusinessException(e.getErrorCode(), e.getMessage());
         }
     }
 
@@ -58,8 +58,8 @@ public class FriendService {
                     .onStatus(HttpStatusCode::isError, GlobalWebClientExceptionHandler::handleResponse)
                     .bodyToMono(new ParameterizedTypeReference<List<ContactPreview>>() {})
                     .block();
-        } catch (RuntimeException e) {
-            throw new RuntimeException(e.getMessage());
+        } catch (BusinessException e) {
+            throw new BusinessException(e.getErrorCode(), e.getMessage());
         }
     }
 
@@ -82,8 +82,8 @@ public class FriendService {
                     .onStatus(HttpStatusCode::isError, GlobalWebClientExceptionHandler::handleResponse)
                     .bodyToMono(ContactPreview.class)
                     .block();
-        } catch (RuntimeException e) {
-            throw new RuntimeException(e.getMessage());
+        } catch (BusinessException e) {
+            throw new BusinessException(e.getErrorCode(), e.getMessage());
         }
     }
 

@@ -4,6 +4,7 @@ import com.mdev.chatcord.client.common.service.DragWindow;
 import com.mdev.chatcord.client.common.service.SpringFXMLLoader;
 import com.mdev.chatcord.client.chat.direct.dto.PrivateChatDTO;
 import com.mdev.chatcord.client.common.implementation.UIErrorHandler;
+import com.mdev.chatcord.client.exception.BusinessException;
 import com.mdev.chatcord.client.friend.dto.ContactPreview;
 import com.mdev.chatcord.client.friend.service.FriendService;
 import com.mdev.chatcord.client.user.dto.ProfileDetails;
@@ -76,7 +77,7 @@ public class AddContactController extends DragWindow implements UIErrorHandler {
                 contactPreview = friendService.addFriend(friendUsername, friendTag);
                 onRetrieveContact.accept(contactPreview);
             }
-        } catch (RuntimeException e){
+        } catch (BusinessException e){
             setVisibility(true, errorLabel);
             errorLabel.setText(e.getMessage());
         }

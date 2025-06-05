@@ -31,7 +31,7 @@ public class WebSocketClientService {
         if (accessToken == null)
             throw new BusinessException("0002", "Failed to authenticate action.");
 
-        String url = "ws://localhost:8080/ws/chat?access_token=" + accessToken;
+        String url = "ws://localhost:8080/ws/chatcord?access_token=" + accessToken;
         WebSocketHttpHeaders headers = new WebSocketHttpHeaders(); // Not used in this case
 
         StompSessionHandler sessionHandler = new StompSessionHandlerAdapter() {
@@ -85,7 +85,7 @@ public class WebSocketClientService {
 
     public void sendPrivateMessage(MessageDTO messageDTO) {
         if (session != null && session.isConnected()) {
-            session.send("/app/chat.send", messageDTO);
+            session.send("/app/chat/direct/message.send", messageDTO);
             log.info("Sent to: {}", messageDTO.getReceiver());
         } else {
             log.error("Cannot send: session is null or disconnected");
