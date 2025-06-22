@@ -8,6 +8,7 @@ import com.mdev.chatcord.client.exception.BusinessException;
 import com.mdev.chatcord.client.exception.GlobalWebClientExceptionHandler;
 import com.mdev.chatcord.client.token.dto.TokenFactory;
 import com.mdev.chatcord.client.user.dto.ProfileDetails;
+import com.mdev.chatcord.client.user.enums.EUserState;
 import com.mdev.chatcord.client.user.service.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -71,6 +72,7 @@ public class AuthenticationService {
 
             // Form Real-time connection using Websockets.
             SocketClientHolder.init(response.getAccessToken());
+            SocketClientHolder.getInstance().sendStatus(EUserState.ONLINE);
 
         } catch (BusinessException e) {
             log.error(e.getMessage());
@@ -150,6 +152,7 @@ public class AuthenticationService {
                             .block());
 
             tokenFactory.deleteRefreshKeyFile(deviceDto.getDEVICE_ID(), String.valueOf(userProfile.getUuid()));
+            SocketClientHolder.getInstance().sendStatus(EUserState.OFFLINE);
 
             log.info(response);
         } catch (BusinessException e) {

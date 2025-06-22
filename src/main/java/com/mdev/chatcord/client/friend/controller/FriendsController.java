@@ -6,6 +6,7 @@ import com.mdev.chatcord.client.common.implementation.TimeUtils;
 import com.mdev.chatcord.client.common.implementation.UIErrorHandler;
 import com.mdev.chatcord.client.friend.dto.ContactPreview;
 import com.mdev.chatcord.client.friend.enums.EFriendStatus;
+import com.mdev.chatcord.client.friend.event.OnContactListUpdate;
 import com.mdev.chatcord.client.friend.service.FriendService;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -23,11 +24,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cglib.core.Local;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @Component
@@ -57,19 +61,28 @@ public class FriendsController implements TimeUtils, UIErrorHandler {
 
     private ChatMemberDTO sender;
 
+    private Map<String, Node> contacts = new HashMap<>();
+
     @FXML
     public void initialize() {
+        addCommunityContact();
         reloadContacts();
     }
 
     public void reloadContacts() {
-        addCommunityContact();
         // This retrieve all the friends that we asked to add and the ones we added.
         List<ContactPreview> allFriends = friendService.getAllFriends();
         if (allFriends != null)
             for (ContactPreview friend: allFriends){
                 addFriendContact(friend);
             }
+    }
+
+    @EventListener
+    public void onUpdate(OnContactListUpdate onContactListUpdate){
+        Node refreshNode = contacts.get(onContactListUpdate.getContactUuid());
+        directChatList.getChildren().remove(refreshNode);
+        addFriendContact(onContactListUpdate.getContactPreview());
     }
 
     private void addCommunityContact() {
@@ -94,7 +107,7 @@ public class FriendsController implements TimeUtils, UIErrorHandler {
         contactsListView.getChildren().add(0, root);
     }
 
-    private void addFriendContact(ContactPreview privateChat) {
+    private void addFriendContact(ContactPreview contactPreview) {
         FXMLLoader loader = springFXMLLoader.getLoader("/view/chat/contact-view.fxml");
         Node root = null;
         try {
@@ -104,10 +117,11 @@ public class FriendsController implements TimeUtils, UIErrorHandler {
         }
         ContactController controller = loader.getController();
 
-        controller.setData(privateChat);
+        controller.setData(contactPreview);
 
         controller.getContactBtn().setToggleGroup(toggleGroup);
 
+        contacts.put(String.valueOf(contactPreview.getUuid()), root);
         directChatList.getChildren().add(root);
     }
 

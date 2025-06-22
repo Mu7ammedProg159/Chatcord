@@ -5,6 +5,8 @@ import com.mdev.chatcord.client.chat.events.ContactSelectedEvent;
 import com.mdev.chatcord.client.common.implementation.UIHandler;
 import com.mdev.chatcord.client.common.service.SpringFXMLLoader;
 import com.mdev.chatcord.client.connection.udp.ClientThread;
+import com.mdev.chatcord.client.connection.websocket.SocketClientHolder;
+import com.mdev.chatcord.client.connection.websocket.WebSocketClientService;
 import com.mdev.chatcord.client.message.controller.MessageBubbleController;
 import com.mdev.chatcord.client.chat.dto.ChatMemberDTO;
 import com.mdev.chatcord.client.message.dto.MessageDTO;
@@ -67,7 +69,7 @@ public class ChatController implements UIHandler {
 
     // This will be initialized and set when pressing into a friend from the friend list.
 
-    private PrivateChatDTO chatPreview;
+   //private PrivateChatDTO chatPreview;
 
     private Image avatarImage;
 
@@ -124,21 +126,23 @@ public class ChatController implements UIHandler {
 //            sendMessage(sender.getUsername(), receiver.getUsername(), sender.getAvatarUrl());
 //
 //        }
-        String message = messageField.getText();
+//        String message = messageField.getText();
+//
+//        if (chatPreview.getChatDTO().getChatMembersDto().size() == 1)
+//            sendMessage(new MessageDTO(ChatType.valueOf(chatPreview.getChatDTO().getChatType()), message,
+//                    new ChatMemberDTO(userDetails.getUsername()),
+//                    new ChatMemberDTO("Everyone"),
+//                    LocalDateTime.now(), false, EMessageStatus.SENT));
+//
+//        else
+//            sendMessage(new MessageDTO(ChatType.valueOf(chatPreview.getChatDTO().getChatType()), message,
+//                    chatPreview.getChatDTO().getChatMembersDto().get(0),
+//                    chatPreview.getChatDTO().getChatMembersDto().get(1),
+//                    LocalDateTime.now(), false, EMessageStatus.SENT));
 
-        if (chatPreview.getChatDTO().getChatMembersDto().size() == 1)
-            sendMessage(new MessageDTO(ChatType.valueOf(chatPreview.getChatDTO().getChatType()), message,
-                    new ChatMemberDTO(userDetails.getUsername()),
-                    new ChatMemberDTO("Everyone"),
-                    LocalDateTime.now(), false, EMessageStatus.SENT));
-
-        else
-            sendMessage(new MessageDTO(ChatType.valueOf(chatPreview.getChatDTO().getChatType()), message,
-                    chatPreview.getChatDTO().getChatMembersDto().get(0),
-                    chatPreview.getChatDTO().getChatMembersDto().get(1),
-                    LocalDateTime.now(), false, EMessageStatus.SENT));
-
-
+        // This is just a test or debug to understand Websockets
+        if (!messageField.getText().equalsIgnoreCase("") || messageField.getText() != null)
+            SocketClientHolder.getInstance().sendMessage("This", messageField.getText());
 
     }
 
@@ -165,15 +169,15 @@ public class ChatController implements UIHandler {
         }
     }
 
-    @EventListener
-    public void onContactSelected(ContactSelectedEvent event) {
-        loadChat(event.getContact(), event.getChatType());
-    }
+//    @EventListener
+//    public void onContactSelected(ContactSelectedEvent event) {
+//        loadChat(event.getContact(), event.getChatType());
+//    }
 
     public void loadChat(PrivateChatDTO chatDTO, ChatType chatType) {
 
         messagesContainer.getChildren().clear();
-        this.chatPreview = chatDTO;
+        //this.chatPreview = chatDTO;
 
         // Community
         // You can use ChatType later...

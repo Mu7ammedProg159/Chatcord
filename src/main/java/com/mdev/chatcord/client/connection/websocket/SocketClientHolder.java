@@ -3,6 +3,7 @@ package com.mdev.chatcord.client.connection.websocket;
 import com.mdev.chatcord.client.authentication.dto.HttpRequest;
 import lombok.Getter;
 
+
 public class SocketClientHolder {
     @Getter
     private static WebSocketClientService instance;

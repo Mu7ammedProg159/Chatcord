@@ -5,19 +5,31 @@
     -fx-background-radius: 20px;
 }
 
-.backgroundImage:hover{
+.contactBtn{
+    -fx-background-color: #430c4bD5;
+    -fx-border-radius: 20px;
+    -fx-background-radius: 20px;
+}
+
+.contactBtn:disable{
+    -fx-background-color: #430c4bD5;
+    -fx-border-radius: 20px;
+    -fx-background-radius: 20px;
+}
+
+.contactBtn:hover{
     -fx-background-color: #60196bd5;
     -fx-border-radius: 20px;
     -fx-background-radius: 20px;
 }
 
-.backgroundImage:pressed{
+.contactBtn:pressed{
     -fx-background-color: #330a3ad5;
     -fx-border-radius: 20px;
     -fx-background-radius: 20px;
 }
 
-.backgroundImage:selected{
+.contactBtn:selected{
     -fx-background-color: #153353;
     -fx-border-radius: 20px;
     -fx-background-radius: 20px;

@@ -3,7 +3,13 @@ package com.mdev.chatcord.client.connection.websocket;
 import com.mdev.chatcord.client.authentication.dto.HttpRequest;
 import com.mdev.chatcord.client.exception.BusinessException;
 import com.mdev.chatcord.client.message.dto.MessageDTO;
+import com.mdev.chatcord.client.user.dto.UserStatusDetails;
+import com.mdev.chatcord.client.user.enums.EUserState;
 import javafx.application.Platform;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.converter.MappingJackson2MessageConverter;
 import org.springframework.messaging.simp.stomp.*;
@@ -57,11 +63,40 @@ public class WebSocketClientService {
                         });
                     }
                 });
+
+                session.subscribe("/user/queue/status", new StompFrameHandler() {
+                    @Override
+                    public Type getPayloadType(StompHeaders headers) {
+                        return UserStatusDetails.class;
+                    }
+
+                    @Override
+                    public void handleFrame(StompHeaders headers, Object payload) {
+                        UserStatusDetails status = (UserStatusDetails) payload;
+                        log.info("{} is now {}", status.getUserUuid(), status.getState().name());
+                        // update UI here
+                    }
+                });
+
+                session.subscribe("/topic/messages", new StompFrameHandler() {
+                    @Override
+                    public Type getPayloadType(StompHeaders headers) {
+                        return MessagesDTO.class;
+                    }
+
+                    @Override
+                    public void handleFrame(StompHeaders headers, Object payload) {
+                        MessagesDTO message = (MessagesDTO) payload;
+                        log.info("Received: From: {}, Content: {}", message.getFrom(), message.getContent());
+                    }
+                });
             }
 
             @Override
             public void handleTransportError(StompSession session, Throwable exception) {
                 log.error("WebSocket error: {}", exception.getMessage());
+                if (exception instanceof IllegalStateException)
+                    reconnect(accessToken);
             }
         };
 
@@ -88,7 +123,27 @@ public class WebSocketClientService {
             session.send("/app/chat/direct/message.send", messageDTO);
             log.info("Sent to: {}", messageDTO.getReceiver());
         } else {
-            log.error("Cannot send: session is null or disconnected");
+            log.error("Cannot send: session is null or disconnected. Trying to reconnect...");
+            reconnect(accessToken);
         }
     }
+
+    public void sendStatus(EUserState state) {
+        if (session != null && session.isConnected()) {
+            session.send("/app/users/status/change", state);
+        }
+    }
+
+    // Debugging test for Websocket understanding.
+    public void sendMessage(String from, String content) {
+        session.send("/app/chat", new MessagesDTO(from, content));
+    }
+}
+
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+class MessagesDTO{
+    String from;
+    String content;
 }

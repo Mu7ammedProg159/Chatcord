@@ -1,7 +1,6 @@
 package com.mdev.chatcord.client.friend.service;
 
 import com.mdev.chatcord.client.authentication.dto.HttpRequest;
-import com.mdev.chatcord.client.chat.direct.dto.PrivateChatDTO;
 import com.mdev.chatcord.client.exception.BusinessException;
 import com.mdev.chatcord.client.exception.GlobalWebClientExceptionHandler;
 import com.mdev.chatcord.client.friend.dto.ContactPreview;
@@ -33,7 +32,6 @@ public class FriendService {
 
     public ContactPreview addFriend(String username, String tag){
         try{
-
             return webClient.get()
                     .uri(httpRequest.uriParams(httpRequest.getFriendUri() + "/friend/add",
                             "username", username, "tag", tag))
@@ -83,6 +81,44 @@ public class FriendService {
                     .bodyToMono(ContactPreview.class)
                     .block();
         } catch (BusinessException e) {
+            throw new BusinessException(e.getErrorCode(), e.getMessage());
+        }
+    }
+
+    public void acceptFriendship(String username, String tag){
+        try{
+            String response = webClient.put()
+                    .uri(httpRequest.uriParams(httpRequest.getFriendUri() + "/friend/accept",
+                            "username", username, "tag", tag))
+                    .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenFactory.getAccessToken())
+                    .retrieve()
+                    .onStatus(HttpStatusCode::isError, GlobalWebClientExceptionHandler::handleResponse)
+                    .bodyToMono(String.class)
+                    .block();
+
+            log.info(response);
+
+        } catch (BusinessException e){
+            log.error(e.getMessage());
+            throw new BusinessException(e.getErrorCode(), e.getMessage());
+        }
+    }
+
+    public void declineFriendship(String username, String tag){
+        try{
+            String response = webClient.delete()
+                    .uri(httpRequest.uriParams(httpRequest.getFriendUri() + "/friend/remove",
+                            "username", username, "tag", tag))
+                    .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenFactory.getAccessToken())
+                    .retrieve()
+                    .onStatus(HttpStatusCode::isError, GlobalWebClientExceptionHandler::handleResponse)
+                    .bodyToMono(String.class)
+                    .block();
+
+            log.info(response);
+
+        } catch (BusinessException e){
+            log.error(e.getMessage());
             throw new BusinessException(e.getErrorCode(), e.getMessage());
         }
     }
