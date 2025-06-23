@@ -71,8 +71,8 @@ public class AuthenticationService {
             tokenFactory.setRefreshToken(response.getRefreshToken(), deviceDto.getDEVICE_ID(), response.getProfileDetails().getUuid());
 
             // Form Real-time connection using Websockets.
-            SocketClientHolder.init(response.getAccessToken());
-            SocketClientHolder.getInstance().sendStatus(EUserState.ONLINE);
+            SocketClientHolder.init(response.getAccessToken(), userProfile);
+            //SocketClientHolder.getInstance().sendStatus(EUserState.ONLINE);
 
         } catch (BusinessException e) {
             log.error(e.getMessage());

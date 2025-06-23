@@ -142,7 +142,7 @@ public class ChatController implements UIHandler {
 
         // This is just a test or debug to understand Websockets
         if (!messageField.getText().equalsIgnoreCase("") || messageField.getText() != null)
-            SocketClientHolder.getInstance().sendMessage("This", messageField.getText());
+            SocketClientHolder.getInstance().sendMessage(userDetails.getUuid().toLowerCase(), "0c5a9aed-9e61-484d-8d7f-62e50ff61a62".toLowerCase(), messageField.getText());
 
     }
 

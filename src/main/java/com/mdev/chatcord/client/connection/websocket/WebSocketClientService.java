@@ -2,15 +2,19 @@ package com.mdev.chatcord.client.connection.websocket;
 
 import com.mdev.chatcord.client.authentication.dto.HttpRequest;
 import com.mdev.chatcord.client.exception.BusinessException;
+import com.mdev.chatcord.client.friend.dto.AddFriendDTO;
+import com.mdev.chatcord.client.friend.dto.ContactPreview;
 import com.mdev.chatcord.client.message.dto.MessageDTO;
 import com.mdev.chatcord.client.user.dto.UserStatusDetails;
 import com.mdev.chatcord.client.user.enums.EUserState;
+import com.mdev.chatcord.client.user.service.User;
 import javafx.application.Platform;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.converter.MappingJackson2MessageConverter;
 import org.springframework.messaging.simp.stomp.*;
 import org.springframework.web.socket.WebSocketHttpHeaders;
@@ -27,8 +31,11 @@ public class WebSocketClientService {
     private StompSession session;
     private String accessToken;
 
-    public WebSocketClientService(String accessToken) {
+    private final User user;
+
+    public WebSocketClientService(String accessToken, User user) {
         this.accessToken = accessToken;
+        this.user = user;
         this.stompClient = new WebSocketStompClient(new StandardWebSocketClient());
         this.stompClient.setMessageConverter(new MappingJackson2MessageConverter());
     }
@@ -38,7 +45,9 @@ public class WebSocketClientService {
             throw new BusinessException("0002", "Failed to authenticate action.");
 
         String url = "ws://localhost:8080/ws/chatcord?access_token=" + accessToken;
-        WebSocketHttpHeaders headers = new WebSocketHttpHeaders(); // Not used in this case
+        WebSocketHttpHeaders wsHeaders = new WebSocketHttpHeaders(); // Not used in this case
+        StompHeaders stompHeaders = new StompHeaders();
+        stompHeaders.add("uuid", user.getUuid());
 
         StompSessionHandler sessionHandler = new StompSessionHandlerAdapter() {
             @Override
@@ -64,6 +73,20 @@ public class WebSocketClientService {
                     }
                 });
 
+                session.subscribe("/user/queue/friendship", new StompFrameHandler() {
+                    @Override
+                    public Type getPayloadType(StompHeaders headers) {
+                        return ContactPreview.class;
+                    }
+
+                    @Override
+                    public void handleFrame(StompHeaders headers, Object payload) {
+                        ContactPreview contact = (ContactPreview) payload;
+                        log.info("{} requested friendship with {}", user.getUsername(), contact.getDisplayName());
+                        // update UI here
+                    }
+                });
+
                 session.subscribe("/user/queue/status", new StompFrameHandler() {
                     @Override
                     public Type getPayloadType(StompHeaders headers) {
@@ -78,7 +101,7 @@ public class WebSocketClientService {
                     }
                 });
 
-                session.subscribe("/topic/messages", new StompFrameHandler() {
+                session.subscribe("/user/queue/messages", new StompFrameHandler() {
                     @Override
                     public Type getPayloadType(StompHeaders headers) {
                         return MessagesDTO.class;
@@ -87,7 +110,7 @@ public class WebSocketClientService {
                     @Override
                     public void handleFrame(StompHeaders headers, Object payload) {
                         MessagesDTO message = (MessagesDTO) payload;
-                        log.info("Received: From: {}, Content: {}", message.getFrom(), message.getContent());
+                        log.info("Received From: {}, Sent to: {}, Content: {}", message.getFrom(), message.getTo(), message.getContent());
                     }
                 });
             }
@@ -100,7 +123,7 @@ public class WebSocketClientService {
             }
         };
 
-        CompletableFuture<StompSession> future = stompClient.connectAsync(url, headers, sessionHandler);
+        CompletableFuture<StompSession> future = stompClient.connectAsync(url, wsHeaders, stompHeaders, sessionHandler);
 
         future.thenAccept(stompSession -> {
             this.session = stompSession;
@@ -134,9 +157,13 @@ public class WebSocketClientService {
         }
     }
 
+    public void sendFriendshipRequest(String username, String tag){
+        session.send("/app/add", new AddFriendDTO(username, tag));
+    }
+
     // Debugging test for Websocket understanding.
-    public void sendMessage(String from, String content) {
-        session.send("/app/chat", new MessagesDTO(from, content));
+    public void sendMessage(String from, String to, String content) {
+        session.send("/app/chat", new MessagesDTO(from, to, content));
     }
 }
 
@@ -145,5 +172,6 @@ public class WebSocketClientService {
 @NoArgsConstructor
 class MessagesDTO{
     String from;
+    String to;
     String content;
 }
