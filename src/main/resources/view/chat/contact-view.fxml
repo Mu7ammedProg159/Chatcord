@@ -47,15 +47,15 @@
                         <Insets right="3.0" top="3.0" />
                      </HBox.margin>
                   </VBox>
-                  <HBox HBox.hgrow="ALWAYS">
+                  <HBox alignment="CENTER" HBox.hgrow="ALWAYS">
                      <children>
                         <AnchorPane maxWidth="350.0" style="-fx-background-color: transparent;" HBox.hgrow="ALWAYS">
                            <children>
-                              <HBox alignment="TOP_CENTER" spacing="15.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                              <HBox alignment="CENTER" spacing="15.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                  <children>
                                     <VBox alignment="CENTER_LEFT" HBox.hgrow="ALWAYS">
                                        <children>
-                                          <VBox alignment="CENTER_LEFT" VBox.vgrow="ALWAYS">
+                                          <VBox alignment="CENTER_LEFT">
                                              <children>
                                                 <Label fx:id="chatName" alignment="TOP_LEFT" style="-fx-text-fill: #dddddd; -fx-font-weight: bold; -fx-font-size: 14;" text="Username" textAlignment="CENTER" textFill="#dddddd" />
                                                 <Label fx:id="tag" alignment="TOP_CENTER" disable="true" layoutX="10.0" layoutY="10.0" style="-fx-text-fill: #dddddd; -fx-font-weight: bold; -fx-font-size: 10; -fx-font-family: Open Sans;" text="####" textAlignment="CENTER" textFill="#dddddd">
@@ -75,7 +75,7 @@
                               </HBox>
                            </children>
                         </AnchorPane>
-                        <VBox fx:id="rightSide" alignment="TOP_CENTER" fillWidth="false" spacing="9.0">
+                        <VBox fx:id="rightSide" alignment="CENTER" fillWidth="false" spacing="9.0">
                            <children>
                               <Label fx:id="timestamp" alignment="CENTER_RIGHT" style="-fx-text-fill: #636363;" text="hh:mm PM" textFill="#636363">
                                  <VBox.margin>

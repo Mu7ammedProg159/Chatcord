@@ -89,9 +89,12 @@ public class ContactController implements UIHandler, TimeUtils, EventStageHandle
         chatName.setText(contactPreview.getDisplayName());
 
         if (contactPreview.isGroup()){
+            contactImage.setSize(50);
             contactImage.setStatusVisible(false);
             tag.setManaged(false);
             tag.setVisible(false);
+            setVisibility(false, unseenMessagesCounter);
+            rightSide.setAlignment(Pos.CENTER);
         }
 
         tag.setText("#" + contactPreview.getTag());
