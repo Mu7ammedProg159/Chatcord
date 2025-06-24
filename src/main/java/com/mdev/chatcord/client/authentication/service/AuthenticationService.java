@@ -1,7 +1,7 @@
 package com.mdev.chatcord.client.authentication.service;
 
 import com.mdev.chatcord.client.authentication.dto.AuthenticationResponse;
-import com.mdev.chatcord.client.connection.websocket.SocketClientHolder;
+import com.mdev.chatcord.client.connection.websocket.controller.SocketClientHolder;
 import com.mdev.chatcord.client.device.dto.DeviceDto;
 import com.mdev.chatcord.client.authentication.dto.HttpRequest;
 import com.mdev.chatcord.client.exception.BusinessException;
@@ -12,6 +12,7 @@ import com.mdev.chatcord.client.user.enums.EUserState;
 import com.mdev.chatcord.client.user.service.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -30,6 +31,7 @@ public class AuthenticationService {
     private final TokenFactory tokenFactory;
     private final DeviceDto deviceDto;
     private final User userProfile;
+    private final ApplicationEventPublisher eventPublisher;
 
     public String register(String email, String password, String username) {
 
@@ -71,7 +73,7 @@ public class AuthenticationService {
             tokenFactory.setRefreshToken(response.getRefreshToken(), deviceDto.getDEVICE_ID(), response.getProfileDetails().getUuid());
 
             // Form Real-time connection using Websockets.
-            SocketClientHolder.init(response.getAccessToken(), userProfile);
+            SocketClientHolder.init(response.getAccessToken(), userProfile, eventPublisher);
             //SocketClientHolder.getInstance().sendStatus(EUserState.ONLINE);
 
         } catch (BusinessException e) {

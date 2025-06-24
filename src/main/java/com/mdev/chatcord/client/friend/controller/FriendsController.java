@@ -7,6 +7,7 @@ import com.mdev.chatcord.client.common.implementation.UIErrorHandler;
 import com.mdev.chatcord.client.friend.dto.ContactPreview;
 import com.mdev.chatcord.client.friend.enums.EFriendStatus;
 import com.mdev.chatcord.client.friend.event.OnContactListUpdate;
+import com.mdev.chatcord.client.friend.event.OnReceivedFriendship;
 import com.mdev.chatcord.client.friend.service.FriendService;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -76,6 +77,12 @@ public class FriendsController implements TimeUtils, UIErrorHandler {
             for (ContactPreview friend: allFriends){
                 addFriendContact(friend);
             }
+    }
+
+    @EventListener
+    public void onFriendshipRequested(OnReceivedFriendship onReceivedFriendship){
+        logger.warn("Received Websocket event for adding new friendship request.");
+        addFriendContact(onReceivedFriendship.getContactPreview());
     }
 
     @EventListener

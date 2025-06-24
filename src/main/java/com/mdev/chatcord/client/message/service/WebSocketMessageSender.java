@@ -1,6 +1,6 @@
 package com.mdev.chatcord.client.message.service;
 
-import com.mdev.chatcord.client.connection.websocket.SocketClientHolder;
+import com.mdev.chatcord.client.connection.websocket.controller.SocketClientHolder;
 import org.springframework.stereotype.Component;
 
 import com.mdev.chatcord.client.message.dto.MessageDTO;

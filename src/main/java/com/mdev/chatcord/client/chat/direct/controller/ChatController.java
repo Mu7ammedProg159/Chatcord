@@ -1,12 +1,10 @@
 package com.mdev.chatcord.client.chat.direct.controller;
 
 import com.mdev.chatcord.client.chat.direct.dto.PrivateChatDTO;
-import com.mdev.chatcord.client.chat.events.ContactSelectedEvent;
 import com.mdev.chatcord.client.common.implementation.UIHandler;
 import com.mdev.chatcord.client.common.service.SpringFXMLLoader;
 import com.mdev.chatcord.client.connection.udp.ClientThread;
-import com.mdev.chatcord.client.connection.websocket.SocketClientHolder;
-import com.mdev.chatcord.client.connection.websocket.WebSocketClientService;
+import com.mdev.chatcord.client.connection.websocket.controller.SocketClientHolder;
 import com.mdev.chatcord.client.message.controller.MessageBubbleController;
 import com.mdev.chatcord.client.chat.dto.ChatMemberDTO;
 import com.mdev.chatcord.client.message.dto.MessageDTO;
@@ -29,7 +27,6 @@ import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
