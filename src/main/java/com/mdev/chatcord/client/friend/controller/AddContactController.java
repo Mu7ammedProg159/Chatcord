@@ -3,7 +3,7 @@ package com.mdev.chatcord.client.friend.controller;
 import com.mdev.chatcord.client.common.service.DragWindow;
 import com.mdev.chatcord.client.common.service.SpringFXMLLoader;
 import com.mdev.chatcord.client.common.implementation.UIErrorHandler;
-import com.mdev.chatcord.client.connection.websocket.controller.SocketClientHolder;
+import com.mdev.chatcord.client.connection.websocket.controller.Communicator;
 import com.mdev.chatcord.client.exception.BusinessException;
 import com.mdev.chatcord.client.friend.dto.ContactPreview;
 import com.mdev.chatcord.client.friend.service.FriendService;
@@ -73,7 +73,7 @@ public class AddContactController extends DragWindow implements UIErrorHandler {
                 setVisibility(false, errorLabel);
                 contactPreview = friendService.addFriend(friendUsername, friendTag);
                 onRetrieveContact.accept(contactPreview);
-                SocketClientHolder.getInstance().sendFriendshipRequest(friendUsername, friendTag);
+                Communicator.getInstance().sendFriendshipRequest(friendUsername, friendTag);
             }
         } catch (BusinessException e){
             setVisibility(true, errorLabel);

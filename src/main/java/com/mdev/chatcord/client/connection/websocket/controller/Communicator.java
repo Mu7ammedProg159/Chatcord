@@ -6,7 +6,7 @@ import lombok.Getter;
 import org.springframework.context.ApplicationEventPublisher;
 
 
-public class SocketClientHolder {
+public class Communicator {
     @Getter
     private static WebSocketClientService instance;
 

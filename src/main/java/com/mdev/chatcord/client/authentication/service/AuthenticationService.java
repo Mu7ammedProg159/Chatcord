@@ -1,7 +1,7 @@
 package com.mdev.chatcord.client.authentication.service;
 
 import com.mdev.chatcord.client.authentication.dto.AuthenticationResponse;
-import com.mdev.chatcord.client.connection.websocket.controller.SocketClientHolder;
+import com.mdev.chatcord.client.connection.websocket.controller.Communicator;
 import com.mdev.chatcord.client.device.dto.DeviceDto;
 import com.mdev.chatcord.client.authentication.dto.HttpRequest;
 import com.mdev.chatcord.client.exception.BusinessException;
@@ -73,7 +73,7 @@ public class AuthenticationService {
             tokenFactory.setRefreshToken(response.getRefreshToken(), deviceDto.getDEVICE_ID(), response.getProfileDetails().getUuid());
 
             // Form Real-time connection using Websockets.
-            SocketClientHolder.init(response.getAccessToken(), userProfile, eventPublisher);
+            Communicator.init(response.getAccessToken(), userProfile, eventPublisher);
             //SocketClientHolder.getInstance().sendStatus(EUserState.ONLINE);
 
         } catch (BusinessException e) {
@@ -154,7 +154,7 @@ public class AuthenticationService {
                             .block());
 
             tokenFactory.deleteRefreshKeyFile(deviceDto.getDEVICE_ID(), String.valueOf(userProfile.getUuid()));
-            SocketClientHolder.getInstance().sendStatus(EUserState.OFFLINE);
+            Communicator.getInstance().sendStatus(EUserState.OFFLINE);
 
             log.info(response);
         } catch (BusinessException e) {

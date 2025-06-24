@@ -5,19 +5,11 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.mdev.chatcord.client.connection.websocket.configuration.StompSessionSubscriberHandler;
 import com.mdev.chatcord.client.connection.websocket.demo.MessagesDTO;
-import com.mdev.chatcord.client.connection.websocket.impl.WebSocketSubscriber;
 import com.mdev.chatcord.client.exception.BusinessException;
-import com.mdev.chatcord.client.friend.dto.AddFriendDTO;
-import com.mdev.chatcord.client.friend.dto.ContactPreview;
-import com.mdev.chatcord.client.friend.event.OnReceivedFriendship;
+import com.mdev.chatcord.client.friend.dto.FriendUser;
 import com.mdev.chatcord.client.message.dto.MessageDTO;
-import com.mdev.chatcord.client.user.dto.UserStatusDetails;
 import com.mdev.chatcord.client.user.enums.EUserState;
 import com.mdev.chatcord.client.user.service.User;
-import javafx.application.Platform;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.messaging.converter.MappingJackson2MessageConverter;
@@ -26,8 +18,6 @@ import org.springframework.web.socket.WebSocketHttpHeaders;
 import org.springframework.web.socket.client.standard.StandardWebSocketClient;
 import org.springframework.web.socket.messaging.WebSocketStompClient;
 
-import java.lang.reflect.Type;
-import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 @Slf4j
@@ -78,94 +68,6 @@ public class WebSocketClientService {
             }
         };
 
-
-//        StompSessionHandler sessionHandler = new StompSessionHandlerAdapter() {
-//            @Override
-//            public void afterConnected(StompSession session, StompHeaders connectedHeaders) {
-//                WebSocketClientService.this.session = session;
-//                log.info("Connected to WebSocket");
-//
-//                session.subscribe("/user/queue/private", new StompFrameHandler() {
-//                    @Override
-//                    public Type getPayloadType(StompHeaders headers) {
-//                        return MessageDTO.class;
-//                    }
-//
-//                    @Override
-//                    public void handleFrame(StompHeaders headers, Object payload) {
-//                        MessageDTO message = (MessageDTO) payload;
-//                        log.info("Message from {}: {}", message.getSender(), message.getContent());
-//
-//                        Platform.runLater(() -> {
-//                            // 🔧 Replace with your UI controller method
-//                            log.info("UI Display: {}", message.getContent());
-//                        });
-//                    }
-//
-//                });
-//
-//                session.subscribe("/user/queue/friendship.add", new StompFrameHandler() {
-//                    @Override
-//                    public Type getPayloadType(StompHeaders headers) {
-//                        return ContactPreview.class;
-//                    }
-//
-//                    @Override
-//                    public void handleFrame(StompHeaders headers, Object payload) {
-//                        ContactPreview contact = (ContactPreview) payload;
-//                        log.info("{} requested friendship with you as [{}]", contact.getDisplayName(), user.getUsername());
-//                        // update UI here
-//                        Platform.runLater(() -> {
-//                            eventPublisher.publishEvent(new OnReceivedFriendship(this, contact));
-//                        });
-//                    }
-//                });
-//                log.warn("Subscribed to /user/queue/friendship");
-//
-//                session.subscribe("/user/queue/status", new StompFrameHandler() {
-//                    @Override
-//                    public Type getPayloadType(StompHeaders headers) {
-//                        return UserStatusDetails.class;
-//                    }
-//
-//                    @Override
-//                    public void handleFrame(StompHeaders headers, Object payload) {
-//                        UserStatusDetails status = (UserStatusDetails) payload;
-//                        log.info("{} is now {}", status.getUserUuid(), status.getState().name());
-//                        // update UI here
-//                    }
-//                });
-//                log.warn("Subscribed to /user/queue/status");
-//
-//                session.subscribe("/user/queue/messages", new StompFrameHandler() {
-//                    @Override
-//                    public Type getPayloadType(StompHeaders headers) {
-//                        return MessagesDTO.class;
-//                    }
-//
-//                    @Override
-//                    public void handleFrame(StompHeaders headers, Object payload) {
-//                        MessagesDTO message = (MessagesDTO) payload;
-//                        log.info("Received From: {}, Sent to: {}, Content: {}", message.getFrom(), message.getTo(), message.getContent());
-//                    }
-//                });
-//                log.warn("Subscribed to /user/queue/messages");
-//            }
-//
-//            @Override
-//            public void handleException(StompSession session, StompCommand command, StompHeaders headers,
-//                                        byte[] payload, Throwable exception) {
-//                log.error("❌ STOMP error: {}", exception.getMessage(), exception);
-//            }
-//
-//            @Override
-//            public void handleTransportError(StompSession session, Throwable exception) {
-//                log.error("WebSocket error: {}", exception.getMessage());
-//                if (exception.getMessage().equalsIgnoreCase("Connection closed"))
-//                    reconnect(accessToken);
-//            }
-//        };
-
         CompletableFuture<StompSession> future = stompClient.connectAsync(url, wsHeaders, stompHeaders, sessionSubscriberHandler);
 
         future.thenAccept(stompSession -> {
@@ -206,10 +108,19 @@ public class WebSocketClientService {
 
     public void sendFriendshipRequest(String username, String tag){
         if (session != null && session.isConnected()) {
-            session.send("/app/friend.add", new AddFriendDTO(username, tag));
+            session.send("/app/friend.add", new FriendUser(username, tag));
         } else {
             reconnect(accessToken);
-            session.send("/app/friend.add", new AddFriendDTO(username, tag));
+            session.send("/app/friend.add", new FriendUser(username, tag));
+        }
+    }
+
+    public void acceptFriendship(String friendUsername, String friendTag) {
+        if (session != null && session.isConnected()) {
+            session.send("/app/friend.accept", new FriendUser(friendUsername, friendTag));
+        } else {
+            reconnect(accessToken);
+            session.send("/app/friend.accept", new FriendUser(friendUsername, friendTag));
         }
     }
 

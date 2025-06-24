@@ -4,7 +4,7 @@ import com.mdev.chatcord.client.chat.direct.dto.PrivateChatDTO;
 import com.mdev.chatcord.client.common.implementation.UIHandler;
 import com.mdev.chatcord.client.common.service.SpringFXMLLoader;
 import com.mdev.chatcord.client.connection.udp.ClientThread;
-import com.mdev.chatcord.client.connection.websocket.controller.SocketClientHolder;
+import com.mdev.chatcord.client.connection.websocket.controller.Communicator;
 import com.mdev.chatcord.client.message.controller.MessageBubbleController;
 import com.mdev.chatcord.client.chat.dto.ChatMemberDTO;
 import com.mdev.chatcord.client.message.dto.MessageDTO;
@@ -139,7 +139,7 @@ public class ChatController implements UIHandler {
 
         // This is just a test or debug to understand Websockets
         if (!messageField.getText().equalsIgnoreCase("") || messageField.getText() != null)
-            SocketClientHolder.getInstance().sendMessage(userDetails.getUuid().toLowerCase(), "0c5a9aed-9e61-484d-8d7f-62e50ff61a62".toLowerCase(), messageField.getText());
+            Communicator.getInstance().sendMessage(userDetails.getUuid().toLowerCase(), "0c5a9aed-9e61-484d-8d7f-62e50ff61a62".toLowerCase(), messageField.getText());
 
     }
 

@@ -6,6 +6,7 @@ import com.mdev.chatcord.client.common.implementation.EventStageHandler;
 import com.mdev.chatcord.client.common.implementation.TimeUtils;
 import com.mdev.chatcord.client.common.service.SpringFXMLLoader;
 import com.mdev.chatcord.client.chat.direct.controller.ChatController;
+import com.mdev.chatcord.client.connection.websocket.controller.Communicator;
 import com.mdev.chatcord.client.friend.dto.ContactPreview;
 import com.mdev.chatcord.client.chat.direct.dto.PrivateChatDTO;
 import com.mdev.chatcord.client.common.implementation.UIHandler;
@@ -208,7 +209,7 @@ public class ContactController implements UIHandler, TimeUtils, EventStageHandle
         friendService.acceptFriendship(contactPreview.getDisplayName(), contactPreview.getTag());
         contactPreview.setFriendStatus(EFriendStatus.ACCEPTED);
 //        showPreviewBasedOnDetails(contactPreview);
-
+        Communicator.getInstance().acceptFriendship(contactPreview.getDisplayName(), contactPreview.getTag());
         eventPublisher.publishEvent(new OnContactListUpdate(this, String.valueOf(contactPreview.getUuid()), contactPreview));
         log.info("You've accepted {} friendship.", contactPreview.getDisplayName());
     }

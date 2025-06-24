@@ -4,6 +4,7 @@ import com.mdev.chatcord.client.connection.websocket.annotation.WebSocketSubscri
 import com.mdev.chatcord.client.connection.websocket.impl.WebSocketRegistry;
 import com.mdev.chatcord.client.connection.websocket.service.WebSocketFeatureSubscriber;
 import com.mdev.chatcord.client.friend.dto.ContactPreview;
+import com.mdev.chatcord.client.friend.event.OnContactListUpdate;
 import com.mdev.chatcord.client.friend.event.OnReceivedFriendship;
 import com.mdev.chatcord.client.user.service.User;
 import org.springframework.context.ApplicationEventPublisher;
@@ -18,8 +19,12 @@ public class FriendshipSubscriber extends WebSocketFeatureSubscriber {
         });
 
         register(WebSocketRegistry.FRIEND_ACCEPT, ContactPreview.class, contact -> {
-            eventPublisher.publishEvent(new OnReceivedFriendship(this, contact));}
-        );
+            eventPublisher.publishEvent(new OnContactListUpdate(
+                    this,
+                    contact.getUuid().toString().toLowerCase(),
+                    contact));
+            log.info("{} accepted friendship with you as [{}]", contact.getDisplayName(), user.getUsername());
+        });
 
         // Here you can add how many you want of friendship endpoints.
     }
