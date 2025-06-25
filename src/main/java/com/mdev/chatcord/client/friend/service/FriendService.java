@@ -106,8 +106,8 @@ public class FriendService {
 
     public void declineFriendship(String username, String tag){
         try{
-            String response = webClient.delete()
-                    .uri(httpRequest.uriParams(httpRequest.getFriendUri() + "/friend/remove",
+            String response = webClient.put()
+                    .uri(httpRequest.uriParams(httpRequest.getFriendUri() + "/friend/decline",
                             "username", username, "tag", tag))
                     .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenFactory.getAccessToken())
                     .retrieve()

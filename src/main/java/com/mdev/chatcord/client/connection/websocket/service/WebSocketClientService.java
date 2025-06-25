@@ -115,12 +115,12 @@ public class WebSocketClientService {
         }
     }
 
-    public void acceptFriendship(String friendUsername, String friendTag) {
+    public void changeFriendship(String friendUsername, String friendTag) {
         if (session != null && session.isConnected()) {
-            session.send("/app/friend.accept", new FriendUser(friendUsername, friendTag));
+            session.send("/app/friend.update", new FriendUser(friendUsername, friendTag));
         } else {
             reconnect(accessToken);
-            session.send("/app/friend.accept", new FriendUser(friendUsername, friendTag));
+            session.send("/app/friend.update", new FriendUser(friendUsername, friendTag));
         }
     }
 

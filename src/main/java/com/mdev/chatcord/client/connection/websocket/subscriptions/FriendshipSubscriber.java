@@ -18,12 +18,13 @@ public class FriendshipSubscriber extends WebSocketFeatureSubscriber {
             log.info("{} requested friendship with you as [{}]", contact.getDisplayName(), user.getUsername());
         });
 
-        register(WebSocketRegistry.FRIEND_ACCEPT, ContactPreview.class, contact -> {
+        register(WebSocketRegistry.FRIEND_UPDATE, ContactPreview.class, contact -> {
             eventPublisher.publishEvent(new OnContactListUpdate(
                     this,
                     contact.getUuid().toString().toLowerCase(),
                     contact));
-            log.info("{} accepted friendship with you as [{}]", contact.getDisplayName(), user.getUsername());
+            String logStatus = contact.getFriendStatus().name().toLowerCase();
+            log.info("{} {} friendship with you as [{}]", contact.getDisplayName(), logStatus, user.getUsername());
         });
 
         // Here you can add how many you want of friendship endpoints.

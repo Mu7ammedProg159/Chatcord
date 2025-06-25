@@ -209,7 +209,7 @@ public class ContactController implements UIHandler, TimeUtils, EventStageHandle
         friendService.acceptFriendship(contactPreview.getDisplayName(), contactPreview.getTag());
         contactPreview.setFriendStatus(EFriendStatus.ACCEPTED);
 //        showPreviewBasedOnDetails(contactPreview);
-        Communicator.getInstance().acceptFriendship(contactPreview.getDisplayName(), contactPreview.getTag());
+        Communicator.getInstance().changeFriendship(contactPreview.getDisplayName(), contactPreview.getTag());
         eventPublisher.publishEvent(new OnContactListUpdate(this, String.valueOf(contactPreview.getUuid()), contactPreview));
         log.info("You've accepted {} friendship.", contactPreview.getDisplayName());
     }
@@ -218,6 +218,7 @@ public class ContactController implements UIHandler, TimeUtils, EventStageHandle
     public void onDeclineButtonClicked(ActionEvent event){
         friendService.declineFriendship(contactPreview.getDisplayName(), contactPreview.getTag());
         contactPreview.setFriendStatus(EFriendStatus.DECLINED);
+        Communicator.getInstance().changeFriendship(contactPreview.getDisplayName(), contactPreview.getTag());
         eventPublisher.publishEvent(new OnContactListUpdate(this, String.valueOf(contactPreview.getUuid()), contactPreview));
         log.info("You've declined {} friendship.", contactPreview.getDisplayName());
     }
