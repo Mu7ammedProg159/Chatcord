@@ -6,6 +6,7 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.mdev.chatcord.client.connection.websocket.configuration.StompSessionSubscriberHandler;
 import com.mdev.chatcord.client.connection.websocket.demo.MessagesDTO;
 import com.mdev.chatcord.client.exception.BusinessException;
+import com.mdev.chatcord.client.friend.dto.ContactPreview;
 import com.mdev.chatcord.client.friend.dto.FriendUser;
 import com.mdev.chatcord.client.message.dto.MessageDTO;
 import com.mdev.chatcord.client.user.enums.EUserState;
@@ -106,12 +107,12 @@ public class WebSocketClientService {
         }
     }
 
-    public void sendFriendshipRequest(String username, String tag){
+    public void sendFriendshipRequest(ContactPreview receiverContact){
         if (session != null && session.isConnected()) {
-            session.send("/app/friend.add", new FriendUser(username, tag));
+            session.send("/app/friend.add", receiverContact);
         } else {
             reconnect(accessToken);
-            session.send("/app/friend.add", new FriendUser(username, tag));
+            session.send("/app/friend.add", receiverContact);
         }
     }
 

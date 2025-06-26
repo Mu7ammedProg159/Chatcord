@@ -23,19 +23,20 @@ public class StompSessionSubscriberHandler extends StompSessionHandlerAdapter {
 
     @Override
     public void afterConnected(StompSession session, StompHeaders connectedHeaders) {
-        log.info("✅ Connected. Auto-subscribing WebSocket handlers...");
+        log.info("Connected. Auto-subscribing WebSocket handlers...");
 
         for (WebSocketSubscriber sub : subscribers) {
             sub.subscribe(session);
+            log.info("Subscribed to {} successfully", sub.getClass().getName());
         }
 
-        log.info("✅ All WebSocket subscriptions registered.");
+        log.info("All WebSocket subscriptions registered.");
     }
 
     @Override
     public void handleException(StompSession session, StompCommand command, StompHeaders headers,
                                 byte[] payload, Throwable exception) {
-        log.error("❌ STOMP error: {}", exception.getMessage(), exception);
+        log.error("STOMP error: {}", exception.getMessage(), exception);
     }
 
 }

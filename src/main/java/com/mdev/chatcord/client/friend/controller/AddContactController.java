@@ -73,7 +73,7 @@ public class AddContactController extends DragWindow implements UIErrorHandler {
                 setVisibility(false, errorLabel);
                 contactPreview = friendService.addFriend(friendUsername, friendTag);
                 onRetrieveContact.accept(contactPreview);
-                Communicator.getInstance().sendFriendshipRequest(friendUsername, friendTag);
+                Communicator.getInstance().sendFriendshipRequest(contactPreview);
             }
         } catch (BusinessException e){
             setVisibility(true, errorLabel);
