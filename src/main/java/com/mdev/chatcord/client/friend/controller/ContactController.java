@@ -191,14 +191,11 @@ public class ContactController implements UIHandler, TimeUtils, EventStageHandle
         return false;
     }
 
-    public void onClick(PrivateChatDTO chat){
-        eventPublisher.publishEvent(new ContactSelectedEvent(this, chat, chatType));
-    }
-
     @FXML
     public void onChatBtnClicked(ActionEvent event){
 //      onClick(privateChatDTO);
-        if (contactPreview.getFriendStatus().equals(EFriendStatus.REQUESTED)){
+        if (contactPreview.getFriendStatus().equals(EFriendStatus.ACCEPTED)){
+            eventPublisher.publishEvent(new ContactSelectedEvent(this, chat, chatType));
             return;
         }
         log.info("You pressed {}'s contact.", contactPreview.getDisplayName());
@@ -209,7 +206,7 @@ public class ContactController implements UIHandler, TimeUtils, EventStageHandle
         friendService.acceptFriendship(contactPreview.getDisplayName(), contactPreview.getTag());
         contactPreview.setFriendStatus(EFriendStatus.ACCEPTED);
 //        showPreviewBasedOnDetails(contactPreview);
-        Communicator.getInstance().changeFriendship(contactPreview.getDisplayName(), contactPreview.getTag());
+        //Communicator.getInstance().changeFriendship(contactPreview.getDisplayName(), contactPreview.getTag());
         eventPublisher.publishEvent(new OnContactListUpdate(this, String.valueOf(contactPreview.getUuid()), contactPreview));
         log.info("You've accepted {} friendship.", contactPreview.getDisplayName());
     }
@@ -218,7 +215,7 @@ public class ContactController implements UIHandler, TimeUtils, EventStageHandle
     public void onDeclineButtonClicked(ActionEvent event){
         friendService.declineFriendship(contactPreview.getDisplayName(), contactPreview.getTag());
         contactPreview.setFriendStatus(EFriendStatus.DECLINED);
-        Communicator.getInstance().changeFriendship(contactPreview.getDisplayName(), contactPreview.getTag());
+        //Communicator.getInstance().changeFriendship(contactPreview);
         eventPublisher.publishEvent(new OnContactListUpdate(this, String.valueOf(contactPreview.getUuid()), contactPreview));
         log.info("You've declined {} friendship.", contactPreview.getDisplayName());
     }

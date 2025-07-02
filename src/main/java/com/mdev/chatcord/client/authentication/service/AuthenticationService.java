@@ -154,7 +154,6 @@ public class AuthenticationService {
                             .block());
 
             tokenFactory.deleteRefreshKeyFile(deviceDto.getDEVICE_ID(), String.valueOf(userProfile.getUuid()));
-            Communicator.getInstance().sendStatus(EUserState.OFFLINE);
 
             log.info(response);
         } catch (BusinessException e) {

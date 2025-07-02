@@ -4,6 +4,7 @@ import com.mdev.chatcord.client.chat.events.ContactSelectedEvent;
 import com.mdev.chatcord.client.common.service.SpringFXMLLoader;
 import com.mdev.chatcord.client.common.service.StageInitializer;
 import com.mdev.chatcord.client.connection.udp.ClientThread;
+import com.mdev.chatcord.client.connection.websocket.controller.Communicator;
 import com.mdev.chatcord.client.settings.controller.SettingsController;
 import com.mdev.chatcord.client.common.implementation.EventStageHandler;
 import com.mdev.chatcord.client.common.implementation.ThrowingRunnable;
@@ -114,10 +115,15 @@ public class NavigationBarController implements EventStageHandler, UIHandler {
     public void onLogoutClick(ActionEvent event) {
         //userService.logoutUser(username, tag);
 
-        clientThread.close();
-        authenticationService.logout();
-        tokenFactory.setAccessToken(null);
-        stageInitializer.switchScenes(getStageActionEvent(event), "/view/login/sign-view.fxml", "Login", 1380, 750);
+        try {
+            clientThread.close();
+            authenticationService.logout();
+            tokenFactory.setAccessToken(null);
+            Communicator.destroy();
+            stageInitializer.switchScenes(getStageActionEvent(event), "/view/login/sign-view.fxml", "Login", 1380, 750);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @FXML

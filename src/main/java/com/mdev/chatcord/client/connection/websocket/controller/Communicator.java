@@ -15,4 +15,9 @@ public class Communicator {
         instance.connectAndSubscribe();
     }
 
+    public static void destroy(){
+        instance.disconnect();
+        instance = null;
+    }
+
 }

@@ -13,12 +13,16 @@ import com.mdev.chatcord.client.user.enums.EUserState;
 import com.mdev.chatcord.client.user.service.User;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.messaging.converter.CompositeMessageConverter;
 import org.springframework.messaging.converter.MappingJackson2MessageConverter;
+import org.springframework.messaging.converter.MessageConverter;
+import org.springframework.messaging.converter.StringMessageConverter;
 import org.springframework.messaging.simp.stomp.*;
 import org.springframework.web.socket.WebSocketHttpHeaders;
 import org.springframework.web.socket.client.standard.StandardWebSocketClient;
 import org.springframework.web.socket.messaging.WebSocketStompClient;
 
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 @Slf4j
@@ -41,8 +45,13 @@ public class WebSocketClientService {
         mapper.registerModule(new JavaTimeModule());
         mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS); // ISO-8601
 
-        MappingJackson2MessageConverter converter = new MappingJackson2MessageConverter();
-        converter.setObjectMapper(mapper);
+        CompositeMessageConverter converter = new CompositeMessageConverter(
+                List.of(
+                        new StringMessageConverter(),
+                        new MappingJackson2MessageConverter(){{
+                            setObjectMapper(mapper);
+                        }}
+                ));
 
         this.stompClient = new WebSocketStompClient(new StandardWebSocketClient());
         this.stompClient.setMessageConverter(converter);
@@ -116,17 +125,24 @@ public class WebSocketClientService {
         }
     }
 
-    public void changeFriendship(String friendUsername, String friendTag) {
+    public void changeFriendship(ContactPreview receiverContact) {
         if (session != null && session.isConnected()) {
-            session.send("/app/friend.update", new FriendUser(friendUsername, friendTag));
+            session.send("/app/friend.update", new FriendUser(receiverContact.getDisplayName(),
+                    receiverContact.getTag()));
         } else {
             reconnect(accessToken);
-            session.send("/app/friend.update", new FriendUser(friendUsername, friendTag));
+            session.send("/app/friend.update", new FriendUser(receiverContact.getDisplayName(),
+                    receiverContact.getTag()));
         }
     }
 
     // Debugging test for Websocket understanding.
     public void sendMessage(String from, String to, String content) {
         session.send("/app/chat", new MessagesDTO(from, to, content));
+    }
+
+    public void disconnect(){
+        log.warn("WebSocket Session Disconnected.");
+        session.disconnect();
     }
 }

@@ -7,6 +7,7 @@ import com.mdev.chatcord.client.common.implementation.UIErrorHandler;
 import com.mdev.chatcord.client.friend.dto.ContactPreview;
 import com.mdev.chatcord.client.friend.enums.EFriendStatus;
 import com.mdev.chatcord.client.friend.event.OnContactListUpdate;
+import com.mdev.chatcord.client.friend.event.OnDeletedFriendship;
 import com.mdev.chatcord.client.friend.event.OnReceivedFriendship;
 import com.mdev.chatcord.client.friend.service.FriendService;
 import javafx.application.Platform;
@@ -90,6 +91,12 @@ public class FriendsController implements TimeUtils, UIErrorHandler {
         Node refreshNode = contacts.get(onContactListUpdate.getContactUuid());
         directChatList.getChildren().remove(refreshNode);
         addFriendContact(onContactListUpdate.getContactPreview());
+    }
+
+    @EventListener
+    public void onRemoveFriendship(OnDeletedFriendship onDeletedFriendship){
+        Node declinedNode = contacts.get(onDeletedFriendship.getContactUUID());
+        directChatList.getChildren().remove(declinedNode);
     }
 
     private void addCommunityContact() {

@@ -26,6 +26,8 @@ public class ClientThread {
     @Value("${spring.application.udp.server.ip}")
     private String serverIp;
 
+    private boolean isOpened = true;
+
     private DatagramSocket socket;
 
     @Autowired
@@ -45,7 +47,7 @@ public class ClientThread {
             try {
                 byte[] buffer = new byte[65507];
                 DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
-                while (true) {
+                while (isOpened) {
                     socket.receive(packet);
 
                     String json = new String(packet.getData(), 0, packet.getLength(), StandardCharsets.UTF_8);
@@ -57,6 +59,9 @@ public class ClientThread {
 
                     onMessageReceived.onMessageReceived(receivedMessage);
                 }
+            } catch (SocketException e){
+                isOpened = false;
+                log.warn(e.getMessage());
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -83,6 +88,11 @@ public class ClientThread {
     }
 
     public void close() {
-        socket.close();
+        try {
+            isOpened = false;
+            socket.close();
+        } catch (Exception e) {
+            log.warn(e.getMessage());
+        }
     }
 }

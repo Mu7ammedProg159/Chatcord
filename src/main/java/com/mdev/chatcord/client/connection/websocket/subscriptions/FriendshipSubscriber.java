@@ -5,6 +5,7 @@ import com.mdev.chatcord.client.connection.websocket.impl.WebSocketRegistry;
 import com.mdev.chatcord.client.connection.websocket.service.WebSocketFeatureSubscriber;
 import com.mdev.chatcord.client.friend.dto.ContactPreview;
 import com.mdev.chatcord.client.friend.event.OnContactListUpdate;
+import com.mdev.chatcord.client.friend.event.OnDeletedFriendship;
 import com.mdev.chatcord.client.friend.event.OnReceivedFriendship;
 import com.mdev.chatcord.client.user.service.User;
 import org.springframework.context.ApplicationEventPublisher;
@@ -25,6 +26,13 @@ public class FriendshipSubscriber extends WebSocketFeatureSubscriber {
                     contact));
             String logStatus = contact.getFriendStatus().name().toLowerCase();
             log.info("{} {} friendship with you as [{}]", contact.getDisplayName(), logStatus, user.getUsername());
+        });
+
+        register(WebSocketRegistry.FRIEND_DELETE, String.class, uuid -> {
+            eventPublisher.publishEvent(new OnDeletedFriendship(
+                    this, uuid
+            ));
+            log.info("Friendship of {} has been removed.", uuid);
         });
 
         // Here you can add how many you want of friendship endpoints.
