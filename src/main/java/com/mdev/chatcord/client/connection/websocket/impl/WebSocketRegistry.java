@@ -8,5 +8,5 @@ public class WebSocketRegistry {
     public static final String FRIEND_REQUEST = dest + "/queue/friendship.add";
     public static final String FRIEND_UPDATE = dest + "/queue/friendship.update";
     public static final String FRIEND_DELETE = dest + "/queue/friendship.delete";
-    public static final String MESSAGE_SEND = dest + "/queue/messages";
+    public static final String DIRECT_MESSAGE_SEND = dest + "/queue/private/message.send";
 }

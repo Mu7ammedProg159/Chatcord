@@ -2,22 +2,22 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.shape.Circle?>
+<?import org.onyxfx.graphics.controls.OFxAvatarView?>
 
 <HBox alignment="TOP_LEFT" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mdev.chatcord.client.message.controller.MessageBubbleController">
 
     <!-- PFP wrapped in StackPane for space reservation -->
     <StackPane prefHeight="40.0" prefWidth="40.0">
-        <ImageView fx:id="pfp" fitHeight="40" fitWidth="40">
-            <clip>
-                <Circle centerX="20" centerY="20" radius="20" />
-            </clip>
-        </ImageView>
+      <OFxAvatarView fx:id="pfp">
+         <defaultImage>
+            <Image url="@../../images/icons/account_logo_32x32.png" />
+         </defaultImage>
+      </OFxAvatarView>
         <Region fx:id="pfpPlaceholder" managed="false" prefHeight="40" prefWidth="40" visible="false" />
     </StackPane>
 
@@ -31,7 +31,7 @@
             <children>
                 <VBox fx:id="messageContainer">
                     <children>
-                        <Label fx:id="message" maxWidth="400" style="-fx-text-fill: #dddddd;" wrapText="true" />
+                        <Label fx:id="message" maxWidth="400" style="-fx-text-fill: #dddddd;" textFill="#000000d9" wrapText="true" />
                     </children>
                 </VBox>
                 <Label fx:id="status" alignment="CENTER" disable="true" textAlignment="CENTER" visible="false">

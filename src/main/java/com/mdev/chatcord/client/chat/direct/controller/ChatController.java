@@ -1,6 +1,9 @@
 package com.mdev.chatcord.client.chat.direct.controller;
 
 import com.mdev.chatcord.client.chat.direct.dto.PrivateChatDTO;
+import com.mdev.chatcord.client.chat.direct.service.DirectChatService;
+import com.mdev.chatcord.client.chat.dto.ChatDTO;
+import com.mdev.chatcord.client.chat.events.ContactSelectedEvent;
 import com.mdev.chatcord.client.common.implementation.UIHandler;
 import com.mdev.chatcord.client.common.service.SpringFXMLLoader;
 import com.mdev.chatcord.client.connection.udp.ClientThread;
@@ -10,6 +13,7 @@ import com.mdev.chatcord.client.chat.dto.ChatMemberDTO;
 import com.mdev.chatcord.client.message.dto.MessageDTO;
 import com.mdev.chatcord.client.chat.enums.ChatType;
 import com.mdev.chatcord.client.message.enums.EMessageStatus;
+import com.mdev.chatcord.client.message.event.OnReceivedMessage;
 import com.mdev.chatcord.client.message.service.MessageSenderFactory;
 import com.mdev.chatcord.client.user.service.User;
 import javafx.application.Platform;
@@ -27,10 +31,12 @@ import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Component
 //@Scope(scopeName = "prototype")
@@ -62,11 +68,13 @@ public class ChatController implements UIHandler {
     private User userDetails;
 
     @Autowired
+    private DirectChatService directChatService;
+
+    @Autowired
     private MessageSenderFactory senderFactory;
 
+   private ChatDTO chat;
     // This will be initialized and set when pressing into a friend from the friend list.
-
-   //private PrivateChatDTO chatPreview;
 
     private Image avatarImage;
 
@@ -97,11 +105,6 @@ public class ChatController implements UIHandler {
     public void sendMessage(MessageDTO messageDTO) {
 
         if (!messageDTO.getContent().isEmpty()) {
-//
-//            MessageDTO messageDTO = new MessageDTO(ChatType.COMMUNITY, message, from, to, System.currentTimeMillis(),
-//                    false,
-//                    EMessageStatus.SENT);
-            //createReceiveMessage(messageDTO, avatarImage);
 
             senderFactory.getChatSender(messageDTO.getChatType()).sendMessage(messageDTO);
             messageField.clear();
@@ -113,34 +116,22 @@ public class ChatController implements UIHandler {
 
     @FXML
     public void onSendBtnClicked(ActionEvent event) {
-        // This is only for Private CHat --- I MUST change the logic here later...
-//        if (chatDTO == null)
-//            sendMessage(userDetails.getUserDTO().getUsername(), "All", userDetails.getUserDTO().getPfpUrl());
-//        else {
-//            ChatMemberDTO sender = chatDTO.getChatMembersDto().get(0);
-//            ChatMemberDTO receiver = chatDTO.getChatMembersDto().get(1);
-//
-//            sendMessage(sender.getUsername(), receiver.getUsername(), sender.getAvatarUrl());
-//
-//        }
-//        String message = messageField.getText();
-//
-//        if (chatPreview.getChatDTO().getChatMembersDto().size() == 1)
-//            sendMessage(new MessageDTO(ChatType.valueOf(chatPreview.getChatDTO().getChatType()), message,
-//                    new ChatMemberDTO(userDetails.getUsername()),
-//                    new ChatMemberDTO("Everyone"),
-//                    LocalDateTime.now(), false, EMessageStatus.SENT));
-//
-//        else
-//            sendMessage(new MessageDTO(ChatType.valueOf(chatPreview.getChatDTO().getChatType()), message,
-//                    chatPreview.getChatDTO().getChatMembersDto().get(0),
-//                    chatPreview.getChatDTO().getChatMembersDto().get(1),
-//                    LocalDateTime.now(), false, EMessageStatus.SENT));
 
-        // This is just a test or debug to understand Websockets
-        if (!messageField.getText().equalsIgnoreCase("") || messageField.getText() != null)
-            Communicator.getInstance().sendMessage(userDetails.getUuid().toLowerCase(), "0c5a9aed-9e61-484d-8d7f-62e50ff61a62".toLowerCase(), messageField.getText());
+        // This is only for Private Chat --- I MUST change the logic here later...
+        if (chat != null) {
 
+            ChatMemberDTO sender = chat.getChatMembersDto().get(0);
+            ChatMemberDTO receiver = chat.getChatMembersDto().get(1);
+
+            String message = messageField.getText();
+
+            if (chat.getChatMembersDto().size() == 2)
+                sendMessage(new MessageDTO(ChatType.valueOf(chat.getChatType()), message,
+                        sender,
+                        receiver,
+                        LocalDateTime.now(), false, EMessageStatus.UNDELIVERED));
+
+        }
     }
 
     public void addMessage(Node node) {
@@ -148,17 +139,17 @@ public class ChatController implements UIHandler {
     }
 
     // This is needed to send and more importantly Receiving Messages.
-    public void createReceiveMessage(MessageDTO dto) {
+    public void createReceiveMessage(MessageDTO message) {
         try {
             FXMLLoader loader = springFXMLLoader.getLoader("/view/chat/message-view.fxml");
             Node messageNode = loader.load();
             MessageBubbleController controller = loader.getController();
-            controller.setData(dto);
+            controller.setData(message);
             //debugString = String.valueOf(controller.getUsername());
 
-            log.info("Message Received as:  {}", dto.toString());
+            log.info("Message Received as:  {}", message.getContent());
 
-            if (!dto.getContent().equalsIgnoreCase("__REGISTER__"))
+            if (!message.getContent().equalsIgnoreCase("__REGISTER__"))
                 addMessage(messageNode);
 
         } catch (IOException e) {
@@ -166,33 +157,58 @@ public class ChatController implements UIHandler {
         }
     }
 
-//    @EventListener
-//    public void onContactSelected(ContactSelectedEvent event) {
-//        loadChat(event.getContact(), event.getChatType());
-//    }
+    @EventListener
+    public void onContactSelected(ContactSelectedEvent event) {
+        loadChat(event.getUuid(), event.getChatType());
+    }
 
-    public void loadChat(PrivateChatDTO chatDTO, ChatType chatType) {
+    @EventListener
+    public void onMessageReceived(OnReceivedMessage onReceivedMessage){
+        createReceiveMessage(onReceivedMessage.getMessage());
+    }
+
+    public void loadChat(String receiverUUID, ChatType chatType) {
 
         messagesContainer.getChildren().clear();
         //this.chatPreview = chatDTO;
+
+        chat = directChatService.startDirectChatSession(receiverUUID);
 
         // Community
         // You can use ChatType later...
         switch (chatType) {
             case COMMUNITY -> {
                 chatTitle.setText("Welcome to Community Open Chat !");
-
+                // Do what ever needed for UDP sending.
             }
             case PRIVATE -> {
-                chatTitle.setText("Chat with " + chatDTO.getContactPreview().getDisplayName() +
-                        "#" + chatDTO.getContactPreview().getLastMessageAt());
+                ChatMemberDTO sender = chat.getChatMembersDto().get(0);
+                ChatMemberDTO receiver = chat.getChatMembersDto().get(1);
 
-                if (chatDTO.getChatDTO().getMessages() != null)
-                    for (MessageDTO message : chatDTO.getChatDTO().getMessages()) {
+                if (userDetails.getUuid().equalsIgnoreCase(sender.getUuid())){
+                    sender = chat.getChatMembersDto().get(0);
+                    receiver = chat.getChatMembersDto().get(1);
+                }
+                else{
+                    sender = chat.getChatMembersDto().get(1);
+                    receiver = chat.getChatMembersDto().get(0);
+                }
+
+                chat.getChatMembersDto().clear();
+                chat.setChatMembersDto(List.of(sender, receiver));
+
+                chatTitle.setText("Chat with " + receiver.getUsername() +
+                        "#" + receiver.getTag());
+
+                if (chat.getMessages() != null){
+                    for (MessageDTO message : chat.getMessages()) {
                         createReceiveMessage(message);
                     }
+                }
             }
+
         }
+
     }
 
     // TODO: Load the chat history for this contact

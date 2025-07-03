@@ -4,18 +4,19 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.mdev.chatcord.client.connection.websocket.configuration.StompSessionSubscriberHandler;
-import com.mdev.chatcord.client.connection.websocket.demo.MessagesDTO;
 import com.mdev.chatcord.client.exception.BusinessException;
 import com.mdev.chatcord.client.friend.dto.ContactPreview;
 import com.mdev.chatcord.client.friend.dto.FriendUser;
 import com.mdev.chatcord.client.message.dto.MessageDTO;
 import com.mdev.chatcord.client.user.enums.EUserState;
 import com.mdev.chatcord.client.user.service.User;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.messaging.converter.CompositeMessageConverter;
 import org.springframework.messaging.converter.MappingJackson2MessageConverter;
-import org.springframework.messaging.converter.MessageConverter;
 import org.springframework.messaging.converter.StringMessageConverter;
 import org.springframework.messaging.simp.stomp.*;
 import org.springframework.web.socket.WebSocketHttpHeaders;
@@ -100,16 +101,6 @@ public class WebSocketClientService {
         }
     }
 
-    public void sendPrivateMessage(MessageDTO messageDTO) {
-        if (session != null && session.isConnected()) {
-            session.send("/app/chat/direct/message.send", messageDTO);
-            log.info("Sent to: {}", messageDTO.getReceiver());
-        } else {
-            log.error("Cannot send: session is null or disconnected. Trying to reconnect...");
-            reconnect(accessToken);
-        }
-    }
-
     public void sendStatus(EUserState state) {
         if (session != null && session.isConnected()) {
             session.send("/app/users/status/change", state);
@@ -136,9 +127,10 @@ public class WebSocketClientService {
         }
     }
 
-    // Debugging test for Websocket understanding.
-    public void sendMessage(String from, String to, String content) {
-        session.send("/app/chat", new MessagesDTO(from, to, content));
+    public void sendDirectMessage(MessageDTO message) {
+        if (session != null && session.isConnected()) {
+            session.send("/app/direct/message.send", message);
+        }
     }
 
     public void disconnect(){

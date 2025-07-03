@@ -9,6 +9,6 @@ import com.mdev.chatcord.client.message.dto.MessageDTO;
 public class WebSocketMessageSender implements MessageSender{
     @Override
     public void sendMessage(MessageDTO message) {
-        Communicator.getInstance().sendPrivateMessage(message);
+        Communicator.getInstance().sendDirectMessage(message);
     }
 }

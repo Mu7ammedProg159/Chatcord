@@ -67,7 +67,7 @@ public class ContactController implements UIHandler, TimeUtils, EventStageHandle
 
     private final User user;
 
-    private ChatType chatType;
+    private final ChatType chatType = ChatType.PRIVATE;
 
     private ContactPreview contactPreview;
 
@@ -194,9 +194,15 @@ public class ContactController implements UIHandler, TimeUtils, EventStageHandle
     @FXML
     public void onChatBtnClicked(ActionEvent event){
 //      onClick(privateChatDTO);
-        if (contactPreview.getFriendStatus().equals(EFriendStatus.ACCEPTED)){
-            eventPublisher.publishEvent(new ContactSelectedEvent(this, chat, chatType));
-            return;
+        if (!contactPreview.isGroup()){
+            if (contactPreview.getFriendStatus().equals(EFriendStatus.ACCEPTED)){
+                eventPublisher.publishEvent(
+                        new ContactSelectedEvent(
+                                this, contactPreview.getUuid().toString().toLowerCase(), chatType
+                        )
+                );
+                return;
+            }
         }
         log.info("You pressed {}'s contact.", contactPreview.getDisplayName());
     }

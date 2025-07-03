@@ -1,14 +1,21 @@
 package com.mdev.chatcord.client.message.controller;
 
+import com.mdev.chatcord.client.chat.dto.ChatMemberDTO;
 import com.mdev.chatcord.client.common.implementation.UIHandler;
 import com.mdev.chatcord.client.message.dto.MessageDTO;
 import com.mdev.chatcord.client.common.implementation.TimeUtils;
+import com.mdev.chatcord.client.message.enums.EMessageStatus;
+import com.mdev.chatcord.client.message.event.OnMessageDelivered;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import lombok.Getter;
+import org.onyxfx.graphics.controls.OFxAvatarView;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -19,31 +26,40 @@ public class MessageBubbleController implements TimeUtils, UIHandler {
     @FXML private Label message;
     @FXML private Label timestamp;
     @FXML private Label status;
-    @FXML private ImageView pfp;
+    @FXML private OFxAvatarView pfp;
     @FXML private Region pfpPlaceholder;
     @FXML private VBox messageContainer;
 
-    private String lastSender;
+    private ChatMemberDTO lastSender;
     private long lastMessageTimestamp;
     private int messageOffset;
+    private MessageDTO content;
 
-    public void setData(MessageDTO dto) {
-        username.setText(dto.getSender().getUsername());
-        message.setText(dto.getContent());
-        status.setText(String.valueOf(dto.getMessageStatus()));
-        pfp.setImage(createImage(dto.getSender().getAvatarUrl()));
+    public void setData(MessageDTO message) {
+        this.content = message;
+        username.setText(message.getSender().getUsername());
+        this.message.setText(message.getContent());
+        status.setText(String.valueOf(message.getMessageStatus()));
 
-        boolean isSameSender = dto.getSender().equals(lastSender);
-        boolean isLastMessageExpired = (dto.getSentAt().getSecond() - lastMessageTimestamp) > 60_000;
+        if (message.getSender().getAvatarUrl() != null)
+            pfp.setUploadedImage(createImage(message.getSender().getAvatarUrl()));
+        else
+            pfp.setBackgroundColor(Color.web(message.getSender().getAvatarColor()));
 
-        String time = convertToLocalTime(dto.getSentAt());
+        boolean isSameSender = message.getSender().equals(lastSender);
+        boolean isLastMessageExpired = (message.getSentAt().getSecond() - lastMessageTimestamp) > 60_000;
+
+        String time = convertToLocalTime(message.getSentAt());
         timestamp.setText(time);
-//        Image img = new Image(getClass().getResource(dto.getProfileImageURL()).toExternalForm());
+
+        this.message.setTextFill(Color.web("#969696D9"));
+        message.setMessageStatus(EMessageStatus.UNDELIVERED);
+//        Image img = new Image(getClass().getResource(message.getProfileImageURL()).toExternalForm());
 //        pfp.setImage(img);
 
         /*// Only show PFP if sender changed
         if (!isSameSender || isLastMessageExpired) {
-            if (dto.getProfileImageURL() != null) {
+            if (message.getProfileImageURL() != null) {
                 //setMessageElementsVisibility(true);
             }
         } else {
@@ -52,8 +68,8 @@ public class MessageBubbleController implements TimeUtils, UIHandler {
             //setMessageElementsVisibility(false); // hide the profile pic
         }
 
-        lastSender = dto.getUsername(); // Update the last sender
-        lastMessageTimestamp = dto.getTimestamp(); // Update the last message timestamp.*/
+        lastSender = message.getUsername(); // Update the last sender
+        lastMessageTimestamp = message.getTimestamp(); // Update the last message timestamp.*/
 
         //message.setStyle("-fx-background-color: #5865f2; -fx-text-fill: white; -fx-padding: 8 10; -fx-background-radius: 8;");
     }
@@ -71,5 +87,12 @@ public class MessageBubbleController implements TimeUtils, UIHandler {
         username.setVisible(visibility);
         username.setManaged(visibility);
 
+    }
+
+    @EventListener
+    public void OnMessageSent(OnMessageDelivered onMessageDelivered){
+        this.message.setTextFill(Color.web("#dddddd"));
+        this.content.setMessageStatus(EMessageStatus.SENT);
+        // You can call websocket or rest to change status of message here.
     }
 }
