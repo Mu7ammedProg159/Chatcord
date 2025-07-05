@@ -13,6 +13,7 @@ import com.mdev.chatcord.client.common.implementation.UIHandler;
 import com.mdev.chatcord.client.friend.enums.EFriendStatus;
 import com.mdev.chatcord.client.friend.event.OnContactListUpdate;
 import com.mdev.chatcord.client.friend.service.FriendService;
+import com.mdev.chatcord.client.message.event.OnReceivedMessage;
 import com.mdev.chatcord.client.user.service.User;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -20,6 +21,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
@@ -32,6 +34,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.onyxfx.graphics.controls.OFxAvatarView;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Scope;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -41,9 +44,9 @@ import org.springframework.stereotype.Component;
 public class ContactController implements UIHandler, TimeUtils, EventStageHandler {
     @FXML private OFxAvatarView contactImage;
     @FXML private Label chatName, tag;
-    @FXML private Label lastChatMessage;
+    @FXML @Getter private Label lastChatMessage;
     @FXML private Label timestamp;
-    @FXML private Label unseenMessagesCounter;
+    @FXML @Getter @Setter private Label unseenMessagesCounter;
     @FXML private Label friendStatus;
     @FXML private HBox requestContainer;
     @FXML private Button acceptBtn, declineBtn;
@@ -59,8 +62,6 @@ public class ContactController implements UIHandler, TimeUtils, EventStageHandle
 
     private final SpringFXMLLoader springFXMLLoader;
 
-    private final ChatController chatController;
-
     private final ApplicationEventPublisher eventPublisher;
 
     private final FriendService friendService;
@@ -71,6 +72,9 @@ public class ContactController implements UIHandler, TimeUtils, EventStageHandle
 
     private ContactPreview contactPreview;
 
+    @Getter
+    @Setter
+    private int messagesCounter = 0;
 //    public void setCommunityChat(String communityName, String lastMessage,
 //                                 LocalDateTime lastMessageDate){
 //        chatName.setText(communityName);
@@ -118,6 +122,10 @@ public class ContactController implements UIHandler, TimeUtils, EventStageHandle
 //                unseenMessagesCounter.setText(String.valueOf(0));
 //                unseenMessagesCounter.setVisible(false);
 //            }
+    }
+
+    public boolean isScrolledToBottom(ScrollPane scrollPane) {
+        return scrollPane.getVvalue() >= scrollPane.getVmax() - 0.01;
     }
 
     private void showPreviewBasedOnDetails(ContactPreview contactPreview) {
@@ -182,6 +190,10 @@ public class ContactController implements UIHandler, TimeUtils, EventStageHandle
         setVisibility(!flag, friendStatus);
     }
 
+    public int incrementMessageCounter(){
+        return ++messagesCounter;
+    }
+
     private boolean isInsideButton(ToggleButton root, Node target) {
         while (target != null) {
             if (target instanceof Button && target != root) return true;
@@ -194,6 +206,9 @@ public class ContactController implements UIHandler, TimeUtils, EventStageHandle
     @FXML
     public void onChatBtnClicked(ActionEvent event){
 //      onClick(privateChatDTO);
+        messagesCounter = 0;
+        unseenMessagesCounter.setText(String.valueOf(messagesCounter));
+        setVisibility(false, unseenMessagesCounter);
         if (!contactPreview.isGroup()){
             if (contactPreview.getFriendStatus().equals(EFriendStatus.ACCEPTED)){
                 eventPublisher.publishEvent(

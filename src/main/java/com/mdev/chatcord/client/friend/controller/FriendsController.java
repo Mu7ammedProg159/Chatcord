@@ -1,15 +1,18 @@
 package com.mdev.chatcord.client.friend.controller;
 
+import com.mdev.chatcord.client.chat.direct.controller.ChatController;
 import com.mdev.chatcord.client.chat.dto.ChatMemberDTO;
 import com.mdev.chatcord.client.common.service.SpringFXMLLoader;
 import com.mdev.chatcord.client.common.implementation.TimeUtils;
 import com.mdev.chatcord.client.common.implementation.UIErrorHandler;
 import com.mdev.chatcord.client.friend.dto.ContactPreview;
+import com.mdev.chatcord.client.friend.dto.Loader;
 import com.mdev.chatcord.client.friend.enums.EFriendStatus;
 import com.mdev.chatcord.client.friend.event.OnContactListUpdate;
 import com.mdev.chatcord.client.friend.event.OnDeletedFriendship;
 import com.mdev.chatcord.client.friend.event.OnReceivedFriendship;
 import com.mdev.chatcord.client.friend.service.FriendService;
+import com.mdev.chatcord.client.message.event.OnReceivedMessage;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -63,7 +66,7 @@ public class FriendsController implements TimeUtils, UIErrorHandler {
 
     private ChatMemberDTO sender;
 
-    private Map<String, Node> contacts = new HashMap<>();
+    private Map<String, Loader<ContactController>> contacts = new HashMap<>();
 
     @FXML
     public void initialize() {
@@ -88,15 +91,25 @@ public class FriendsController implements TimeUtils, UIErrorHandler {
 
     @EventListener
     public void onUpdate(OnContactListUpdate onContactListUpdate){
-        Node refreshNode = contacts.get(onContactListUpdate.getContactUuid());
+        Node refreshNode = contacts.get(onContactListUpdate.getContactUuid()).getNode();
         directChatList.getChildren().remove(refreshNode);
         addFriendContact(onContactListUpdate.getContactPreview());
     }
 
     @EventListener
     public void onRemoveFriendship(OnDeletedFriendship onDeletedFriendship){
-        Node declinedNode = contacts.get(onDeletedFriendship.getContactUUID());
+        Node declinedNode = contacts.get(onDeletedFriendship.getContactUUID()).getNode();
         directChatList.getChildren().remove(declinedNode);
+    }
+
+    @EventListener
+    public void onMessageReceived(OnReceivedMessage onReceivedMessage){
+        ContactController controller = contacts.get(onReceivedMessage.getMessage().getSender().getUuid()).getController();
+        if(!controller.getContactBtn().isSelected()){
+            controller.getUnseenMessagesCounter().setText(String.valueOf(controller.incrementMessageCounter()));
+            setVisibility(true, controller.getUnseenMessagesCounter());
+            controller.getLastChatMessage().setText(onReceivedMessage.getMessage().getContent());
+        }
     }
 
     private void addCommunityContact() {
@@ -135,7 +148,7 @@ public class FriendsController implements TimeUtils, UIErrorHandler {
 
         controller.getContactBtn().setToggleGroup(toggleGroup);
 
-        contacts.put(String.valueOf(contactPreview.getUuid()), root);
+        contacts.put(String.valueOf(contactPreview.getUuid()), new Loader<ContactController>(root, controller));
         directChatList.getChildren().add(root);
     }
 

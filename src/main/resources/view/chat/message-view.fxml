@@ -13,10 +13,13 @@
 
     <!-- PFP wrapped in StackPane for space reservation -->
     <StackPane prefHeight="40.0" prefWidth="40.0">
-      <OFxAvatarView fx:id="pfp">
+      <OFxAvatarView fx:id="pfp" fitHeight="22.0" fitWidth="24.0">
          <defaultImage>
-            <Image url="@../../images/icons/account_logo_32x32.png" />
+            <Image url="@../../images/icons/Asset%201.png" />
          </defaultImage>
+         <padding>
+            <Insets bottom="2.0" />
+         </padding>
       </OFxAvatarView>
         <Region fx:id="pfpPlaceholder" managed="false" prefHeight="40" prefWidth="40" visible="false" />
     </StackPane>
