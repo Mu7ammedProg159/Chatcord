@@ -19,7 +19,7 @@ import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
 @Component
-public class MessageBubbleController implements TimeUtils, UIHandler {
+public class MessageBubbleController implements UIHandler {
 
     @FXML @Getter
     private Label username;
@@ -49,7 +49,7 @@ public class MessageBubbleController implements TimeUtils, UIHandler {
         boolean isSameSender = message.getSender().equals(lastSender);
         boolean isLastMessageExpired = (message.getSentAt().getSecond() - lastMessageTimestamp) > 60_000;
 
-        String time = convertToLocalTime(message.getSentAt());
+        String time = TimeUtils.convertToLocalTime(message.getSentAt());
         timestamp.setText(time);
 
         this.message.setTextFill(Color.web("#969696D9"));

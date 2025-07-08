@@ -12,7 +12,9 @@ import com.mdev.chatcord.client.friend.event.OnContactListUpdate;
 import com.mdev.chatcord.client.friend.event.OnDeletedFriendship;
 import com.mdev.chatcord.client.friend.event.OnReceivedFriendship;
 import com.mdev.chatcord.client.friend.service.FriendService;
+import com.mdev.chatcord.client.message.enums.EMessageStatus;
 import com.mdev.chatcord.client.message.event.OnReceivedMessage;
+import com.mdev.chatcord.client.message.service.MessageService;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -44,7 +46,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @Getter
 @Setter
-public class FriendsController implements TimeUtils, UIErrorHandler {
+public class FriendsController implements UIErrorHandler {
 
     @FXML private Button addContactButton;
     @FXML private TextField searchField;
@@ -59,6 +61,9 @@ public class FriendsController implements TimeUtils, UIErrorHandler {
 
     @Autowired
     private FriendService friendService;
+
+    @Autowired
+    private MessageService messageService;
 
     private StackPane mainOverlayPane;
 
@@ -105,10 +110,16 @@ public class FriendsController implements TimeUtils, UIErrorHandler {
     @EventListener
     public void onMessageReceived(OnReceivedMessage onReceivedMessage){
         ContactController controller = contacts.get(onReceivedMessage.getMessage().getSender().getUuid()).getController();
+        controller.getLastChatMessage().setText(onReceivedMessage.getMessage().getContent());
+        controller.getTimestamp().setText(TimeUtils.convertToLocalTime(onReceivedMessage.getMessage().getSentAt()));
+
         if(!controller.getContactBtn().isSelected()){
             controller.getUnseenMessagesCounter().setText(String.valueOf(controller.incrementMessageCounter()));
             setVisibility(true, controller.getUnseenMessagesCounter());
-            controller.getLastChatMessage().setText(onReceivedMessage.getMessage().getContent());
+        }
+        else {
+            messageService.changeMessageStatus(onReceivedMessage.getMessage(), EMessageStatus.SEEN);
+            logger.info("You saw the message {}.", onReceivedMessage.getMessage().getContent());
         }
     }
 

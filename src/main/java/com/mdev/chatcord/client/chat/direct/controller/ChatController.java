@@ -13,8 +13,10 @@ import com.mdev.chatcord.client.chat.dto.ChatMemberDTO;
 import com.mdev.chatcord.client.message.dto.MessageDTO;
 import com.mdev.chatcord.client.chat.enums.ChatType;
 import com.mdev.chatcord.client.message.enums.EMessageStatus;
+import com.mdev.chatcord.client.message.enums.EMessageType;
 import com.mdev.chatcord.client.message.event.OnReceivedMessage;
 import com.mdev.chatcord.client.message.service.MessageSenderFactory;
+import com.mdev.chatcord.client.message.service.MessageService;
 import com.mdev.chatcord.client.user.service.User;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -37,6 +39,7 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 @Component
 //@Scope(scopeName = "prototype")
@@ -73,7 +76,7 @@ public class ChatController implements UIHandler {
     @Autowired
     private MessageSenderFactory senderFactory;
 
-   private ChatDTO chat;
+    private ChatDTO chat;
     // This will be initialized and set when pressing into a friend from the friend list.
 
     private Image avatarImage;
@@ -92,8 +95,12 @@ public class ChatController implements UIHandler {
         });
 
         // Pre-message for UDP Connection Start
-        sendMessage(new MessageDTO(ChatType.COMMUNITY, "__REGISTER__", new ChatMemberDTO("SERVER"),
-                new ChatMemberDTO("Everyone"), LocalDateTime.now(), false, EMessageStatus.SENT));
+        sendMessage(new MessageDTO(UUID.randomUUID(), UUID.randomUUID(), ChatType.COMMUNITY, "__REGISTER__",
+                EMessageType.SYSTEM,
+                null,
+                new ChatMemberDTO("SERVER"),
+                new ChatMemberDTO("Everyone"),
+                LocalDateTime.now(), null, false, false, EMessageStatus.SENT));
 
         messagesContainer.heightProperty().addListener(
                 (obs, oldVal, newVal) ->
@@ -125,11 +132,14 @@ public class ChatController implements UIHandler {
 
             String message = messageField.getText();
 
-            if (chat.getChatMembersDto().size() == 2)
-                sendMessage(new MessageDTO(ChatType.valueOf(chat.getChatType()), message,
+            if (chat.getChatType().equals(ChatType.PRIVATE.name()))
+                sendMessage(new MessageDTO(UUID.randomUUID(), chat.getUuid(), ChatType.valueOf(chat.getChatType()),
+                        message,
+                        EMessageType.TEXT,
+                        null,
                         sender,
                         receiver,
-                        LocalDateTime.now(), false, EMessageStatus.UNDELIVERED));
+                        LocalDateTime.now(), null, false, false, EMessageStatus.UNDELIVERED));
 
         }
     }
@@ -149,7 +159,7 @@ public class ChatController implements UIHandler {
 
             log.info("Message Received as:  {}", message.getContent());
 
-            if (!message.getContent().equalsIgnoreCase("__REGISTER__"))
+            if (!message.getType().equals(EMessageType.SYSTEM))
                 addMessage(messageNode);
 
         } catch (IOException e) {

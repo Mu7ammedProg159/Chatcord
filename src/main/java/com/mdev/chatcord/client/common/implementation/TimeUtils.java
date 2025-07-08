@@ -6,13 +6,13 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 
-public interface TimeUtils {
-    public default String convertToHourTime(long timestampMillis) {
+public class TimeUtils {
+    public static String convertToHourTime(long timestampMillis) {
         ZonedDateTime zoned = Instant.ofEpochMilli(timestampMillis).atZone(ZoneId.systemDefault());
         return zoned.format(DateTimeFormatter.ofPattern("hh:mm a"));
     }
 
-    public default String convertToLocalTime(LocalDateTime dateTime) {
+    public static String convertToLocalTime(LocalDateTime dateTime) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("h:mm a");
         return dateTime.format(formatter);
     }

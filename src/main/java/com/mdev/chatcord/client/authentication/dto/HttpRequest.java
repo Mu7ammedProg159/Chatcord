@@ -30,6 +30,7 @@ public class HttpRequest {
     private String requestUri = "/api/request";
     private String friendUri = requestUri + "/users/friends";
     private String privateUri = requestUri + "/chat/privates";
+    private String messageStateUri = requestUri + "/messages/message/direct/status";
 
     public String uriParams(String path, String... keyValueParams){
 

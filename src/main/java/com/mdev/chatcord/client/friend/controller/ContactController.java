@@ -14,6 +14,7 @@ import com.mdev.chatcord.client.friend.enums.EFriendStatus;
 import com.mdev.chatcord.client.friend.event.OnContactListUpdate;
 import com.mdev.chatcord.client.friend.service.FriendService;
 import com.mdev.chatcord.client.message.event.OnReceivedMessage;
+import com.mdev.chatcord.client.message.service.MessageService;
 import com.mdev.chatcord.client.user.service.User;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -41,12 +42,12 @@ import org.springframework.stereotype.Component;
 @Scope(scopeName = "prototype")
 @RequiredArgsConstructor
 @Slf4j
-public class ContactController implements UIHandler, TimeUtils, EventStageHandler {
+public class ContactController implements UIHandler, EventStageHandler {
     @FXML private OFxAvatarView contactImage;
     @FXML private Label chatName, tag;
     @FXML @Getter private Label lastChatMessage;
-    @FXML private Label timestamp;
-    @FXML @Getter @Setter private Label unseenMessagesCounter;
+    @FXML @Getter private Label timestamp;
+    @FXML @Getter private Label unseenMessagesCounter;
     @FXML private Label friendStatus;
     @FXML private HBox requestContainer;
     @FXML private Button acceptBtn, declineBtn;
@@ -107,7 +108,7 @@ public class ContactController implements UIHandler, TimeUtils, EventStageHandle
         showPreviewBasedOnDetails(contactPreview);
 
         try {
-            timestamp.setText(convertToLocalTime(contactPreview.getLastMessageAt()));
+            timestamp.setText(TimeUtils.convertToLocalTime(contactPreview.getLastMessageAt()));
         } catch (Exception e) {
             log.info(e.getMessage());
         }
