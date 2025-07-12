@@ -11,17 +11,18 @@ public class SubscriptionDefinition<T> {
     public final String destination;
     public final StompFrameHandler frameHandler;
 
-    public SubscriptionDefinition(String destination, Class<T> payloadType, Consumer<T> handler) {
+    public SubscriptionDefinition(String destination, Type payloadType, Consumer<T> handler) {
         this.destination = destination;
         this.frameHandler = new StompFrameHandler() {
+
             @Override
             public Type getPayloadType(StompHeaders headers) {
-                return payloadType;
+                return payloadType; // Can now be List<MessageDTO>
             }
 
             @Override
             public void handleFrame(StompHeaders headers, Object payload) {
-                Platform.runLater(() -> handler.accept(payloadType.cast(payload)));
+                Platform.runLater(() -> handler.accept((T) payload)); // safe cast
             }
         };
     }

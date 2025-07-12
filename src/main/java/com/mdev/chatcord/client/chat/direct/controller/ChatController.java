@@ -76,6 +76,9 @@ public class ChatController implements UIHandler {
     @Autowired
     private MessageSenderFactory senderFactory;
 
+    @Autowired
+    private MessageService messageService;
+
     private ChatDTO chat;
     // This will be initialized and set when pressing into a friend from the friend list.
 
@@ -212,6 +215,9 @@ public class ChatController implements UIHandler {
 
                 if (chat.getMessages() != null){
                     for (MessageDTO message : chat.getMessages()) {
+                        if (message.getMessageStatus().equals(EMessageStatus.DELIVERED)){
+                            messageService.changeMessageStatus(message, EMessageStatus.SEEN);
+                        }
                         createReceiveMessage(message);
                     }
                 }

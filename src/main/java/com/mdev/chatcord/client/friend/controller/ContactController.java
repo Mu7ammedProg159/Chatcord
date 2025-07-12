@@ -66,6 +66,7 @@ public class ContactController implements UIHandler, EventStageHandler {
     private final ApplicationEventPublisher eventPublisher;
 
     private final FriendService friendService;
+    private final MessageService messageService;
 
     private final User user;
 
@@ -107,12 +108,6 @@ public class ContactController implements UIHandler, EventStageHandler {
 
         showPreviewBasedOnDetails(contactPreview);
 
-        try {
-            timestamp.setText(TimeUtils.convertToLocalTime(contactPreview.getLastMessageAt()));
-        } catch (Exception e) {
-            log.info(e.getMessage());
-        }
-
 //        contactImage.setUploadedImage(createImage(contactPreview.getAvatarUrl()==null ? "/images/CommunityIcon65x65.png" : contactPreview.getAvatarUrl()));
 
 //        if (contactPreview.getUnreadStatus() != null)
@@ -135,15 +130,29 @@ public class ContactController implements UIHandler, EventStageHandler {
         } else
             contactImage.setBackgroundColor(Color.web(contactPreview.getAvatarColor()));
 
-        if (contactPreview.getLastMessage() != null && contactPreview.getFriendStatus().equals(EFriendStatus.ACCEPTED)){
-            lastChatMessage.setText(contactPreview.getLastMessage());
-            isEverChatted(true);
+        if (contactPreview.getLastMessage() != null){
+            if (contactPreview.getFriendStatus().equals(EFriendStatus.ACCEPTED)){
+                lastChatMessage.setText(contactPreview.getLastMessage().getSender().getUsername()
+                        + "#" + contactPreview.getLastMessage().getSender().getTag() + ": "
+                        + contactPreview.getLastMessage().getContent());
+                isEverChatted(true);
+            }
+            timestamp.setText(TimeUtils.convertToLocalTime(contactPreview.getLastMessage().getSentAt()));
         }
         else{
+            timestamp.setText(TimeUtils.convertToLocalTime(contactPreview.getAddedAt()));
             if (contactPreview.getFriendStatus() != null){
                 isEverChatted(false);
             }
             lastChatMessage.setText("No messages sent yet.");
+        }
+
+        if (contactPreview.getUnreadMessages() <= 0){
+            setVisibility(false, unseenMessagesCounter);
+            unseenMessagesCounter.setText(String.valueOf(0));
+        } else {
+            unseenMessagesCounter.setText(String.valueOf(contactPreview.getUnreadMessages()));
+            setVisibility(true, unseenMessagesCounter);
         }
 
         if (contactPreview.getFriendStatus() != null)
@@ -192,7 +201,8 @@ public class ContactController implements UIHandler, EventStageHandler {
     }
 
     public int incrementMessageCounter(){
-        return ++messagesCounter;
+        contactPreview.setUnreadMessages(contactPreview.getUnreadMessages()+1);
+        return contactPreview.getUnreadMessages();
     }
 
     private boolean isInsideButton(ToggleButton root, Node target) {
@@ -207,9 +217,10 @@ public class ContactController implements UIHandler, EventStageHandler {
     @FXML
     public void onChatBtnClicked(ActionEvent event){
 //      onClick(privateChatDTO);
-        messagesCounter = 0;
-        unseenMessagesCounter.setText(String.valueOf(messagesCounter));
+        contactPreview.setUnreadMessages(0);
+        unseenMessagesCounter.setText(String.valueOf(contactPreview.getUnreadMessages()));
         setVisibility(false, unseenMessagesCounter);
+
         if (!contactPreview.isGroup()){
             if (contactPreview.getFriendStatus().equals(EFriendStatus.ACCEPTED)){
                 eventPublisher.publishEvent(

@@ -1,5 +1,6 @@
 package com.mdev.chatcord.client.connection.websocket.subscriptions;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.mdev.chatcord.client.common.implementation.TimeUtils;
 import com.mdev.chatcord.client.connection.websocket.annotation.WebSocketSubscriber;
 import com.mdev.chatcord.client.connection.websocket.impl.WebSocketRegistry;
@@ -9,6 +10,9 @@ import com.mdev.chatcord.client.message.event.OnMessageDelivered;
 import com.mdev.chatcord.client.message.event.OnReceivedMessage;
 import com.mdev.chatcord.client.user.service.User;
 import org.springframework.context.ApplicationEventPublisher;
+
+import java.util.List;
+import java.util.Set;
 
 @WebSocketSubscriber
 public class MessageSubscriber extends WebSocketFeatureSubscriber {
@@ -27,6 +31,11 @@ public class MessageSubscriber extends WebSocketFeatureSubscriber {
         register(WebSocketRegistry.UPDATE_MESSAGE_STATE, MessageDTO.class, messageDTO -> {
             log.info("{} seen the message you sent him at {}.", messageDTO.getReceiver().getUsername(),
                     TimeUtils.convertToLocalTime(messageDTO.getSeenAt()));
+        });
+
+        registerList(WebSocketRegistry.UPDATE_MESSAGE_STATE_BULK, MessageDTO.class, messages -> {
+            log.info("{} messages seen that you sent him since {}.", messages.size(),
+                    TimeUtils.convertToLocalTime(messages.get(0).getSentAt()));
         });
     }
 }

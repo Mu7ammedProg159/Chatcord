@@ -26,6 +26,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import lombok.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -135,9 +136,11 @@ public class FriendsController implements UIErrorHandler {
 
         //controller.setCommunityChat("Community", "/images/CommunityIcon65x65.png",
 //                "There are no messages yet.", LocalDateTime.now());
-        ContactPreview contactPreview = new ContactPreview(UUID.randomUUID(), "Community", null,
-                "/images/CommunityIcon65x65.png", null, null, LocalDateTime.now(),
-                null, true, null);
+        ContactPreview contactPreview = new ContactPreview(
+                UUID.randomUUID(), "Community", null,
+                "/images/CommunityIcon65x65.png", Color.LIMEGREEN.toString(),
+                null, 0, true, null,
+                LocalDateTime.of(2025, 7, 11, 6, 41));
 
         controller.setData(contactPreview);
 
